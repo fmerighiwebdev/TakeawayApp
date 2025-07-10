@@ -1,0 +1,10 @@
+.cartPage {
+  padding-block: 9rem;
+  min-height: 100dvh;
+}
+
+.cartPage h1 {
+  margin: 0 0 3rem 0;
+  text-align: center;
+  color: var(--primary);
+}

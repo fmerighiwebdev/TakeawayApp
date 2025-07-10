@@ -1,0 +1,145 @@
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3rem;
+  padding: 10rem 0;
+}
+
+.heroHeading {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+  opacity: 0;
+  animation: fadeInBounce 1s ease-in-out forwards;
+}
+
+.heroHeading div {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1rem;
+}
+
+.heroHeading img {
+  width: clamp(5.313rem, 4.384rem + 3.81vw, 7.813rem);
+  height: auto;
+}
+
+.heroHeading h1 {
+  margin: 0;
+  color: var(--primary);
+  text-align: center;
+}
+
+.heroHeading p {
+  margin: 0;
+  text-align: center;
+  font-size: clamp(1.125rem, 1.079rem + 0.19vw, 1.25rem);
+  color: gray;
+}
+
+.heroHeading a {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  font-size: clamp(1.125rem, 1.079rem + 0.19vw, 1.25rem);
+  color: gray;
+  text-decoration: none;
+}
+
+.heroHeading a img {
+  width: 25px;
+  height: auto;
+}
+
+.heroCategories {
+  width: 100%;
+  opacity: 0;
+  animation: fadeIn 0.5s ease-in-out forwards 0.75s;
+}
+
+.categoriesContainer {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 1.25rem;
+}
+
+.heroCategory {
+  height: 250px;
+}
+
+.heroCategory h2 {
+  font-size: clamp(2rem, 1.814rem + 0.762vw, 2.5rem);
+  margin: 0;
+  text-align: center;
+  color: white;
+}
+
+.heroCategory a {
+  position: relative;
+  display: block;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.2);
+  transition: transform 0.3s;
+}
+
+.heroCategory img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.heroCategory:hover a {
+  transform: scale(1.05);
+}
+
+.categoryOverlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--white);
+  text-transform: uppercase;
+  padding: 1.5rem;
+}
+
+@media screen and (max-width: 992px) {
+  .hero {
+    padding: 9rem 0;
+  }
+}
+
+@keyframes fadeInBounce {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  60% {
+    opacity: 1;
+    transform: translateY(-10px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  0% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}

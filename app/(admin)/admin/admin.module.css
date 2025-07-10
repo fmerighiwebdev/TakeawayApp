@@ -1,0 +1,20 @@
+.adminPage {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3rem;
+  height: 100dvh;
+}
+
+.adminPage h1 {
+  color: var(--primary);
+  margin: 0;
+}
+
+.formWrapper {
+  width: min(95%, 450px);
+  padding: 1.5rem;
+  box-shadow: 0 0 10px rgba(224, 123, 16, 0.3);
+  margin: 0 auto;
+}

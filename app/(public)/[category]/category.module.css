@@ -1,0 +1,44 @@
+.categoryPage {
+  padding-block: 7rem;
+  display: flex;
+  flex-direction: column;
+  min-height: 100dvh;
+}
+
+.categoryPage h1 {
+  margin-bottom: 1.5rem;
+  color: var(--primary);
+  text-align: center;
+  opacity: 0;
+  animation: fadeInFromBottom 0.5s ease-in-out forwards;
+}
+
+.backButton {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  text-decoration: none;
+  margin-bottom: 2rem;
+}
+
+.backButton img {
+  width: clamp(1.125rem, 1.079rem + 0.19vw, 1.25rem);
+  height: auto;
+}
+
+.backButton span {
+  font-size: clamp(1.125rem, 1.079rem + 0.19vw, 1.25rem);
+  color: var(--primary);
+  font-weight: var(--fw-400);
+}
+
+@keyframes fadeInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}

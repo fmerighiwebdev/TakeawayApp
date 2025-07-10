@@ -1,0 +1,107 @@
+.checkoutWrapper {
+  width: 100%;
+  padding: 1rem;
+  border: 1px solid rgb(224, 224, 224);
+}
+
+.checkoutItems ul {
+  list-style: none;
+  padding: 0;
+  width: 100%;
+  margin: 0 auto;
+}
+
+.checkoutItems ul a {
+  display: block;
+  margin: 1.5rem auto 0 auto;
+  text-decoration: none;
+  background-color: rgb(240, 240, 240);
+  color: gray;
+  font-weight: 500;
+  width: fit-content;
+  padding: 0.5rem 1rem;
+  font-size: clamp(1rem, 0.907rem + 0.381vw, 1.25rem);
+  transition: all 0.2s;
+}
+
+.checkoutItems ul a:hover {
+  background-color: rgb(220, 220, 220);
+}
+
+.checkoutItem h2,
+.checkoutItem p {
+  margin: 0;
+}
+
+.checkoutItem {
+  padding: 1rem 0;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  border-top: 1px solid rgba(224, 123, 16, 0.5);
+}
+
+.checkoutItemInfo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.checkoutItemInfoHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+}
+
+.checkoutItemInfoHeading div {
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.checkoutItemInfoHeading h3 {
+  font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
+  font-weight: var(--fw-500);
+}
+
+.checkoutItemInfoHeading p {
+  font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
+  color: var(--primary);
+  font-weight: var(--fw-600);
+  font-family: var(--ff-heading);
+}
+
+.itemDescription {
+  color: gray;
+  font-size: clamp(0.875rem, 0.829rem + 0.19vw, 1rem);
+  font-style: italic;
+}
+
+.cartTotal {
+  text-align: right;
+  font-family: var(--ff-heading);
+  font-weight: var(--fw-600);
+  text-transform: uppercase;
+  margin-bottom: 0.25rem;
+}
+
+.checkoutItemVariations {
+  background-color: rgb(244, 244, 244);
+  padding: 1rem;
+}
+
+.checkoutItemVariations p:first-child {
+  font-weight: var(--fw-600);
+  color: gray;
+  font-size: clamp(0.875rem, 0.829rem + 0.19vw, 1rem);
+}
+
+.itemDough,
+.itemExtra,
+.itemRemoval,
+.itemCookingOption,
+.itemSpiceLevel {
+  font-size: 0.875rem;
+  color: gray;
+}

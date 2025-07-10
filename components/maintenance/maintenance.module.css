@@ -1,0 +1,26 @@
+.maintenance {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  height: 100dvh;
+  gap: 2rem;
+}
+
+.maintenance img {
+  width: 80px;
+  height: auto;
+}
+
+.maintenance h1 {
+  color: var(--primary);
+  text-align: center;
+  margin: 0;
+}
+
+.maintenance p {
+  color: gray;
+  font-size: clamp(1.25rem, 0.971rem + 1.143vw, 2rem);
+  text-align: center;
+  margin: 0;
+}

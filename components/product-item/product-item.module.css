@@ -1,0 +1,111 @@
+.productGridItem {
+  background-color: white;
+  padding: 1rem 1rem 4.5rem 1rem;
+  border: 1px solid var(--primary);
+  position: relative;
+  flex-basis: calc(33.333% - 1rem);
+}
+
+.productGridItem h3,
+.productGridItem p {
+  margin: 0;
+}
+
+.productGridItem h3 {
+  font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
+}
+
+.productGridItemHeading {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 0.5rem;
+  gap: 1.5rem;
+}
+
+.productTitle {
+  display: flex;
+  align-items: center;
+}
+
+.productGridItemHeading p {
+  font-family: var(--ff-heading);
+  font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
+  font-weight: var(--fw-500);
+  color: var(--primary);
+}
+
+.productGridItemDescription {
+  font-size: clamp(0.875rem, 0.829rem + 0.19vw, 1rem);
+  color: gray;
+  font-style: italic;
+}
+
+.productGridItemActions {
+  position: absolute;
+  bottom: 1rem;
+  left: 1rem;
+  right: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.modalBtn {
+  color: var(--primary);
+  font-weight: var(--fw-500);
+  background-color: transparent;
+  border: none;
+  cursor: pointer;
+  font-size: clamp(0.875rem, 0.829rem + 0.19vw, 1rem);
+  text-decoration: underline;
+}
+
+.addToCartBtn {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 65px;
+  height: 40px;
+  cursor: pointer;
+  transition: all 0.3s;
+  margin: 0 0 0 auto;
+}
+
+.addToCartBtn:hover {
+  box-shadow: 0 2px 5px rgba(224, 123, 16, 0.5);
+}
+
+.addToCartBtn div {
+  display: flex;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.descriptionList {
+  padding: 0 0 0 1rem;
+}
+
+.descriptionList li::marker {
+  color: var(--primary);
+}
+
+.descriptionList li {
+  font-size: clamp(0.875rem, 0.829rem + 0.19vw, 1rem);
+  color: gray;
+  font-style: italic;
+}
+
+@media (max-width: 992px) {
+  .productGridItem {
+    flex-basis: calc(50% - 1rem);
+  }
+}
+@media (max-width: 768px) {
+  .productGridItem {
+    flex-basis: 100%;
+  }
+}

@@ -1,0 +1,88 @@
+.checkoutPage {
+  padding-block: 8rem;
+  min-height: 100dvh;
+}
+
+.checkoutSection {
+  display: flex;
+  gap: 2rem;
+}
+
+.checkoutSection div {
+  flex: 1;
+}
+
+.checkoutPage h1 {
+  margin: 0 0 3rem 0;
+  text-align: center;
+  color: var(--primary);
+}
+
+.successPageHeading {
+  margin: 0 0 3rem 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 0.75rem;
+}
+
+.successPageHeading h1 {
+  margin: 0;
+  text-align: center;
+  color: var(--primary);
+  text-transform: uppercase;
+  opacity: 0;
+  animation: fadeInFromBottom 0.5s ease-in-out forwards;
+}
+
+.successPageHeading p {
+  color: gray;
+  text-align: center;
+  margin: 0;
+}
+
+.checkoutSection {
+  opacity: 0;
+  animation: fadeInFromBottom 0.5s ease-in-out forwards;
+}
+
+.checkIcon {
+  width: clamp(3.75rem, 3.402rem + 1.429vw, 4.688rem);
+  height: clamp(3.75rem, 3.402rem + 1.429vw, 4.688rem);
+  margin: 0 auto;
+  opacity: 0;
+  animation: scaleIn 0.75s ease-in-out 0.75s forwards;
+}
+
+@media screen and (max-width: 992px) {
+  .checkoutSection {
+    flex-direction: column;
+    gap: 2rem;
+  }
+}
+
+@keyframes fadeInFromBottom {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes scaleIn {
+  0% {
+    transform: scale(0.5);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}

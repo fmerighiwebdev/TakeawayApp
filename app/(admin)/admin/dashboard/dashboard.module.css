@@ -1,0 +1,20 @@
+.adminDashboard {
+  padding-block: 5rem 9rem;
+}
+
+.adminDashboardHeading {
+  margin: 0 0 3rem 0;
+}
+
+.adminDashboard h1 {
+  color: var(--primary);
+  text-align: center;
+  margin: 0;
+}
+
+.adminDashboardHeading p {
+  color: gray;
+  font-size: clamp(1.25rem, 0.971rem + 1.143vw, 2rem);
+  text-align: center;
+  margin: 0;
+}

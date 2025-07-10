@@ -1,0 +1,47 @@
+.adminForm {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  gap: 1rem;
+}
+
+.adminForm button {
+  background-color: var(--primary);
+  color: white;
+  border: none;
+  padding: 0.5rem;
+  font-weight: var(--fw-600);
+  font-size: clamp(1rem, 0.907rem + 0.381vw, 1.25rem);
+  cursor: pointer;
+  text-transform: uppercase;
+  transition: all 0.3s;
+  font-family: var(--ff-body);
+  width: 175px;
+  margin-top: 0.5rem;
+}
+
+.adminForm button:hover {
+  background-color: var(--primary-dark);
+}
+
+.adminForm .inputField {
+  width: 100%;
+}
+
+.error {
+  color: var(--accent-red);
+  font-size: 0.875rem;
+  margin: 0;
+}
+
+.errorBanner {
+  background-color: rgba(239, 49, 32, 0.15);
+  color: var(--accent-red);
+  padding: 0.5rem;
+  text-align: center;
+  font-size: clamp(1rem, 0.954rem + 0.19vw, 1.125rem);
+  width: 100%;
+  margin: 0;
+}
