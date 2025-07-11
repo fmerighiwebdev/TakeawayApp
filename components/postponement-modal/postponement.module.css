@@ -34,13 +34,13 @@
 
 .modalContent h3 {
   font-weight: var(--fw-600);
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
   margin: 0;
   line-height: 1.15;
 }
 
 .modalContent h3 span {
-  color: var(--primary);
+  color: var(--primaryColor);
 }
 
 .modalContent p {
@@ -67,12 +67,12 @@
 }
 
 .confirmButton {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: white;
 }
 
 .confirmButton:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }
 
 .cancelButton {

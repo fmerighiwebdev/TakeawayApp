@@ -8,7 +8,7 @@
 }
 
 .adminForm button {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: white;
   border: none;
   padding: 0.5rem;
@@ -17,13 +17,13 @@
   cursor: pointer;
   text-transform: uppercase;
   transition: all 0.3s;
-  font-family: var(--ff-body);
+  font-family: var(--ffBody);
   width: 175px;
   margin-top: 0.5rem;
 }
 
 .adminForm button:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }
 
 .adminForm .inputField {

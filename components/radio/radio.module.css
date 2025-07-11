@@ -38,8 +38,8 @@
 }
 
 .formGroupFlex input:checked + label .customRadio {
-  background-color: var(--primary);
-  border-color: var(--primary);
+  background-color: var(--primaryColor);
+  border-color: var(--primaryColor);
 }
 
 .formGroupFlex input:checked + label .customRadio::after {
@@ -55,5 +55,5 @@
 }
 
 .formGroupFlex label:hover .customRadio {
-  border-color: var(--primary);
+  border-color: var(--primaryColor);
 }

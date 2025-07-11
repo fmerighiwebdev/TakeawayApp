@@ -19,7 +19,7 @@
 }
 
 .orderNumber {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   width: clamp(3.125rem, 2.893rem + 0.952vw, 3.75rem);
   height: clamp(3.125rem, 2.893rem + 0.952vw, 3.75rem);
   display: flex;

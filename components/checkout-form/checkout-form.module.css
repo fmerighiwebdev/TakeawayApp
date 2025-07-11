@@ -12,8 +12,8 @@
 }
 
 .checkoutForm button {
-  background-color: var(--primary);
-  font-family: var(--ff-body);
+  background-color: var(--primaryColor);
+  font-family: var(--ffBody);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -27,7 +27,7 @@
 }
 
 .checkoutForm button:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }
 
 .doubleGroup {

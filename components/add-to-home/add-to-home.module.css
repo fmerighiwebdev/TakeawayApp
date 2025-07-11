@@ -1,77 +1,77 @@
 .addToHomeScreenPrompt {
-    position: fixed;
-    bottom: 20px;
-    left: 50%;
-    transform: translateX(-50%);
-    padding: 1rem;
-    background-color: #ffffff;
-    color: #333;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
-    z-index: 999;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-    width: min(400px, 100%);
-    text-align: center;
+  position: fixed;
+  bottom: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  padding: 1rem;
+  background-color: #ffffff;
+  color: #333;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  z-index: 999;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+  width: min(400px, 100%);
+  text-align: center;
 }
 
 .promptHeading {
-    font-weight: 600;
-    font-size: clamp(1rem, 0.96rem + 0.183vw, 1.125rem);
+  font-weight: 600;
+  font-size: clamp(1rem, 0.96rem + 0.183vw, 1.125rem);
 }
 
 .promptInstructions {
-    font-weight: 500;
-    font-size: clamp(1rem, 0.96rem + 0.183vw, 1.125rem);
-    color: gray;
+  font-weight: 500;
+  font-size: clamp(1rem, 0.96rem + 0.183vw, 1.125rem);
+  color: gray;
 }
 
 .promptActions {
-    display: flex;
-    align-items: center;
-    width: 100%;
-    gap: .5rem;
+  display: flex;
+  align-items: center;
+  width: 100%;
+  gap: 0.5rem;
 }
 
 .installApp {
-    flex: 1;
-    background-color: var(--primary);
-    color: white;
-    font-weight: 700;
-    text-transform: uppercase;
-    text-align: center;
-    transition: all .2s;
-    outline: none;
-    border: none;
-    padding-block: .5rem;
-    cursor: pointer;
-    font-size: clamp(1rem, 0.96rem + 0.183vw, 1.125rem);
+  flex: 1;
+  background-color: var(--primaryColor);
+  color: white;
+  font-weight: 700;
+  text-transform: uppercase;
+  text-align: center;
+  transition: all 0.2s;
+  outline: none;
+  border: none;
+  padding-block: 0.5rem;
+  cursor: pointer;
+  font-size: clamp(1rem, 0.96rem + 0.183vw, 1.125rem);
 }
 
 .installApp:hover {
-    background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }
 
 .dismissInstall {
-    flex: 1;
-    background-color: #dddddd;
-    color: rgb(102, 102, 102);
-    font-weight: 400;
-    transition: all .2s;
-    outline: none;
-    border: none;
-    padding-block: .5rem;
-    cursor: pointer;
-    font-size: clamp(1rem, 0.96rem + 0.183vw, 1.125rem);
+  flex: 1;
+  background-color: #dddddd;
+  color: rgb(102, 102, 102);
+  font-weight: 400;
+  transition: all 0.2s;
+  outline: none;
+  border: none;
+  padding-block: 0.5rem;
+  cursor: pointer;
+  font-size: clamp(1rem, 0.96rem + 0.183vw, 1.125rem);
 }
 
 .dismissInstall:hover {
-    background-color: #bdbdbd;
+  background-color: #bdbdbd;
 }
 
 @media screen and (max-width: 768px) {
-    .addToHomeScreenPrompt {
-        bottom: 0;
-    }
+  .addToHomeScreenPrompt {
+    bottom: 0;
+  }
 }

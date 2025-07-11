@@ -41,7 +41,7 @@
 }
 
 .variationsModalHeading h3 span {
-  color: var(--primary);
+  color: var(--primaryColor);
   margin: 0;
 }
 
@@ -119,7 +119,7 @@
 }
 
 .addToCartBtn {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: white;
   border: none;
   display: flex;

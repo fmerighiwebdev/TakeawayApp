@@ -19,13 +19,13 @@
 }
 
 .active {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: var(--white);
   box-shadow: 0 2px 5px rgba(224, 123, 16, 0.5);
 }
 
 .active:hover {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: var(--white);
   box-shadow: 0 2px 5px rgba(224, 123, 16, 0.5);
 }

@@ -67,9 +67,9 @@
 
 .checkoutItemInfoHeading p {
   font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
-  color: var(--primary);
+  color: var(--primaryColor);
   font-weight: var(--fw-600);
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
 }
 
 .itemDescription {
@@ -80,7 +80,7 @@
 
 .cartTotal {
   text-align: right;
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
   font-weight: var(--fw-600);
   text-transform: uppercase;
   margin-bottom: 0.25rem;

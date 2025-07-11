@@ -25,7 +25,7 @@
 }
 
 .ordersTotal span {
-  color: var(--primary);
+  color: var(--primaryColor);
 }
 
 .noOrders {

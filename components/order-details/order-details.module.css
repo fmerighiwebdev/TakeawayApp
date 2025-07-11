@@ -82,7 +82,7 @@
 }
 
 .orderDetailsHeading h2 {
-  color: var(--primary);
+  color: var(--primaryColor);
   margin: 0;
 }
 
@@ -109,7 +109,7 @@
 
 .orderDetailsElementHeading h3 {
   font-weight: var(--fw-500);
-  font-family: var(--ff-body);
+  font-family: var(--ffBody);
   color: gray;
   text-transform: uppercase;
   margin: 0;
@@ -167,9 +167,9 @@
 
 .productItemInfoHeading p {
   font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
-  color: var(--primary);
+  color: var(--primaryColor);
   font-weight: var(--fw-600);
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
 }
 
 .productItemDescription {
@@ -209,7 +209,7 @@
 
 .totalPrice p {
   font-weight: var(--fw-600);
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
   color: gray;
   text-transform: uppercase;
   font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
@@ -218,7 +218,7 @@
 }
 
 .totalPrice p span {
-  color: var(--primary);
+  color: var(--primaryColor);
   font-weight: var(--fw-600);
   font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
 }
@@ -239,7 +239,7 @@
 }
 
 .markAsCompleted {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: white;
   font-size: 1rem;
   display: block;
@@ -253,7 +253,7 @@
 }
 
 .markAsCompleted:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }
 
 .lateOrder {

@@ -6,6 +6,8 @@ import phoneIcon from "@/assets/phone.svg";
 
 import Image from "next/image";
 import Script from "next/script";
+import { headers } from "next/headers";
+import supabase from "@/lib/supabaseClient";
 
 export const metadata = {
   title: "Ristorante Pizzeria All'Amicizia - Takeaway",
@@ -67,27 +69,44 @@ const jsonLd = {
   ]
 };
 
-export default function Home() {
+export default async function Home() {
+  const tenantId = (await headers()).get("x-tenant-id");
+
+  const { data: tenant, error: tenantError } = await supabase
+    .from("tenants")
+    .select("name, address, phone, theme")
+    .eq("id", tenantId)
+    .single();
+
+  if (tenantError || !tenant) {
+    console.error("Error fetching tenant data:", tenantError);
+  }
+
   return (
     <main className={styles.hero}>
-      <Script id="json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }} />
+      <Script
+        id="json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+      />
       <section className={styles.heroHeading}>
         <div className={`container ${styles.heroHeadingContainer}`}>
           <Image
-            src={chandiLogo}
-            alt="Asporto - Ristorante Pizzeria All'Amicizia - Chandi Logo"
+            src={tenant.theme.logoUrl}
+            alt={`Takeaway - ${tenant.name} - Logo`}
+            width={100}
+            height={100}
             priority
           />
           <div>
-            <h1>Ristorante Pizzeria All&apos;Amicizia</h1>
-            <p>
-              Piazza S.Maria Assunta, 2 <br /> Villa Lagarina (TN)
-            </p>
+            <h1>{tenant.name}</h1>
+            <p>{tenant.address}</p>
             <a
-              href="tel:+390464411420"
-              aria-label="Chiama il ristorante al numero 0464 411420">
+              href={`tel:+39${tenant.phone}`}
+              aria-label={`Chiama il ristorante al numero ${tenant.phone}`}
+            >
               <Image src={phoneIcon} alt="" aria-hidden="true" />
-              <span>0464 411420</span>
+              <span>{tenant.phone}</span>
             </a>
           </div>
         </div>
@@ -97,7 +116,12 @@ export default function Home() {
           <div className={styles.categoriesContainer}>
             <div className={styles.heroCategory}>
               <Link href="/pizzeria">
-                <Image src="/category-images/pizzeria.jpg" alt="Pizzeria - Pizze variegate" width={400} height={300} />
+                <Image
+                  src="/category-images/pizzeria.jpg"
+                  alt="Pizzeria - Pizze variegate"
+                  width={400}
+                  height={300}
+                />
                 <div className={styles.categoryOverlay}>
                   <h2>Pizzeria</h2>
                 </div>
@@ -107,7 +131,9 @@ export default function Home() {
               <Link href="/cucina-indiana">
                 <Image
                   src="/category-images/cucina-indiana.webp"
-                  alt="Cucina Indiana - Piatti speziati e autentici" width={400} height={300}
+                  alt="Cucina Indiana - Piatti speziati e autentici"
+                  width={400}
+                  height={300}
                 />
                 <div className={styles.categoryOverlay}>
                   <h2>Cucina Indiana</h2>
@@ -118,7 +144,9 @@ export default function Home() {
               <Link href="/cucina-italiana">
                 <Image
                   src="/category-images/cucina-italiana.webp"
-                  alt="Cucina Italiana - Tradizione e gusto" width={400} height={300}
+                  alt="Cucina Italiana - Tradizione e gusto"
+                  width={400}
+                  height={300}
                 />
                 <div className={styles.categoryOverlay}>
                   <h2>Cucina Italiana</h2>
@@ -127,7 +155,12 @@ export default function Home() {
             </div>
             <div className={styles.heroCategory}>
               <Link href="/bevande">
-                <Image src="/category-images/bevande.webp" alt="Bevande - Bibite e bevande alcoliche" width={400} height={300} />
+                <Image
+                  src="/category-images/bevande.webp"
+                  alt="Bevande - Bibite e bevande alcoliche"
+                  width={400}
+                  height={300}
+                />
                 <div className={styles.categoryOverlay}>
                   <h2>Bevande</h2>
                 </div>

@@ -1,30 +1,44 @@
 import { NextResponse } from "next/server";
-import axios from "axios";
+import supabase from "./lib/supabaseClient";
 
-// Middleware per risolvere il tenant in base al dominio
+// Middleware per la gestione dei tenant basata sul dominio
+// Questo middleware intercetta le richieste e determina il tenant in base al dominio
 export async function middleware(request) {
   const host = request.headers.get("host") || "";
 
-  try {
-    const response = await axios.get(
-      `${process.env.NEXT_PUBLIC_API_URL}/api/resolve-tenant?domain=${host}`
-    );
+  console.log("Middleware tenant check for host:", host);
 
-    if (response.status === 404) {
-      return NextResponse.rewrite(new URL("/not-found", request.url));
-    }
+  // Controlla se il dominio è localhost
+  // Se sì, usa un tenant predefinito o quello specificato nell'ambiente
+  if (host.startsWith("localhost")) {
+    return NextResponse.next({
+      headers: {
+        "x-tenant-id": process.env.LOCAL_TENANT_ID || "default-tenant-id",
+      },
+    });
+  }
 
-    const tenantData = response.data;
+  // Altrimenti, cerca il tenant nel database in base al dominio
+  const { data, error } = await supabase
+    .from("tenants")
+    .select("id")
+    .eq("domain", host)
+    .single();
 
-    const nextResponse = NextResponse.next();
-    nextResponse.headers.set("x-tenant-id", tenantData.id);
-    return nextResponse;
-  } catch (error) {
-    console.error("Error resolving tenant:", error);
+  if (error || !data) {
     return NextResponse.rewrite(new URL("/not-found", request.url));
   }
+
+  // Se il tenant è trovato, aggiungi l'ID del tenant agli headers della risposta
+  // Questo permette di utilizzare l'ID del tenant in altre parti dell'applicazione
+  return NextResponse.next({
+    headers: {
+      "x-tenant-id": data.id,
+    },
+  });
 }
 
+// Configurazione del matcher per applicare il middleware a tutte le rotte tranne quelle statiche
 export const config = {
-  matcher: ["/((?!api|_next/static|_next/image|favicon.ico).*)"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico).*)"],
 };

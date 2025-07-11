@@ -10,13 +10,13 @@
   border: 1px solid lightgray;
   font-size: 1rem;
   transition: all 0.3s;
-  font-family: var(--ff-body);
+  font-family: var(--ffBody);
   background-color: white;
 }
 
 .formGroup select:focus {
   outline: none;
-  border-color: var(--primary);
+  border-color: var(--primaryColor);
 }
 
 .formGroup label span {
@@ -37,7 +37,7 @@
   border: 1px #eb6559 solid;
   padding: 0.5rem;
   color: #eb6559;
-  font-family: var(--ff-body);
+  font-family: var(--ffBody);
   font-size: 1rem;
   background-color: rgba(255, 0, 0, 0.05);
 }

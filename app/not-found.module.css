@@ -14,11 +14,11 @@
 }
 
 .notFoundPage h1 {
-  color: var(--primary);
+  color: var(--primaryColor);
 }
 
 .notFoundPage a {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: var(--white);
   padding: 0.5rem 1rem;
   text-decoration: none;
@@ -27,5 +27,5 @@
 }
 
 .notFoundPage a:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }

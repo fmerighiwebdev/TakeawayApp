@@ -13,7 +13,7 @@
 }
 
 .maintenance h1 {
-  color: var(--primary);
+  color: var(--primaryColor);
   text-align: center;
   margin: 0;
 }

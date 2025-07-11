@@ -21,12 +21,12 @@
   font-size: clamp(1rem, 0.814rem + 0.762vw, 1.5rem);
   text-transform: uppercase;
   transition: all 0.2s;
-  font-family: var(--ff-body);
+  font-family: var(--ffBody);
   width: 100%;
 }
 
 .ordersNav button.active {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   box-shadow: 0 0 15px rgba(224, 123, 16, 0.5);
   color: white;
   font-weight: var(--fw-600);

@@ -15,7 +15,7 @@
 .checkoutPage h1 {
   margin: 0 0 3rem 0;
   text-align: center;
-  color: var(--primary);
+  color: var(--primaryColor);
 }
 
 .successPageHeading {
@@ -29,7 +29,7 @@
 .successPageHeading h1 {
   margin: 0;
   text-align: center;
-  color: var(--primary);
+  color: var(--primaryColor);
   text-transform: uppercase;
   opacity: 0;
   animation: fadeInFromBottom 0.5s ease-in-out forwards;

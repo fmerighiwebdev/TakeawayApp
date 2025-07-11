@@ -1,7 +1,7 @@
 .productGridItem {
   background-color: white;
   padding: 1rem 1rem 4.5rem 1rem;
-  border: 1px solid var(--primary);
+  border: 1px solid var(--primaryColor);
   position: relative;
   flex-basis: calc(33.333% - 1rem);
 }
@@ -29,10 +29,10 @@
 }
 
 .productGridItemHeading p {
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
   font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
   font-weight: var(--fw-500);
-  color: var(--primary);
+  color: var(--primaryColor);
 }
 
 .productGridItemDescription {
@@ -52,7 +52,7 @@
 }
 
 .modalBtn {
-  color: var(--primary);
+  color: var(--primaryColor);
   font-weight: var(--fw-500);
   background-color: transparent;
   border: none;
@@ -62,7 +62,7 @@
 }
 
 .addToCartBtn {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: white;
   border: none;
   display: flex;
@@ -90,7 +90,7 @@
 }
 
 .descriptionList li::marker {
-  color: var(--primary);
+  color: var(--primaryColor);
 }
 
 .descriptionList li {

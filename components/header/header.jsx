@@ -4,7 +4,6 @@ import Image from "next/image";
 
 import styles from "./header.module.css";
 
-import chandiLogo from "@/assets/logo-minimal.svg";
 import shopBag from "@/assets/bag.svg";
 
 import { useCartStore } from "@/store/cart";
@@ -13,7 +12,7 @@ import { usePathname } from "next/navigation";
 import { differenceInDays, differenceInYears } from "date-fns";
 import { useEffect, useState } from "react";
 
-export default function Header() {
+export default function Header({ tenantData, tenantTheme }) {
   const { cart } = useCartStore();
   const pathname = usePathname();
   const [isHydrated, setIsHydrated] = useState(false);
@@ -48,12 +47,15 @@ export default function Header() {
           <div className={styles.headerHeading}>
             <Link href="/">
               <Image
-                src={chandiLogo}
+                src={tenantTheme.logoUrl}
                 className={styles.headerLogo}
-                alt="Asporto - Ristorante Pizzeria All'Amicizia - Chandi Logo"
+                alt={`Takeaway - ${tenantData.name} Logo`}
+                width={100}
+                height={100}
+                priority
               />
             </Link>
-            <span>Indian Italian Restaurant</span>
+            <span>{tenantData.slogan}</span>
           </div>
           <Link href="/carrello">
             <div className={styles.shopBagWrapper}>

@@ -51,9 +51,9 @@
 
 .cartItemInfoHeading p {
   font-size: clamp(1.75rem, 1.657rem + 0.381vw, 2rem);
-  color: var(--primary);
+  color: var(--primaryColor);
   font-weight: var(--fw-600);
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
 }
 
 .cartItemInfoHeading h3 {
@@ -73,7 +73,7 @@
 }
 
 .cartItemControls button {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: white;
   border: none;
   cursor: pointer;
@@ -86,7 +86,7 @@
 }
 
 .cartItemControls button:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }
 
 .cartItemControls {
@@ -107,7 +107,7 @@
 
 .cartTotal {
   text-align: right;
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
   font-weight: var(--fw-600);
   text-transform: uppercase;
   margin-bottom: 0.25rem;
@@ -130,14 +130,14 @@
 }
 
 .cartCta .checkout {
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: white;
   font-weight: 700;
   font-size: clamp(1rem, 0.907rem + 0.381vw, 1.25rem);
 }
 
 .cartCta .checkout:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }
 
 .cartCta .backToShop {
@@ -153,7 +153,7 @@
 
 .backToShopNoItems {
   text-decoration: none;
-  background-color: var(--primary);
+  background-color: var(--primaryColor);
   color: white;
   font-size: 1.125rem;
   display: block;
@@ -165,7 +165,7 @@
 }
 
 .backToShopNoItems:hover {
-  background-color: var(--primary-dark);
+  background-color: var(--primaryColorDark);
 }
 
 .cartItemVariations {

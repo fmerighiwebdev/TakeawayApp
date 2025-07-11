@@ -24,7 +24,7 @@
 
 .headerHeading span {
   font-size: clamp(1rem, 0.907rem + 0.381vw, 1.25rem);
-  font-family: var(--ff-heading);
+  font-family: var(--ffHeading);
   color: var(--black);
   text-transform: uppercase;
 }
@@ -56,7 +56,7 @@
 }
 
 .marqueeWrapper {
-  background-color: var(--secondary);
+  background-color: var(--secondaryColor);
   position: absolute;
   top: 100%;
   left: 0;
