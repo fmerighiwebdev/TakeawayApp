@@ -1,10 +1,10 @@
 import Image from "next/image";
 import styles from "./footer.module.css";
+import DOMPurify from "isomorphic-dompurify";
 
-import chandiLogo from "@/assets/chandi-logo.svg";
 import Link from "next/link";
 
-export default function Footer() {
+export default function Footer({ tenantData, tenantTheme }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -14,33 +14,32 @@ export default function Footer() {
     >
       <div className={`container ${styles.footerContainer}`}>
         <Image
-          src={chandiLogo}
-          alt="Asporto - Ristorante Pizzeria All'Amicizia - Chandi Logo"
-          width={100}
-          height={100}
+          src={tenantTheme.logoUrl}
+          alt={`Asporto ${tenantData.name} Logo`}
+          width={40}
+          height={40}
         />
         <div className={styles.footerText}>
-          <p>ALL&apos;AMICIZIA SNC</p>
-          <p>DI SINGH SARABJIT & C.</p>
+          <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(tenantData.legal_name) }} />
           <p>
-            <strong>P.IVA: 01757660228</strong>
+            <strong>P.IVA: {tenantData.tax}</strong>
           </p>
-          <p>Piazza S. Maria Assunta, 2 - Villa Lagarina (TN)</p>
+          <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(tenantData.address) }}></p>
         </div>
         <div className={styles.footerLinks}>
-          <a
-            href="https://www.singhrestaurant.it"
+          {tenantData.website_url && (<a
+            href={tenantData.website_url}
             target="_blank"
             rel="noopener noreferrer"
-            title="Visita il sito web di Ristorante Pizzeria All'Amicizia"
+            aria-label={`Visita il sito web di ${tenantData.name}`}
           >
             Sito web
-          </a>
+          </a>)}
           <Link href="/contatti">Contatti</Link>
           <Link href="/privacy">Privacy Cookie Policy</Link>
         </div>
         <p className={styles.footerCopy}>
-          &copy; {currentYear} - ALL&apos;AMICIZIA
+          &copy; {currentYear} - {tenantData.name} - Tutti i diritti riservati
         </p>
       </div>
     </footer>

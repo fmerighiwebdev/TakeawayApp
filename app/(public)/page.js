@@ -1,13 +1,14 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 
-import chandiLogo from "@/assets/chandi-logo.svg";
 import phoneIcon from "@/assets/phone.svg";
 
 import Image from "next/image";
 import Script from "next/script";
 import { headers } from "next/headers";
 import supabase from "@/lib/supabaseClient";
+import DOMPurify from "isomorphic-dompurify";
+import { getTenantDetails, getTenantId, getTenantTheme } from "@/lib/tenantDetails";
 
 export const metadata = {
   title: "Ristorante Pizzeria All'Amicizia - Takeaway",
@@ -70,17 +71,9 @@ const jsonLd = {
 };
 
 export default async function Home() {
-  const tenantId = (await headers()).get("x-tenant-id");
-
-  const { data: tenant, error: tenantError } = await supabase
-    .from("tenants")
-    .select("name, address, phone, theme")
-    .eq("id", tenantId)
-    .single();
-
-  if (tenantError || !tenant) {
-    console.error("Error fetching tenant data:", tenantError);
-  }
+  const tenantId = getTenantId();
+  const tenantData = await getTenantDetails(tenantId);
+  const tenantTheme = await getTenantTheme(tenantId);
 
   return (
     <main className={styles.hero}>
@@ -92,21 +85,21 @@ export default async function Home() {
       <section className={styles.heroHeading}>
         <div className={`container ${styles.heroHeadingContainer}`}>
           <Image
-            src={tenant.theme.logoUrl}
-            alt={`Takeaway - ${tenant.name} - Logo`}
+            src={tenantTheme.logoUrl}
+            alt={`Takeaway - ${tenantData.name} - Logo`}
             width={100}
             height={100}
             priority
           />
           <div>
-            <h1>{tenant.name}</h1>
-            <p>{tenant.address}</p>
+            <h1>{tenantData.name}</h1>
+            <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(tenantData.address) }}></p>
             <a
-              href={`tel:+39${tenant.phone}`}
-              aria-label={`Chiama il ristorante al numero ${tenant.phone}`}
+              href={`tel:+39${tenantData.phone}`}
+              aria-label={`Chiama il ristorante al numero ${tenantData.phone}`}
             >
               <Image src={phoneIcon} alt="" aria-hidden="true" />
-              <span>{tenant.phone}</span>
+              <span>{tenantData.phone}</span>
             </a>
           </div>
         </div>

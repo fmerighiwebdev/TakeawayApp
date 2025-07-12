@@ -6,6 +6,8 @@ import phoneOrangeIcon from "@/assets/phone-orange.svg";
 import locationOrangeIcon from "@/assets/location-orange.svg";
 import emailOrangeIcon from "@/assets/email-orange.svg";
 import Script from "next/script";
+import DOMPurify from "isomorphic-dompurify";
+import { getTenantDetails, getTenantId } from "@/lib/tenantDetails";
 
 export const metadata = {
   title: "Contatti - All'Amicizia Takeaway",
@@ -55,7 +57,12 @@ const breadcrumbJsonLd = {
   ]
 };
 
-export default function ContactsPage() {
+export default async function ContactsPage() {
+  const tenantId = getTenantId();
+  const tenantData = await getTenantDetails(tenantId);
+
+  console.log("Tenant Data:", tenantData);
+
   return (
     <main className={styles.contactsPage}>
       <Script id="breadcrumb-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
@@ -86,7 +93,7 @@ export default function ContactsPage() {
                   width={50}
                   height={50}
                 />
-                <p>0464 411420</p>
+                <p>{tenantData.phone}</p>
               </li>
               <li className={styles.contactItem}>
                 <Image
@@ -96,8 +103,7 @@ export default function ContactsPage() {
                   height={50}
                 />
                 <div>
-                  <p>Piazza Santa Maria Assunta 2</p>
-                  <p>38060 Villa Lagarina (TN)</p>
+                  <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(tenantData.address) }}></p>
                 </div>
               </li>
               <li className={styles.contactItem}>
@@ -107,7 +113,7 @@ export default function ContactsPage() {
                   width={50}
                   height={50}
                 />
-                <p>amicizia@singhrestaurant.it</p>
+                <p>{tenantData.email}</p>
               </li>
             </ul>
           </div>

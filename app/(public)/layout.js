@@ -9,7 +9,6 @@ export const metadata = {
 }
 
 export default async function PublicLayout({ children }) {
-
   const tenantId = getTenantId();
   const tenantData = await getTenantDetails(tenantId);
   const tenantTheme = await getTenantTheme(tenantId);
@@ -22,7 +21,7 @@ export default async function PublicLayout({ children }) {
       </Script>
       <Header tenantData={tenantData} tenantTheme={tenantTheme} />
       {children}
-      <Footer />
+      <Footer tenantData={tenantData} tenantTheme={tenantTheme} />
       <AddToHomeScreenPrompt />
     </>
   );
