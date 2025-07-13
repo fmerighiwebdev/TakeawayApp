@@ -1,17 +1,20 @@
 import { NextResponse } from "next/server";
 
 import { getProductsByCategory } from "@/lib/products";
-import { categoryNames } from "@/lib/categories";
+import { getTenantCategories, getTenantId } from "@/lib/tenantDetails";
 
 export async function GET(req, { params }) {
-  const { category: categorySlug } = await params;
+  const { category: categoryId } = await params;
+  
+  const tenantId = getTenantId();
+  const tenantCategories = await getTenantCategories(tenantId);
 
-  if (!Object.keys(categoryNames).includes(categorySlug)) {
-    return NextResponse.json({ message: "Categoria non valida" }, { status: 400 });
+  if (!tenantCategories.some(category => category.id === categoryId)) {
+    return NextResponse.json({ message: "Categoria non trovata" }, { status: 404 });
   }
 
   try {
-    const rows = await getProductsByCategory(categorySlug);
+    const rows = await getProductsByCategory(categoryId, tenantId);
     return NextResponse.json({ products: rows }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ message: "Errore nel caricamento dei prodotti" }, { status: 500 });

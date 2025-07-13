@@ -7,7 +7,7 @@ import styles from "./products-grid.module.css";
 import ProductItem from "../product-item/product-item";
 import Loader from "../loader/loader";
 
-export default function ProductsGrid({ categorySlug, activeSubcategory }) {
+export default function ProductsGrid({ categoryId, activeSubcategory }) {
   const [allProducts, setAllProducts] = useState([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState(null);
@@ -16,7 +16,7 @@ export default function ProductsGrid({ categorySlug, activeSubcategory }) {
     async function fetchProducts() {
       setLoading(true);
       try {
-        const response = await axios.get(`/api/products/${categorySlug}`);
+        const response = await axios.get(`/api/products/${categoryId}`);
         setAllProducts(response.data.products);
       } catch (error) {
         console.error(error);
@@ -26,11 +26,11 @@ export default function ProductsGrid({ categorySlug, activeSubcategory }) {
     }
 
     fetchProducts();
-  }, [categorySlug]);
+  }, [categoryId]);
 
   const displayedProducts = activeSubcategory
     ? allProducts.filter(
-        (product) => product.slug_subcategory === activeSubcategory
+        (product) => product.subcategory_id === activeSubcategory
       )
     : allProducts;
 

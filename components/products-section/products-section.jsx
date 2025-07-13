@@ -6,14 +6,11 @@ import ProductsGrid from "../products-grid/products-grid";
 
 import styles from "./products-section.module.css";
 import SubcategoryButton from "../subcategory-button/subcategory-button";
-import { notFound } from "next/navigation";
 
 import { categoryNames, categoryData } from "@/lib/categories";
 
-export default function ProductsSection({ categorySlug }) {
+export default function ProductsSection({ subcategories, categoryId }) {
   const [activeSubcategory, setActiveSubcategory] = useState(null);
-
-  const subcategories = categoryData[categorySlug];
 
   return (
     <section className={styles.productsSection}>
@@ -21,10 +18,10 @@ export default function ProductsSection({ categorySlug }) {
         <ul role="list">
           {subcategories.map((subcategory) => (
             <SubcategoryButton
-              key={subcategory.slug_subcategory}
+              key={subcategory.id}
               subcategory={subcategory}
-              isActive={activeSubcategory === subcategory.slug_subcategory}
-              onClick={() => setActiveSubcategory(subcategory.slug_subcategory)}
+              isActive={activeSubcategory === subcategory.id}
+              onClick={() => setActiveSubcategory(subcategory.id)}
             />
           ))}
         </ul>
@@ -37,7 +34,7 @@ export default function ProductsSection({ categorySlug }) {
           </button>
         )}
       </div>
-      <ProductsGrid categorySlug={categorySlug} activeSubcategory={activeSubcategory} />
+      <ProductsGrid categoryId={categoryId} activeSubcategory={activeSubcategory} />
     </section>
   );
 }

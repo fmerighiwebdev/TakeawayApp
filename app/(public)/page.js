@@ -8,72 +8,96 @@ import Script from "next/script";
 import { headers } from "next/headers";
 import supabase from "@/lib/supabaseClient";
 import DOMPurify from "isomorphic-dompurify";
-import { getTenantDetails, getTenantId, getTenantTheme } from "@/lib/tenantDetails";
+import {
+  getTenantCategories,
+  getTenantDetails,
+  getTenantId,
+  getTenantTheme,
+} from "@/lib/tenantDetails";
 
 export const metadata = {
   title: "Ristorante Pizzeria All'Amicizia - Takeaway",
-  description: "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia. Cucina italiana e indiana, pizze, bevande e molto altro.",
+  description:
+    "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia. Cucina italiana e indiana, pizze, bevande e molto altro.",
   openGraph: {
     title: "Ristorante Pizzeria All'Amicizia - Takeaway",
-    description: "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia",
+    description:
+      "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia",
     images: [
       {
-        url: '/allamicizia.webp',
+        url: "/allamicizia.webp",
         width: 1200,
         height: 630,
-        alt: "Ristorante Pizzeria All'Amicizia"
-      }
+        alt: "Ristorante Pizzeria All'Amicizia",
+      },
     ],
-    locale: 'it_IT',
-    type: 'website',
+    locale: "it_IT",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "Ristorante Pizzeria All'Amicizia - Takeaway",
-    description: "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia",
-    images: ['/allamicizia.webp'],
+    description:
+      "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia",
+    images: ["/allamicizia.webp"],
   },
   alternates: {
-    canonical: process.env.BASE_URL
-  }
+    canonical: process.env.BASE_URL,
+  },
 };
 
 const jsonLd = {
   "@context": "https://schema.org",
   "@type": "Restaurant",
-  "name": "Ristorante Pizzeria All'Amicizia",
-  "image": "/allamicizia.webp",
-  "address": {
+  name: "Ristorante Pizzeria All'Amicizia",
+  image: "/allamicizia.webp",
+  address: {
     "@type": "PostalAddress",
-    "streetAddress": "Piazza Santa Maria Assunta 2",
-    "addressLocality": "Villa Lagarina",
-    "postalCode": "38060",
-    "addressRegion": "TN",
-    "addressCountry": "IT"
+    streetAddress: "Piazza Santa Maria Assunta 2",
+    addressLocality: "Villa Lagarina",
+    postalCode: "38060",
+    addressRegion: "TN",
+    addressCountry: "IT",
   },
-  "url": `${process.env.BASE_URL}`,
-  "telephone": "+390464411420",
-  "servesCuisine": ["Italian", "Indian"],
-  "openingHoursSpecification": [
+  url: `${process.env.BASE_URL}`,
+  telephone: "+390464411420",
+  servesCuisine: ["Italian", "Indian"],
+  openingHoursSpecification: [
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "opens": "12:00",
-      "closes": "14:30"
+      dayOfWeek: [
+        "Monday",
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+      opens: "12:00",
+      closes: "14:30",
     },
     {
       "@type": "OpeningHoursSpecification",
-      "dayOfWeek": ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday", "Sunday"],
-      "opens": "18:30",
-      "closes": "23:00"
-    }
-  ]
+      dayOfWeek: [
+        "Tuesday",
+        "Wednesday",
+        "Thursday",
+        "Friday",
+        "Saturday",
+        "Sunday",
+      ],
+      opens: "18:30",
+      closes: "23:00",
+    },
+  ],
 };
 
 export default async function Home() {
   const tenantId = getTenantId();
   const tenantData = await getTenantDetails(tenantId);
   const tenantTheme = await getTenantTheme(tenantId);
+  const tenantCategories = await getTenantCategories(tenantId);
 
   return (
     <main className={styles.hero}>
@@ -93,7 +117,11 @@ export default async function Home() {
           />
           <div>
             <h1>{tenantData.name}</h1>
-            <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(tenantData.address) }}></p>
+            <p
+              dangerouslySetInnerHTML={{
+                __html: DOMPurify.sanitize(tenantData.address),
+              }}
+            />
             <a
               href={`tel:+39${tenantData.phone}`}
               aria-label={`Chiama il ristorante al numero ${tenantData.phone}`}
@@ -107,58 +135,21 @@ export default async function Home() {
       <section className={`${styles.heroCategories}`}>
         <div className="container">
           <div className={styles.categoriesContainer}>
-            <div className={styles.heroCategory}>
-              <Link href="/pizzeria">
-                <Image
-                  src="/category-images/pizzeria.jpg"
-                  alt="Pizzeria - Pizze variegate"
-                  width={400}
-                  height={300}
-                />
-                <div className={styles.categoryOverlay}>
-                  <h2>Pizzeria</h2>
-                </div>
-              </Link>
-            </div>
-            <div className={styles.heroCategory}>
-              <Link href="/cucina-indiana">
-                <Image
-                  src="/category-images/cucina-indiana.webp"
-                  alt="Cucina Indiana - Piatti speziati e autentici"
-                  width={400}
-                  height={300}
-                />
-                <div className={styles.categoryOverlay}>
-                  <h2>Cucina Indiana</h2>
-                </div>
-              </Link>
-            </div>
-            <div className={styles.heroCategory}>
-              <Link href="/cucina-italiana">
-                <Image
-                  src="/category-images/cucina-italiana.webp"
-                  alt="Cucina Italiana - Tradizione e gusto"
-                  width={400}
-                  height={300}
-                />
-                <div className={styles.categoryOverlay}>
-                  <h2>Cucina Italiana</h2>
-                </div>
-              </Link>
-            </div>
-            <div className={styles.heroCategory}>
-              <Link href="/bevande">
-                <Image
-                  src="/category-images/bevande.webp"
-                  alt="Bevande - Bibite e bevande alcoliche"
-                  width={400}
-                  height={300}
-                />
-                <div className={styles.categoryOverlay}>
-                  <h2>Bevande</h2>
-                </div>
-              </Link>
-            </div>
+            {tenantCategories.map((category) => (
+              <div key={category.id} className={styles.heroCategory}>
+                <Link href={`/${category.slug}`}>
+                  <Image
+                    src={category.image_url}
+                    alt={`${category.name} - Immagine di categoria`}
+                    width={400}
+                    height={300}
+                  />
+                  <div className={styles.categoryOverlay}>
+                    <h2>{category.name}</h2>
+                  </div>
+                </Link>
+              </div>
+            ))}
           </div>
         </div>
       </section>

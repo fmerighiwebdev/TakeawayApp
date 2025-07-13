@@ -11,10 +11,10 @@ export default function SubcategoryButton({ subcategory, isActive, onClick }) {
             : `${styles.subcategoryButton} ${styles.active}`
         }
         aria-pressed={isActive}
-        aria-label={`Filtra per ${subcategory.subcategory}`}
+        aria-label={`Filtra per ${subcategory.name}`}
         onClick={onClick}
       >
-        {subcategory.subcategory}
+        {subcategory.name}
       </button>
     </li>
   );
