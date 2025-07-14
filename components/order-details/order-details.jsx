@@ -162,24 +162,24 @@ export default function OrderDetails({ orderId, publicDetails }) {
             <div className={styles.productsDetails}>
               <ul className={styles.productsList}>
                 {orderDetails.items && orderDetails.items.length > 0 ? (
-                  orderDetails.items.map((product) => {
-                    const key = `${product.id}-${
-                      product.dough?.name || "no-dough"
-                    }-${product.extras.join(",") || "no-extras"}-${
-                      product.removals.join(",") || "no-removals"
-                    }-${product.cooking?.label || "no-cooking"}-${
-                      product.spice?.label || "no-spice"
+                  orderDetails.items.map((item) => {
+                    const key = `${item.id}-${
+                      item.dough?.name || "no-dough"
+                    }-${item.extras.join(",") || "no-extras"}-${
+                      item.removals.join(",") || "no-removals"
+                    }-${item.cooking?.label || "no-cooking"}-${
+                      item.spice?.label || "no-spice"
                     }`;
 
-                    const itemExtrasTotal = product.extras.reduce(
+                    const itemExtrasTotal = item.extras.reduce(
                       (acc, extra) => acc + parseFloat(extra.price),
                       0
                     );
 
                     const itemPrice =
-                      product.price * product.quantity +
-                      (product.dough?.price || 0) * product.quantity +
-                      itemExtrasTotal * product.quantity;
+                      item.product.price * item.quantity +
+                      (item.dough?.price || 0) * item.quantity +
+                      itemExtrasTotal * item.quantity;
 
                     const formattedItemPrice = new Intl.NumberFormat("it-IT", {
                       style: "currency",
@@ -189,36 +189,36 @@ export default function OrderDetails({ orderId, publicDetails }) {
                     const formattedDoughPrice = new Intl.NumberFormat("it-IT", {
                       style: "currency",
                       currency: "EUR",
-                    }).format(product.dough?.price || 0);
+                    }).format(item.dough?.price || 0);
 
                     return (
                       <li key={key} className={styles.productItem}>
                         <div className={styles.productItemInfo}>
                           <div className={styles.productItemInfoHeading}>
-                            <h3>{product.name}</h3>
+                            <h3>{item.product.name}</h3>
                             <p>
-                              {product.quantity}x {formattedItemPrice}
+                              {item.quantity}x {formattedItemPrice}
                             </p>
                           </div>
-                          {product.description && (
+                          {item.product.description && (
                             <p className={styles.productItemDescription}>
-                              {product.description}
+                              {item.product.description}
                             </p>
                           )}
-                          {(product.dough ||
-                            product.extras.length > 0 ||
-                            product.removals.length > 0 ||
-                            product.cooking ||
-                            product.spice) && (
+                          {(item.dough ||
+                            item.extras.length > 0 ||
+                            item.removals.length > 0 ||
+                            item.cooking ||
+                            item.spice) && (
                             <div className={styles.productItemVariations}>
                               <p>VARIAZIONI</p>
-                              {product.dough && (
+                              {item.dough && (
                                 <p className={styles.itemDough}>
-                                  {product.dough?.name} ({formattedDoughPrice})
+                                  {item.dough?.name} ({formattedDoughPrice})
                                 </p>
                               )}
-                              {product.extras.length > 0 &&
-                                product.extras.map((extra, index) => (
+                              {item.extras.length > 0 &&
+                                item.extras.map((extra, index) => (
                                   <p key={index} className={styles.itemExtra}>
                                     + {extra.name} (
                                     {new Intl.NumberFormat("it-IT", {
@@ -228,20 +228,20 @@ export default function OrderDetails({ orderId, publicDetails }) {
                                     )
                                   </p>
                                 ))}
-                              {product.removals.length > 0 &&
-                                product.removals.map((removal, index) => (
+                              {item.removals.length > 0 &&
+                                item.removals.map((removal, index) => (
                                   <p key={index} className={styles.itemRemoval}>
                                     - {removal.name}
                                   </p>
                                 ))}
-                              {product.cooking && (
+                              {item.cooking && (
                                 <p className={styles.itemCooking}>
-                                  Cottura &quot;{product.cooking.label}&quot;
+                                  Cottura &quot;{item.cooking.label}&quot;
                                 </p>
                               )}
-                              {product.spice && (
+                              {item.spice && (
                                 <p className={styles.itemSpice}>
-                                  {product.spice.label}
+                                  {item.spice.label}
                                 </p>
                               )}
                             </div>

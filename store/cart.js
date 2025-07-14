@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { persist, createJSONStorage } from "zustand/middleware";
 
 export const useCartStore = create(
   persist(
@@ -148,6 +148,29 @@ export const useCartStore = create(
     }),
     {
       name: "cart-storage",
+      storage: createJSONStorage(() => ({
+        getItem: (name) => {
+          const hostname =
+            typeof window !== "undefined"
+              ? window.location.hostname
+              : "default";
+          return localStorage.getItem(`${name}-${hostname}`);
+        },
+        setItem: (name, value) => {
+          const hostname =
+            typeof window !== "undefined"
+              ? window.location.hostname
+              : "default";
+          return localStorage.setItem(`${name}-${hostname}`, value);
+        },
+        removeItem: (name) => {
+          const hostname =
+            typeof window !== "undefined"
+              ? window.location.hostname
+              : "default";
+          return localStorage.removeItem(`${name}-${hostname}`);
+        },
+      })),
       partialize: (state) => ({ cart: state.cart }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated?.();

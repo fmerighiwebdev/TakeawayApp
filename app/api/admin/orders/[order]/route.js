@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
 
 import {
-    getCustomerByOrderId,
-  getOrderById,
+  getCustomerByOrderId,
+  getOrderByIdWithDetails,
   updateOrderStatus,
   updatePickUpTime,
 } from "@/lib/orders";
@@ -40,7 +40,7 @@ export async function GET(req, { params }) {
 
   const { order: orderId } = await params;
 
-  const orderDetails = await getOrderById(orderId);
+  const orderDetails = await getOrderByIdWithDetails(orderId);
 
   return NextResponse.json({ orderDetails: orderDetails }, { status: 200 });
 }
@@ -91,29 +91,32 @@ export async function PATCH(req, { params }) {
     }
 
     try {
-        await updatePickUpTime(orderId, postponementTime);
+      await updatePickUpTime(orderId, postponementTime);
 
-        try {
-            const customerData = await getCustomerByOrderId(orderId);
-            const customerName = customerData.customer_name;
-            const customerEmail = customerData.customer_email;
+      try {
+        const customerData = await getCustomerByOrderId(orderId);
+        const customerName = customerData.customer_name;
+        const customerEmail = customerData.customer_email;
 
-            await sendOrderPostponementEmail({
-                customerName,
-                customerEmail,
-                postponementTime,
-                orderId
-            });
-        } catch (error) {
-            console.error("Orario di ritiro aggiornato, errore durante l'invio dell'email:", error);
-            return NextResponse.json(
-              {
-                error:
-                  "Orario di ritiro aggiornato, errore durante l'invio dell'email di avviso",
-              },
-              { status: 500 }
-            );
-        }
+        await sendOrderPostponementEmail({
+          customerName,
+          customerEmail,
+          postponementTime,
+          orderId,
+        });
+      } catch (error) {
+        console.error(
+          "Orario di ritiro aggiornato, errore durante l'invio dell'email:",
+          error
+        );
+        return NextResponse.json(
+          {
+            error:
+              "Orario di ritiro aggiornato, errore durante l'invio dell'email di avviso",
+          },
+          { status: 500 }
+        );
+      }
     } catch (error) {
       return NextResponse.json(
         { error: "Errore durante l'aggiornamento dell'orario di ritiro" },

@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import { createOrder } from "@/lib/orders";
 import { sendOrderConfirmationEmail } from "@/lib/emails/sendOrderConfirmationEmail";
+import { getTenantId } from "@/lib/tenantDetails";
 
 export async function POST(req, res) {
   const { name, surname, time, phone, email, items } = await req.json();
@@ -44,15 +45,18 @@ export async function POST(req, res) {
       )
       .toFixed(2);
     const full_name = `${name} ${surname}`;
-
-    const orderId = await createOrder({
+    const orderData = {
       full_name,
       time,
       phone,
       total_price,
       email,
-      items,
-    });
+      items
+    }
+
+    const tenantId = getTenantId();
+    console.log("Ordine in arrivo:", orderData);
+    const orderIds = await createOrder(orderData, tenantId);
 
     try {
       await sendOrderConfirmationEmail({
@@ -61,7 +65,8 @@ export async function POST(req, res) {
         orderItems: items,
         total: total_price,
         pickupTime: time,
-        orderId,
+        orderId: orderIds.id,
+        orderPublicId: orderIds.publicId,
       });
     } catch (emailError) {
       console.error("Errore nell'invio dell'email:", emailError);
@@ -71,7 +76,7 @@ export async function POST(req, res) {
       );
     }
 
-    return NextResponse.json({ orderId: orderId }, { status: 200 });
+    return NextResponse.json({ orderId: orderIds.id, orderPublicId: orderIds.publicId }, { status: 200 });
   } catch (error) {
     console.error("Errore nella creazione dell'ordine:", error);
     return NextResponse.json(

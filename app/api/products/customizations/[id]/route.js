@@ -1,12 +1,14 @@
 import { NextResponse } from "next/server";
 
-import { getCustomizationsByProductId } from "@/lib/products";
+import { getProductCustomizations } from "@/lib/products";
+import { getTenantId } from "@/lib/tenantDetails";
 
 export async function GET(req, { params }) {
   const { id } = params;
+  const tenantId = getTenantId();
 
   try {
-    const customizations = await getCustomizationsByProductId(id);
+    const customizations = await getProductCustomizations(id, tenantId);
     return NextResponse.json({ customizations }, { status: 200 });
   } catch (error) {
     console.error("Errore nel fetch delle personalizzazioni:", error);

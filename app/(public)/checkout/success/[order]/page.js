@@ -5,7 +5,7 @@ import Image from "next/image";
 import checkIcon from "@/assets/check.svg";
 
 export default async function SuccessPage({ params }) {
-  const { order: orderId } = await params;
+  const { order: orderPublicId } = await params;
 
   return (
     <section className={styles.checkoutPage}>
@@ -19,7 +19,7 @@ export default async function SuccessPage({ params }) {
           />
         </div>
       </div>
-      <OrderDetails orderId={orderId} publicDetails />
+      <OrderDetails orderId={orderPublicId} publicDetails />
     </section>
   );
 }

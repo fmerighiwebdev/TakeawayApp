@@ -58,6 +58,8 @@ export default function VariationsModal({
     fetchCustomizations();
   }, [productId]);
 
+  console.log("Customizations:", customizations);
+
   async function handleAddToCart() {
     const variationsCount =
       (selectedDough ? 1 : 0) +
