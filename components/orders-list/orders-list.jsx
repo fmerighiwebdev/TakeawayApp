@@ -14,18 +14,8 @@ export default function OrdersList({ status, tenantId }) {
       setLoading(true);
       setOrders([]);
 
-      const authToken = localStorage.getItem("auth-token");
-
-      if (!authToken) {
-        return;
-      }
-
       try {
-        const response = await axios.get(`/api/admin/orders?status=${status}`, {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        });
+        const response = await axios.get(`/api/admin/orders?status=${status}`);
         setOrders(response.data.orders);
       } catch (error) {
         console.error(error);

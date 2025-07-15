@@ -4,6 +4,7 @@ import { getTenantOrdersByStatus } from "@/lib/orders";
 
 import jwt from "jsonwebtoken";
 import { getTenantId } from "@/lib/tenantDetails";
+import { cookies } from "next/headers";
 
 function verifyToken(token) {
     try {
@@ -15,14 +16,11 @@ function verifyToken(token) {
 }
 
 export async function GET(req) {
-    const authHeader = req.headers.get('authorization');
     const tenantId = getTenantId();
+    const cookieStore = cookies();
+    const cookieKey = `auth-token-${tenantId}`;
+    const token = cookieStore.get(cookieKey)?.value;
 
-    if (!authHeader || !authHeader.startsWith('Bearer ')) {
-        return NextResponse.json({ error: 'Non sei autenticato.' }, { status: 401 });
-    }
-
-    const token = authHeader.split(' ')[1];
     if (!verifyToken(token)) {
         return NextResponse.json({ error: 'Non sei autenticato.' }, { status: 401 });
     }
@@ -32,8 +30,6 @@ export async function GET(req) {
 
     const orderStatus = status === "waiting" ? "In Attesa" : "Completato";
     const orders = await getTenantOrdersByStatus(tenantId, orderStatus);
-
-    console.log(orders);
 
     return NextResponse.json({ orders: orders }, { status: 200 });
 }

@@ -3,9 +3,14 @@ import styles from "../../checkout.module.css";
 import Image from "next/image";
 
 import checkIcon from "@/assets/check.svg";
+import { getOrderByPublicIdWithDetails } from "@/lib/orders";
+import { getTenantId } from "@/lib/tenantDetails";
 
 export default async function SuccessPage({ params }) {
   const { order: orderPublicId } = await params;
+
+  const tenantId = getTenantId();
+  const orderDetails = await getOrderByPublicIdWithDetails(tenantId, orderPublicId);
 
   return (
     <section className={styles.checkoutPage}>
@@ -19,7 +24,7 @@ export default async function SuccessPage({ params }) {
           />
         </div>
       </div>
-      <OrderDetails orderId={orderPublicId} publicDetails />
+      <OrderDetails orderDetails={orderDetails} publicDetails />
     </section>
   );
 }

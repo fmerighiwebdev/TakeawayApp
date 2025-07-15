@@ -18,26 +18,6 @@ export default function AdminForm({ tenantId }) {
   const [errors, setErrors] = useState(null);
   const [loading, setLoading] = useState(false);
 
-  useEffect(() => {
-    const token = localStorage.getItem("auth-token");
-
-    if (!token) return;
-
-    async function validateToken() {
-      try {
-        const res = await axios.post("/api/validate-token", { token });
-        router.push("/admin/dashboard");
-      } catch {
-        setErrors({
-          credentials: "Effettua nuovamente l'accesso.",
-        });
-        localStorage.removeItem("auth-token");
-      }
-    }
-
-    validateToken();
-  }, []);
-
   function validateForm() {
     const newErrors = {};
 
@@ -68,10 +48,10 @@ export default function AdminForm({ tenantId }) {
     try {
       const response = await axios.post("/api/admin/login", { user, password, tenantId });
       const authToken = response.data.authToken;
-      const tokenKey = "auth-token";
+      const tokenKey = "auth-token" + tenantId;
 
       localStorage.setItem(tokenKey, authToken);
-      router.push("/admin/dashboard");
+      router.push("/dashboard");
       setLoading(false);
     } catch (error) {
       const newErrors = {};

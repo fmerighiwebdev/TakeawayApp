@@ -47,5 +47,16 @@ export async function POST(req) {
     { expiresIn: "24h" }
   );
 
-  return NextResponse.json({ authToken: token }, { status: 200 });
+  const response = NextResponse.json({ success: true });
+
+  // Imposta cookie sicuro
+  response.cookies.set(`auth-token-${tenantId}`, token, {
+    httpOnly: true,
+    secure: process.env.NODE_ENV === "production",
+    maxAge: 60 * 60 * 24, // 24 ore
+    path: "/",
+    sameSite: "lax",
+  });
+
+  return response;
 }

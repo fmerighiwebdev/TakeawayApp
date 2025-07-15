@@ -8,22 +8,10 @@ export default function ConfirmationModal({ setShowConfirmation, orderId }) {
   const router = useRouter();
 
   async function handleCompleteOrder() {
-    const authToken = localStorage.getItem("auth-token");
-
-    if (!authToken) {
-      return;
-    }
-
     try {
-      const response = await axios.patch(
-        `/api/admin/orders/${orderId}`,
-        { newStatus: "Completato" },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
-      );
+      const response = await axios.patch(`/api/admin/orders/${orderId}`, {
+        newStatus: "Completato",
+      });
 
       router.push("/admin/dashboard");
     } catch (error) {

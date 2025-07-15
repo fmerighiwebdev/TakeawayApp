@@ -1,3 +1,8 @@
+import { getTenantId } from "@/lib/tenantDetails";
+import { redirect } from "next/navigation";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
+
 export const metadata = {
   title: "All'Amicizia Takeaway - Ordini",
   description:
@@ -9,7 +14,7 @@ export const metadata = {
   manifest: "/api/admin-manifest"
 };
 
-export default function AdminLayout({ children }) {
+export default async function AdminLayout({ children }) {
   return (
     <>
       {children}

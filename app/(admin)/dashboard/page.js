@@ -3,7 +3,7 @@ import styles from "./dashboard.module.css";
 import AuthGuard from "@/components/auth-guard/auth-guard";
 import { getTenantId } from "@/lib/tenantDetails";
 
-export default function AdminDashboard() {
+export default async function AdminDashboard() {
     const today = new Date();
     const options = { day: '2-digit', month: 'long', year: 'numeric' };
     const formattedDate = today.toLocaleDateString('it-IT', options);

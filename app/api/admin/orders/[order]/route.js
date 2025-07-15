@@ -11,6 +11,7 @@ import { sendOrderPostponementEmail } from "@/lib/emails/sendOrderPostponementEm
 
 import jwt from "jsonwebtoken";
 import { getTenantId } from "@/lib/tenantDetails";
+import { cookies } from "next/headers";
 
 function verifyToken(token) {
   try {
@@ -22,17 +23,11 @@ function verifyToken(token) {
 }
 
 export async function GET(req, { params }) {
-  const authHeader = req.headers.get("authorization");
   const tenantId = getTenantId();
+  const cookieStore = cookies();
+  const cookieKey = `auth-token-${tenantId}`;
+  const token = cookieStore.get(cookieKey)?.value;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { error: "Non sei autenticato." },
-      { status: 401 }
-    );
-  }
-
-  const token = authHeader.split(" ")[1];
   if (!verifyToken(token)) {
     return NextResponse.json(
       { error: "Non sei autenticato." },
@@ -48,17 +43,11 @@ export async function GET(req, { params }) {
 }
 
 export async function PATCH(req, { params }) {
-  const authHeader = req.headers.get("authorization");
   const tenantId = getTenantId();
+  const cookieStore = cookies();
+  const cookieKey = `auth-token-${tenantId}`;
+  const token = cookieStore.get(cookieKey)?.value;
 
-  if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return NextResponse.json(
-      { error: "Non sei autenticato." },
-      { status: 401 }
-    );
-  }
-
-  const token = authHeader.split(" ")[1];
   if (!verifyToken(token)) {
     return NextResponse.json(
       { error: "Non sei autenticato." },

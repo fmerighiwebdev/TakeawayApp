@@ -1,35 +1,23 @@
-"use client";
+import { getTenantId } from "@/lib/tenantDetails";
+import { redirect } from "next/navigation";
+import jwt from "jsonwebtoken";
+import { cookies } from "next/headers";
 
-import { useEffect, useState } from "react";
-import { useRouter } from "next/navigation";
-import axios from "axios";
-import Loader from "../loader/loader";
+export default async function AuthGuard({ children }) {
+  const tenantId = getTenantId();
+  const cookieStore = await cookies();
+  const tokenKey = `auth-token-${tenantId}`;
+  const authToken = cookieStore.get(tokenKey)?.value;
 
-export default function AuthGuard({ children }) {
-  const [loading, setLoading] = useState(true);
-  const router = useRouter();
+  if (!authToken) {
+    redirect("/login");
+  }
 
-  useEffect(() => {
-    const authToken = localStorage.getItem("auth-token");
+  try {
+    jwt.verify(authToken, process.env.JWT_SECRET);
+  } catch (error) {
+    redirect("/login");
+  }
 
-    if (!authToken) {
-      router.push("/admin");
-      return;
-    }
-
-    async function validateToken() {
-      try {
-        await axios.post("/api/validate-token", { token: authToken });
-        setLoading(false);
-      } catch (error) {
-        localStorage.removeItem("auth-token");
-        router.push("/admin");
-        setLoading(false);
-      }
-    }
-
-    validateToken();
-  }, [router]);
-
-  return loading ? <Loader fullscreen /> : children;
+  return <>{children}</>;
 }
