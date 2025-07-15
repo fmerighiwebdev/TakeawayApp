@@ -1,11 +1,14 @@
 import Orders from "@/components/orders/orders";
 import styles from "./dashboard.module.css";
 import AuthGuard from "@/components/auth-guard/auth-guard";
+import { getTenantId } from "@/lib/tenantDetails";
 
 export default function AdminDashboard() {
     const today = new Date();
     const options = { day: '2-digit', month: 'long', year: 'numeric' };
     const formattedDate = today.toLocaleDateString('it-IT', options);
+
+    const tenantId = getTenantId();
 
     return (
       <AuthGuard>
@@ -15,7 +18,7 @@ export default function AdminDashboard() {
             <p>{formattedDate}</p>
           </div>
           <div className="container">
-            <Orders />
+            <Orders tenantId={tenantId} />
           </div>
         </section>
       </AuthGuard>

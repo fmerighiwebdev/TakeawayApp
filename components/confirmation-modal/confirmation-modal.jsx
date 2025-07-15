@@ -17,7 +17,7 @@ export default function ConfirmationModal({ setShowConfirmation, orderId }) {
     try {
       const response = await axios.patch(
         `/api/admin/orders/${orderId}`,
-        { status: "Completato" },
+        { newStatus: "Completato" },
         {
           headers: {
             Authorization: `Bearer ${authToken}`,

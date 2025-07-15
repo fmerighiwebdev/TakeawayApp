@@ -7,10 +7,9 @@ import axios from "axios";
 
 import Input from "../input/input";
 import { useRouter } from "next/navigation";
-import { set } from "date-fns";
 import Loader from "../loader/loader";
 
-export default function AdminForm() {
+export default function AdminForm({ tenantId }) {
   const userRef = useRef();
   const passwordRef = useRef();
 
@@ -67,13 +66,16 @@ export default function AdminForm() {
     const password = passwordRef.current.value;
 
     try {
-      const response = await axios.post("/api/admin/login", { user, password });
+      const response = await axios.post("/api/admin/login", { user, password, tenantId });
       const authToken = response.data.authToken;
-      localStorage.setItem("auth-token", authToken);
+      const tokenKey = "auth-token";
+
+      localStorage.setItem(tokenKey, authToken);
       router.push("/admin/dashboard");
       setLoading(false);
     } catch (error) {
       const newErrors = {};
+      console.log(error);
       newErrors.credentials = error.response.data.message;
       setErrors(newErrors);
       setLoading(false);

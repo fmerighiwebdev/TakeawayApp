@@ -10,6 +10,7 @@ import {
 import { sendOrderPostponementEmail } from "@/lib/emails/sendOrderPostponementEmail";
 
 import jwt from "jsonwebtoken";
+import { getTenantId } from "@/lib/tenantDetails";
 
 function verifyToken(token) {
   try {
@@ -22,6 +23,7 @@ function verifyToken(token) {
 
 export async function GET(req, { params }) {
   const authHeader = req.headers.get("authorization");
+  const tenantId = getTenantId();
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return NextResponse.json(
@@ -40,13 +42,14 @@ export async function GET(req, { params }) {
 
   const { order: orderId } = await params;
 
-  const orderDetails = await getOrderByIdWithDetails(orderId);
+  const orderDetails = await getOrderByIdWithDetails(tenantId, orderId);
 
   return NextResponse.json({ orderDetails: orderDetails }, { status: 200 });
 }
 
 export async function PATCH(req, { params }) {
   const authHeader = req.headers.get("authorization");
+  const tenantId = getTenantId();
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
     return NextResponse.json(
@@ -66,13 +69,13 @@ export async function PATCH(req, { params }) {
   const { order: orderId } = await params;
   const body = await req.json();
 
-  if (body.status) {
-    const { status } = body;
-    if (status !== "In Attesa" && status !== "Completato") {
+  if (body.newStatus) {
+    const { newStatus } = body;
+    if (newStatus !== "In Attesa" && newStatus !== "Completato") {
       return NextResponse.json({ error: "Stato non valido" }, { status: 400 });
     }
 
-    await updateOrderStatus(orderId, status);
+    await updateOrderStatus(tenantId, orderId, newStatus);
 
     return NextResponse.json(
       { message: "Stato ordine aggiornato" },

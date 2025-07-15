@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import Loader from "../loader/loader";
 import Order from "../order/order";
 
-export default function OrdersList({ status }) {
+export default function OrdersList({ status, tenantId }) {
   const [orders, setOrders] = useState([]);
   const [loading, setLoading] = useState(true);
 
@@ -26,7 +26,6 @@ export default function OrdersList({ status }) {
             Authorization: `Bearer ${authToken}`,
           },
         });
-        console.log(response.data.orders);
         setOrders(response.data.orders);
       } catch (error) {
         console.error(error);
@@ -47,8 +46,6 @@ export default function OrdersList({ status }) {
     currency: "EUR",
   }).format(ordersTotal);
 
-  console.log(ordersTotal);
-
   return (
     <div className={styles.ordersList}>
       {loading ? (
@@ -62,7 +59,7 @@ export default function OrdersList({ status }) {
             <p className={styles.noOrders}>Nessun ordine in attesa</p>
           )}
           {orders.map((order) => (
-            <Order key={order.id} order={order} status={status} />
+            <Order key={order.id} order={order} status={status} numberOfItems={orders.length} />
           ))}
           {status === "completed" && !loading && (
             <div className={styles.ordersTotal}>

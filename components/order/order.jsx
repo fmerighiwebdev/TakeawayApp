@@ -4,9 +4,7 @@ import styles from "./order.module.css";
 import clockIcon from "@/assets/clock.svg";
 import Image from "next/image";
 
-export default function Order({ order, status }) {
-  const numberOfItems = order.items.length;
-
+export default function Order({ order, status, numberOfItems }) {
   return (
     <Link href={`/admin/dashboard/${order.id}`} className={styles.order}>
       <div className={styles.orderDetailsWrapper}>
