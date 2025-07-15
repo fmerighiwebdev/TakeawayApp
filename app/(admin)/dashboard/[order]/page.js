@@ -5,6 +5,7 @@ import { getTenantId } from "@/lib/tenantDetails";
 import { cookies } from "next/headers";
 import { notFound } from "next/navigation";
 import jwt from "jsonwebtoken";
+import { redirect } from "next/navigation";
 
 export default async function OrderPage({ params }) {
     const { order: orderId } = await params;
@@ -13,14 +14,8 @@ export default async function OrderPage({ params }) {
     const cookieKey = `auth-token-${tenantId}`;
     const token = cookieStore.get(cookieKey)?.value;
 
-    if (!token) {
-      notFound();
-    }
-
-    try {
-      jwt.verify(token, process.env.JWT_SECRET);
-    } catch {
-      notFound();
+    if (!token || !jwt.verify(token, process.env.JWT_SECRET)) {
+        redirect("/login");
     }
 
     const orderDetails = await getOrderByIdWithDetails(tenantId, orderId);
@@ -28,6 +23,8 @@ export default async function OrderPage({ params }) {
     if (!orderDetails) {
       notFound();
     }
+
+    console.log("Order Details:", orderDetails);
 
     return (
         <main className={styles.adminDashboard}>

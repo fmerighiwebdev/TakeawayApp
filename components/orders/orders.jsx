@@ -5,7 +5,7 @@ import styles from "./orders.module.css";
 
 import { useState } from "react";
 
-export default function Orders({ tenantId }) {
+export default function Orders({ orders }) {
   const [status, setStatus] = useState("waiting");
 
   return (
@@ -24,7 +24,7 @@ export default function Orders({ tenantId }) {
           Completati
         </button>
       </nav>
-      <OrdersList status={status} tenantId={tenantId} />
+      <OrdersList orders={orders} status={status} />
     </div>
   );
 }

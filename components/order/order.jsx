@@ -6,7 +6,7 @@ import Image from "next/image";
 
 export default function Order({ order, status, numberOfItems }) {
   return (
-    <Link href={`/admin/dashboard/${order.id}`} className={styles.order}>
+    <Link href={`/dashboard/${order.id}`} className={styles.order}>
       <div className={styles.orderDetailsWrapper}>
         <div className={styles.orderNumber}>
           <p>#{order.id}</p>
