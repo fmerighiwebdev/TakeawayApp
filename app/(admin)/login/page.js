@@ -5,7 +5,7 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
-export default function AdminPage() {
+export default async function AdminPage() {
   const tenantId = await getTenantId();
   const cookieStore = cookies();
   const cookieKey = `auth-token-${tenantId}`;
