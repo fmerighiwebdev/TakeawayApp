@@ -61,8 +61,6 @@ export default async function ContactsPage() {
   const tenantId = getTenantId();
   const tenantData = await getTenantDetails(tenantId);
 
-  console.log("Tenant Data:", tenantData);
-
   return (
     <main className={styles.contactsPage}>
       <Script id="breadcrumb-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />

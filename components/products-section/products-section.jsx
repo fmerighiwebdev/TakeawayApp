@@ -7,9 +7,7 @@ import ProductsGrid from "../products-grid/products-grid";
 import styles from "./products-section.module.css";
 import SubcategoryButton from "../subcategory-button/subcategory-button";
 
-import { categoryNames, categoryData } from "@/lib/categories";
-
-export default function ProductsSection({ subcategories, categoryId }) {
+export default function ProductsSection({ subcategories, categoryProducts }) {
   const [activeSubcategory, setActiveSubcategory] = useState(null);
 
   return (
@@ -34,7 +32,7 @@ export default function ProductsSection({ subcategories, categoryId }) {
           </button>
         )}
       </div>
-      <ProductsGrid categoryId={categoryId} activeSubcategory={activeSubcategory} />
+      <ProductsGrid categoryProducts={categoryProducts} activeSubcategory={activeSubcategory} />
     </section>
   );
 }

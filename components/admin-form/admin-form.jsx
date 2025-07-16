@@ -2,7 +2,7 @@
 
 import styles from "./admin-form.module.css";
 
-import { useRef, useState, useEffect } from "react";
+import { useRef, useState } from "react";
 import axios from "axios";
 
 import Input from "../input/input";
@@ -46,18 +46,17 @@ export default function AdminForm({ tenantId }) {
     const password = passwordRef.current.value;
 
     try {
-      const response = await axios.post("/api/admin/login", { user, password, tenantId });
-      const authToken = response.data.authToken;
-      const tokenKey = "auth-token" + tenantId;
-
-      localStorage.setItem(tokenKey, authToken);
+      const response = await axios.post("/api/admin/login", {
+        user,
+        password,
+        tenantId,
+      });
       router.push("/dashboard");
-      setLoading(false);
     } catch (error) {
       const newErrors = {};
-      console.log(error);
       newErrors.credentials = error.response.data.message;
       setErrors(newErrors);
+    } finally {
       setLoading(false);
     }
   }
@@ -95,7 +94,9 @@ export default function AdminForm({ tenantId }) {
         />
         {errors?.password && <p className={styles.error}>{errors.password}</p>}
       </div>
-      <button type="submit" disabled={loading}>{loading ? <Loader button buttonLabel="ACCESSO..." /> : "Accedi"}</button>
+      <button type="submit" disabled={loading}>
+        {loading ? <Loader button buttonLabel="ACCESSO..." /> : "Accedi"}
+      </button>
     </form>
   );
 }

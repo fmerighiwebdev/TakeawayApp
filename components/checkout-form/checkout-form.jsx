@@ -117,7 +117,6 @@ export default function CheckoutForm() {
     try {
       const response = await axios.post("/api/orders", order);
       const orderPublicId = response.data.orderPublicId;
-      clearCart();
       router.replace(`/checkout/success/${orderPublicId}`);
     } catch (error) {
       const newErrors = {};

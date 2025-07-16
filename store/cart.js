@@ -63,6 +63,11 @@ export const useCartStore = create(
             ],
           });
         }
+
+        if (typeof window !== "undefined") {
+          const hostname = window.location.hostname;
+          document.cookie = `cart-count-${hostname}=${get().cart.length}; path=/; SameSite=Lax`;
+        }
       },
 
       // Remove an item from the cart
@@ -87,6 +92,11 @@ export const useCartStore = create(
               item.selectedSpiceLevel !== selectedSpiceLevel
           ),
         });
+
+        if (typeof window !== "undefined") {
+          const hostname = window.location.hostname;
+          document.cookie = `cart-count-${hostname}=${get().cart.length}; path=/; SameSite=Lax`;
+        }
       },
 
       // Update item quantity
@@ -174,6 +184,10 @@ export const useCartStore = create(
       partialize: (state) => ({ cart: state.cart }),
       onRehydrateStorage: () => (state) => {
         state?.setHydrated?.();
+        if (typeof document !== "undefined") {
+          const hostname = window.location.hostname;
+          document.cookie = `cart-count-${hostname}=${state.cart.length}; path=/; SameSite=Lax`;
+        }
       },
     }
   )

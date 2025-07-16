@@ -5,8 +5,6 @@ import phoneIcon from "@/assets/phone.svg";
 
 import Image from "next/image";
 import Script from "next/script";
-import { headers } from "next/headers";
-import supabase from "@/lib/supabaseClient";
 import DOMPurify from "isomorphic-dompurify";
 import {
   getTenantCategories,

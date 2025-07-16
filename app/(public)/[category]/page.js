@@ -6,12 +6,12 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import Image from "next/image";
 
-import { categoryNames } from "@/lib/categories";
 import {
   getTenantCategories,
   getTenantId,
   getTenantSubcategories,
 } from "@/lib/tenantDetails";
+import { getTenantProductsByCategory } from "@/lib/products";
 
 export default async function CategoryPage({ params }) {
   const { category: categorySlug } = await params;
@@ -32,6 +32,11 @@ export default async function CategoryPage({ params }) {
     activeCategory.id
   );
 
+  const categoryProducts = await getTenantProductsByCategory(
+    activeCategory.id,
+    tenantId
+  );
+
   return (
     <main className={styles.categoryPage}>
       <div className="container">
@@ -42,7 +47,7 @@ export default async function CategoryPage({ params }) {
         <h1>{activeCategory.name}</h1>
         <ProductsSection
           subcategories={subcategories}
-          categoryId={activeCategory.id}
+          categoryProducts={categoryProducts}
         />
       </div>
     </main>

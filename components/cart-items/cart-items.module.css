@@ -5,18 +5,6 @@
   border: 1px solid rgb(224, 224, 224);
 }
 
-.cartItems {
-  opacity: 0;
-  animation: fadeInFromBottom 0.5s ease-in-out forwards;
-}
-
-.cartItems ul {
-  list-style: none;
-  padding: 0;
-  width: 100%;
-  margin: 0 auto;
-}
-
 .cartItem h2,
 .cartItem p {
   margin: 0;
@@ -149,23 +137,6 @@
 
 .cartCta .backToShop:hover {
   background-color: rgb(220, 220, 220);
-}
-
-.backToShopNoItems {
-  text-decoration: none;
-  background-color: var(--primaryColor);
-  color: white;
-  font-size: 1.125rem;
-  display: block;
-  text-align: center;
-  width: 200px;
-  margin: 0 auto;
-  padding-block: 0.5rem;
-  transition: all 0.2s;
-}
-
-.backToShopNoItems:hover {
-  background-color: var(--primaryColorDark);
 }
 
 .cartItemVariations {

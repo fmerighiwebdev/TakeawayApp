@@ -22,26 +22,6 @@ function verifyToken(token) {
   }
 }
 
-export async function GET(req, { params }) {
-  const tenantId = getTenantId();
-  const cookieStore = cookies();
-  const cookieKey = `auth-token-${tenantId}`;
-  const token = cookieStore.get(cookieKey)?.value;
-
-  if (!verifyToken(token)) {
-    return NextResponse.json(
-      { error: "Non sei autenticato." },
-      { status: 401 }
-    );
-  }
-
-  const { order: orderId } = await params;
-
-  const orderDetails = await getOrderByIdWithDetails(tenantId, orderId);
-
-  return NextResponse.json({ orderDetails: orderDetails }, { status: 200 });
-}
-
 export async function PATCH(req, { params }) {
   const tenantId = getTenantId();
   const cookieStore = cookies();

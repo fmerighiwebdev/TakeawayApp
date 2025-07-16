@@ -5,6 +5,7 @@ import Image from "next/image";
 import checkIcon from "@/assets/check.svg";
 import { getOrderByPublicIdWithDetails } from "@/lib/orders";
 import { getTenantId } from "@/lib/tenantDetails";
+import ClearCartOnMount from "@/components/clear-cart/clear-cart";
 
 export default async function SuccessPage({ params }) {
   const { order: orderPublicId } = await params;
@@ -13,18 +14,21 @@ export default async function SuccessPage({ params }) {
   const orderDetails = await getOrderByPublicIdWithDetails(tenantId, orderPublicId);
 
   return (
-    <section className={styles.checkoutPage}>
-      <div className="container">
-        <div className={styles.successPageHeading}>
-          <h1>Grazie per il tuo ordine!</h1>
-          <Image
-            className={styles.checkIcon}
-            src={checkIcon}
-            alt="Ordine completato"
-          />
+    <main>
+      <ClearCartOnMount />
+      <section className={styles.checkoutPage}>
+        <div className="container">
+          <div className={styles.successPageHeading}>
+            <h1>Grazie per il tuo ordine!</h1>
+            <Image
+              className={styles.checkIcon}
+              src={checkIcon}
+              alt="Ordine completato"
+            />
+          </div>
         </div>
-      </div>
-      <OrderDetails orderDetails={orderDetails} publicDetails />
-    </section>
+        <OrderDetails orderDetails={orderDetails} publicDetails />
+      </section>
+    </main>
   );
 }
