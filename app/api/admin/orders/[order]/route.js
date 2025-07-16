@@ -2,6 +2,7 @@ import { NextResponse } from "next/server";
 
 import {
   getCustomerByOrderId,
+  getOrderCustomerDetails,
   updateOrderStatus,
   updatePickUpTime,
 } from "@/lib/orders";
@@ -65,7 +66,7 @@ export async function PATCH(req, { params }) {
       await updatePickUpTime(orderId, postponementTime, tenantId);
 
       try {
-        const customerData = await getCustomerByOrderId(orderId);
+        const customerData = await getOrderCustomerDetails(tenantId, orderId);
         const customerName = customerData.customer_name;
         const customerEmail = customerData.customer_email;
 
