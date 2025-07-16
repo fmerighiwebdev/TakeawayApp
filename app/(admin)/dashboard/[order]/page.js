@@ -21,7 +21,7 @@ export default async function OrderPage({ params }) {
               <div className={styles.adminDashboardHeading}>
                   <h1>Ordine n.{orderId}</h1>
               </div>
-              <OrderDetails orderDetails={orderDetails} />
+              <OrderDetails orderDetails={orderDetails} orderId={orderId} />
           </main>
         </AuthGuard>
     );

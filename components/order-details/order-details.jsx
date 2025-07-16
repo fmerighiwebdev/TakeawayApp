@@ -11,7 +11,7 @@ import shapeDown from "@/assets/shape-down.svg";
 import ConfirmationModal from "../confirmation-modal/confirmation-modal";
 import PostponementModal from "../postponement-modal/postponement-modal";
 
-export default function OrderDetails({ orderDetails, publicDetails }) {
+export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPostponement, setShowPostponement] = useState(false);
 

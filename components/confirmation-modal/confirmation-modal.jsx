@@ -13,11 +13,12 @@ export default function ConfirmationModal({ setShowConfirmation, orderId }) {
         newStatus: "Completato",
       });
 
-      router.push("/admin/dashboard");
+      router.replace("/dashboard");
     } catch (error) {
       console.error(error);
     }
   }
+
   return createPortal(
     <div className={styles.modalOverlay}>
       <AnimatePresence>

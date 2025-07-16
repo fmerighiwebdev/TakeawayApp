@@ -2,7 +2,6 @@ import { NextResponse } from "next/server";
 
 import {
   getCustomerByOrderId,
-  getOrderByIdWithDetails,
   updateOrderStatus,
   updatePickUpTime,
 } from "@/lib/orders";
@@ -44,7 +43,7 @@ export async function PATCH(req, { params }) {
       return NextResponse.json({ error: "Stato non valido" }, { status: 400 });
     }
 
-    await updateOrderStatus(tenantId, orderId, newStatus);
+    await updateOrderStatus(orderId, newStatus, tenantId);
 
     return NextResponse.json(
       { message: "Stato ordine aggiornato" },
@@ -63,7 +62,7 @@ export async function PATCH(req, { params }) {
     }
 
     try {
-      await updatePickUpTime(orderId, postponementTime);
+      await updatePickUpTime(orderId, postponementTime, tenantId);
 
       try {
         const customerData = await getCustomerByOrderId(orderId);

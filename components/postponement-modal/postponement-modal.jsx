@@ -13,23 +13,12 @@ export default function PostponementModal({
   const postponementTimeRef = useRef(null);
 
   async function handlePostponeTime() {
-    const authToken = localStorage.getItem("auth-token");
-
-    if (!authToken) {
-      return;
-    }
-
     const postponementTime = postponementTimeRef.current.value;
 
     try {
       await axios.patch(
         `/api/admin/orders/${orderId}`,
         { postponementTime: postponementTime },
-        {
-          headers: {
-            Authorization: `Bearer ${authToken}`,
-          },
-        }
       );
       setSuccess(`Orario di ritiro aggiornato a ${postponementTime}`);
       window.location.reload();
