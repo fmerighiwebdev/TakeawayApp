@@ -25,11 +25,17 @@ export default function ProductItem({ product }) {
       return null;
     }
 
-    const productsDescriptionList = [51, 52, 53, 54];
+    const hostname = typeof window !== "undefined" ? window.location.hostname : "";
+    const isAffectedByListFormatting = hostname === "www.amiciziatakeaway.it";
+
+    let productsDescriptionList = [];
+    if (hostname === "www.amiciziatakeaway.it") {
+      productsDescriptionList = [51, 52, 53, 54];
+    }
 
     const shouldFormatAsList = productsDescriptionList.includes(currentProduct.id);
 
-    if (shouldFormatAsList) {
+    if (shouldFormatAsList && isAffectedByListFormatting) {
       const splitterRegex = /\s*,\s*(?![^()]*\))/g;
       const descriptionItems = currentProduct.description
         .split(splitterRegex)

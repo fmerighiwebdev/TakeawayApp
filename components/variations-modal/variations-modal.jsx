@@ -15,6 +15,7 @@ import closeIcon from "@/assets/close-icon.svg";
 import Checkbox from "../checkbox/checkbox";
 import Radio from "../radio/radio";
 import Loader from "../loader/loader";
+import useSWR from "swr";
 
 export default function VariationsModal({
   product,
@@ -27,9 +28,6 @@ export default function VariationsModal({
   const [selectedRemovals, setSelectedRemovals] = useState([]);
   const [selectedCookingOption, setSelectedCookingOption] = useState(null);
   const [selectedSpiceLevel, setSelectedSpiceLevel] = useState(null);
-  const [customizations, setCustomizations] = useState(null);
-  const [loading, setLoading] = useState(true);
-  const [error, setError] = useState(null);
   const [menuOpen, setMenuOpen] = useState({
     doughs: false,
     extras: false,
@@ -40,25 +38,19 @@ export default function VariationsModal({
 
   const { addToCart } = useCartStore();
 
-  useEffect(() => {
-    async function fetchCustomizations() {
-      try {
-        const response = await axios.get(
-          `/api/products/customizations/${productId}`
-        );
-        setCustomizations(response.data.customizations);
-      } catch (error) {
-        console.error("Errore nel fetch delle personalizzazioni:", error);
-        setError(error.response.data.message);
-      }
+  // SWR
+  const fetcher = (url) =>
+    axios.get(url).then((res) => res.data.customizations);
 
-      setLoading(false);
-    }
-
-    fetchCustomizations();
-  }, [productId]);
-
-  console.log("Customizations:", customizations);
+  // Fetch + cache
+  const {
+    data: customizations,
+    error,
+    isLoading,
+  } = useSWR(`/api/products/customizations/${productId}`, fetcher, {
+    revalidateOnFocus: false,
+    depupingInterval: 5 * 60 * 1000, // Salva per 5 minuti
+  });
 
   async function handleAddToCart() {
     const variationsCount =
@@ -76,7 +68,7 @@ export default function VariationsModal({
       selectedCookingOption,
       selectedSpiceLevel
     );
-    
+
     setSuccess({ productName: product.name, variations: variationsCount });
     setTimeout(() => {
       setSuccess(null);
@@ -138,7 +130,7 @@ export default function VariationsModal({
               />
             </button>
           </div>
-          {loading && <Loader />}
+          {isLoading && <Loader />}
           {error && (
             <p className="errorBanner" role="alert">
               {error}
@@ -177,7 +169,9 @@ export default function VariationsModal({
                         return (
                           <li key={index}>
                             <Radio
-                              label={`${dough.name} +${convertToCurrency(dough.price)}`}
+                              label={`${dough.name} +${convertToCurrency(
+                                dough.price
+                              )}`}
                               name="dough"
                               id={dough.name}
                               value={dough.name}
