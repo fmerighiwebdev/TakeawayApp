@@ -22,5 +22,5 @@ export default async function sitemap() {
     }
   ];
 
-  return [...staticPages, ...categories];
+  return [...staticPages];
 }
