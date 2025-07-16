@@ -193,7 +193,7 @@ const fontThemes = {
     heading: bitter,
     body: karla,
   },
-}
+};
 
 export const metadata = {
   title: "All'Amicizia Takeaway",
@@ -215,15 +215,23 @@ export const metadata = {
 export default async function RootLayout({ children }) {
   const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
 
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const tenantTheme = await getTenantTheme(tenantId);
 
   const fontKey = tenantTheme.fontKey || "clean";
   const selectedFonts = fontThemes[fontKey] || fontThemes["clean"];
 
   return (
-    <html lang="it" className={`${selectedFonts.heading.variable} ${selectedFonts.body.variable}`}>
-      <body style={{ "--primaryColor": tenantTheme.primaryColor || "#000000", "--secondaryColor": tenantTheme.secondaryColor || "#ffffff" }}>
+    <html
+      lang="it"
+      className={`${selectedFonts.heading.variable} ${selectedFonts.body.variable}`}
+    >
+      <body
+        style={{
+          "--primaryColor": tenantTheme.primaryColor || "#000000",
+          "--secondaryColor": tenantTheme.secondaryColor || "#ffffff",
+        }}
+      >
         {isMaintenance ? <Maintenance /> : children}
       </body>
     </html>

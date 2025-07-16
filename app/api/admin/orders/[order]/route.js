@@ -23,7 +23,7 @@ function verifyToken(token) {
 }
 
 export async function PATCH(req, { params }) {
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const cookieStore = cookies();
   const cookieKey = `auth-token-${tenantId}`;
   const token = cookieStore.get(cookieKey)?.value;

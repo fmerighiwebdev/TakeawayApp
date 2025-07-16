@@ -10,8 +10,11 @@ import ClearCartOnMount from "@/components/clear-cart/clear-cart";
 export default async function SuccessPage({ params }) {
   const { order: orderPublicId } = await params;
 
-  const tenantId = getTenantId();
-  const orderDetails = await getOrderByPublicIdWithDetails(tenantId, orderPublicId);
+  const tenantId = await getTenantId();
+  const orderDetails = await getOrderByPublicIdWithDetails(
+    tenantId,
+    orderPublicId
+  );
 
   return (
     <main>

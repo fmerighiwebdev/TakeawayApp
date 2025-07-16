@@ -16,7 +16,7 @@ import { getTenantProductsByCategory } from "@/lib/products";
 export default async function CategoryPage({ params }) {
   const { category: categorySlug } = await params;
 
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const tenantCategories = await getTenantCategories(tenantId);
 
   const activeCategory = tenantCategories.find(

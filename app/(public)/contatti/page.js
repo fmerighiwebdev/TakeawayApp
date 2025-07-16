@@ -18,52 +18,56 @@ export const metadata = {
     url: `${process.env.BASE_URL}/contatti`,
     images: [
       {
-        url: '/allamicizia.webp',
+        url: "/allamicizia.webp",
         width: 1200,
         height: 630,
-        alt: "Contatti All'Amicizia"
-      }
+        alt: "Contatti All'Amicizia",
+      },
     ],
-    locale: 'it_IT',
-    type: 'website',
+    locale: "it_IT",
+    type: "website",
   },
   twitter: {
-    card: 'summary_large_image',
+    card: "summary_large_image",
     title: "Contatti - All'Amicizia Takeaway",
     description: "Per qualsiasi informazione, non esitare a contattarci!",
-    images: ['/allamicizia.webp'],
+    images: ["/allamicizia.webp"],
   },
   alternates: {
-    canonical: `${process.env.BASE_URL}/contatti`
-  }
+    canonical: `${process.env.BASE_URL}/contatti`,
+  },
 };
 
 const breadcrumbJsonLd = {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [
+  itemListElement: [
     {
       "@type": "ListItem",
-      "position": 1,
-      "name": "Home",
-      "item": `${process.env.BASE_URL}`
+      position: 1,
+      name: "Home",
+      item: `${process.env.BASE_URL}`,
     },
     {
       "@type": "ListItem",
-      "position": 2,
-      "name": "Contatti",
-      "item": `${process.env.BASE_URL}/contatti`
-    }
-  ]
+      position: 2,
+      name: "Contatti",
+      item: `${process.env.BASE_URL}/contatti`,
+    },
+  ],
 };
 
 export default async function ContactsPage() {
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const tenantData = await getTenantDetails(tenantId);
 
   return (
     <main className={styles.contactsPage}>
-      <Script id="breadcrumb-json-ld" type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }} />
+      <Script
+        id="breadcrumb-json-ld"
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
       <div className="container">
         <div className={styles.contactsPageHeading}>
           <h1>Contatti</h1>
@@ -101,7 +105,11 @@ export default async function ContactsPage() {
                   height={50}
                 />
                 <div>
-                  <p dangerouslySetInnerHTML={{ __html: DOMPurify.sanitize(tenantData.address) }}></p>
+                  <p
+                    dangerouslySetInnerHTML={{
+                      __html: DOMPurify.sanitize(tenantData.address),
+                    }}
+                  ></p>
                 </div>
               </li>
               <li className={styles.contactItem}>

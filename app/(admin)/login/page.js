@@ -6,7 +6,7 @@ import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
 export default function AdminPage() {
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const cookieStore = cookies();
   const cookieKey = `auth-token-${tenantId}`;
   const authToken = cookieStore.get(cookieKey)?.value;

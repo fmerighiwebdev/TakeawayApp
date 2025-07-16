@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 
 export default async function AuthGuard({ children }) {
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const cookieStore = await cookies();
   const tokenKey = `auth-token-${tenantId}`;
   const authToken = cookieStore.get(tokenKey)?.value;

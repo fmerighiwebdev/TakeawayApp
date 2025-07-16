@@ -92,7 +92,7 @@ const jsonLd = {
 };
 
 export default async function Home() {
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const tenantData = await getTenantDetails(tenantId);
   const tenantTheme = await getTenantTheme(tenantId);
   const tenantCategories = await getTenantCategories(tenantId);

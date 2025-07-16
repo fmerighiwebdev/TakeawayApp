@@ -5,7 +5,7 @@ import { getTenantId } from "@/lib/tenantDetails";
 
 export async function GET(req, { params }) {
   const { id } = params;
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
 
   try {
     const customizations = await getProductCustomizations(id, tenantId);

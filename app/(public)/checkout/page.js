@@ -3,6 +3,7 @@ import styles from "./checkout.module.css";
 import CheckoutItems from "@/components/checkout-items/checkout-items";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
+import { getTenantId, getTenantPickupTimes } from "@/lib/tenantDetails";
 
 export const metadata = {
   title: "Checkout - All'Amicizia Takeaway",
@@ -23,14 +24,17 @@ export default async function CheckoutPage() {
   if (cartCount === 0) {
     redirect("/carrello");
   }
-  
+
+  const tenantId = await getTenantId();
+  const pickupTimes = await getTenantPickupTimes(tenantId);
+
   return (
     <main className={styles.checkoutPage}>
       <h1>Conferma il tuo ordine</h1>
       <div className="container">
         <section className={styles.checkoutSection}>
           <div>
-            <CheckoutForm />
+            <CheckoutForm pickupTimes={pickupTimes} />
           </div>
           <div>
             <CheckoutItems />

@@ -9,7 +9,7 @@ export default async function AdminDashboard() {
   const options = { day: "2-digit", month: "long", year: "numeric" };
   const formattedDate = today.toLocaleDateString("it-IT", options);
 
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
 
   const orders = await getOrdersByTenantId(tenantId);
 

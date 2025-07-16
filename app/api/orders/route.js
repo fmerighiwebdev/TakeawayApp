@@ -51,10 +51,10 @@ export async function POST(req, res) {
       phone,
       total_price,
       email,
-      items
-    }
+      items,
+    };
 
-    const tenantId = getTenantId();
+    const tenantId = await getTenantId();
     console.log("Ordine in arrivo:", orderData);
     const orderIds = await createOrder(orderData, tenantId);
 
@@ -76,7 +76,10 @@ export async function POST(req, res) {
       );
     }
 
-    return NextResponse.json({ orderId: orderIds.id, orderPublicId: orderIds.publicId }, { status: 200 });
+    return NextResponse.json(
+      { orderId: orderIds.id, orderPublicId: orderIds.publicId },
+      { status: 200 }
+    );
   } catch (error) {
     console.error("Errore nella creazione dell'ordine:", error);
     return NextResponse.json(

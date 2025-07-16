@@ -6,23 +6,23 @@ import { notFound } from "next/navigation";
 import AuthGuard from "@/components/auth-guard/auth-guard";
 
 export default async function OrderPage({ params }) {
-    const { order: orderId } = await params;
-    const tenantId = getTenantId();
+  const { order: orderId } = await params;
+  const tenantId = await getTenantId();
 
-    const orderDetails = await getOrderByIdWithDetails(tenantId, orderId);
+  const orderDetails = await getOrderByIdWithDetails(tenantId, orderId);
 
-    if (!orderDetails) {
-      notFound();
-    }
+  if (!orderDetails) {
+    notFound();
+  }
 
-    return (
-        <AuthGuard>
-          <main className={styles.adminDashboard}>
-              <div className={styles.adminDashboardHeading}>
-                  <h1>Ordine n.{orderId}</h1>
-              </div>
-              <OrderDetails orderDetails={orderDetails} orderId={orderId} />
-          </main>
-        </AuthGuard>
-    );
+  return (
+    <AuthGuard>
+      <main className={styles.adminDashboard}>
+        <div className={styles.adminDashboardHeading}>
+          <h1>Ordine n.{orderId}</h1>
+        </div>
+        <OrderDetails orderDetails={orderDetails} orderId={orderId} />
+      </main>
+    </AuthGuard>
+  );
 }

@@ -6,7 +6,7 @@ import { getTenantCategories, getTenantId } from "@/lib/tenantDetails";
 export async function GET(req, { params }) {
   const { category: categoryId } = await params;
 
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const tenantCategories = await getTenantCategories(tenantId);
 
   if (!tenantCategories.some((category) => category.id === categoryId)) {

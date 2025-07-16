@@ -7,14 +7,14 @@ import Input from "../input/input";
 
 import styles from "./checkout-form.module.css";
 
-import { timeOptions } from "@/lib/timeOptions";
+import { defaultTimeOptions } from "@/lib/defaultTimeOptions";
 import { useCartStore } from "@/store/cart";
 import Loader from "../loader/loader";
 import { useRouter } from "next/navigation";
 import Checkbox from "../checkbox/checkbox";
 import Select from "../select/select";
 
-export default function CheckoutForm() {
+export default function CheckoutForm({ pickupTimes }) {
   const nameRef = useRef();
   const surnameRef = useRef();
   const timeRef = useRef();
@@ -29,7 +29,7 @@ export default function CheckoutForm() {
   const [availableTimes, setAvailableTimes] = useState([]);
   const [isLoadingTimes, setIsLoadingTimes] = useState(true);
 
-  const { cart, clearCart } = useCartStore();
+  const { cart } = useCartStore();
 
   const getCurrentTime = () => {
     const now = new Date();
@@ -37,6 +37,8 @@ export default function CheckoutForm() {
     const minutes = now.getMinutes();
     return `${String(hours).padStart(2, '0')}:${String(minutes).padStart(2, '0')}`;
   };
+
+  const timeOptions = pickupTimes || defaultTimeOptions;
 
   useEffect(() => {
     const currentTimeString = getCurrentTime(); // e.g., "19:41"

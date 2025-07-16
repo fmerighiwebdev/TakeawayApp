@@ -16,7 +16,7 @@ export default async function PrivacyPage() {
     day: "numeric",
   });
 
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
   const tenantData = await getTenantDetails(tenantId);
 
   return (
@@ -208,7 +208,8 @@ export default async function PrivacyPage() {
           <section>
             <h2>11. Titolare del Trattamento</h2>
             <p>
-              <span style={{ display: "block", fontWeight: "bold" }}
+              <span
+                style={{ display: "block", fontWeight: "bold" }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(tenantData.legal_name),
                 }}
@@ -218,7 +219,8 @@ export default async function PrivacyPage() {
               sono:
               <br />
               <br />
-              <span style={{ display: "block" }}
+              <span
+                style={{ display: "block" }}
                 dangerouslySetInnerHTML={{
                   __html: DOMPurify.sanitize(tenantData.address),
                 }}

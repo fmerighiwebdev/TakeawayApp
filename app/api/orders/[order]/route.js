@@ -5,10 +5,13 @@ import { getTenantId } from "@/lib/tenantDetails";
 
 export async function GET(req, { params }) {
   const { order: orderPublicId } = await params;
-  const tenantId = getTenantId();
+  const tenantId = await getTenantId();
 
   try {
-    const orderDetails = await getOrderByPublicIdWithDetails(tenantId, orderPublicId);
+    const orderDetails = await getOrderByPublicIdWithDetails(
+      tenantId,
+      orderPublicId
+    );
     console.log("Dettagli ordine recuperati:", orderDetails);
     return NextResponse.json({ orderDetails: orderDetails }, { status: 200 });
   } catch (error) {
