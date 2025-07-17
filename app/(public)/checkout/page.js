@@ -6,11 +6,14 @@ import { cookies } from "next/headers";
 import { getTenantId, getTenantPickupTimes } from "@/lib/tenantDetails";
 
 export const metadata = {
-  title: "Checkout - All'Amicizia Takeaway",
-  description: "Completa il tuo ordine",
+  title: "Checkout",
+  description: "Scegli l'orario di ritiro e conferma il tuo ordine",
   robots: {
     index: false,
     follow: true,
+  },
+  alternates: {
+    canonical: "/checkout",
   },
 };
 

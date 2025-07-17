@@ -7,6 +7,16 @@ import { getTenantId } from "@/lib/tenantDetails";
 import ClearCartOnMount from "@/components/clear-cart/clear-cart";
 import { getIcon } from "@/lib/icons";
 
+export const metadata = {
+  title: "Ordine completato",
+  description: "Grazie per il tuo ordine! Ecco i dettagli.",
+  robots: {
+    index: false,
+    follow: true,
+  },
+}
+
+
 export default async function SuccessPage({ params }) {
   const { order: orderPublicId } = await params;
 

@@ -20,7 +20,6 @@ export default function PostponementModal({
         `/api/admin/orders/${orderId}`,
         { postponementTime: postponementTime },
       );
-      setSuccess(`Orario di ritiro aggiornato a ${postponementTime}`);
       window.location.reload();
     } catch (error) {
       console.error(error);

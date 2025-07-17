@@ -2,113 +2,35 @@ import Link from "next/link";
 import styles from "./page.module.css";
 
 import Image from "next/image";
-import Script from "next/script";
-import DOMPurify from "isomorphic-dompurify";
+
 import {
+  getTenantAssets,
   getTenantCategories,
   getTenantDetails,
   getTenantId,
-  getTenantLogo,
 } from "@/lib/tenantDetails";
 import { getIcon } from "@/lib/icons";
 
 export const metadata = {
-  title: "Ristorante Pizzeria All'Amicizia - Takeaway",
-  description:
-    "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia. Cucina italiana e indiana, pizze, bevande e molto altro.",
-  openGraph: {
-    title: "Ristorante Pizzeria All'Amicizia - Takeaway",
-    description:
-      "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia",
-    images: [
-      {
-        url: "/allamicizia.webp",
-        width: 1200,
-        height: 630,
-        alt: "Ristorante Pizzeria All'Amicizia",
-      },
-    ],
-    locale: "it_IT",
-    type: "website",
-  },
-  twitter: {
-    card: "summary_large_image",
-    title: "Ristorante Pizzeria All'Amicizia - Takeaway",
-    description:
-      "Ordina online i tuoi piatti preferiti dal Ristorante Pizzeria All'Amicizia",
-    images: ["/allamicizia.webp"],
-  },
   alternates: {
-    canonical: process.env.BASE_URL,
+    canonical: "/",
   },
-};
-
-const jsonLd = {
-  "@context": "https://schema.org",
-  "@type": "Restaurant",
-  name: "Ristorante Pizzeria All'Amicizia",
-  image: "/allamicizia.webp",
-  address: {
-    "@type": "PostalAddress",
-    streetAddress: "Piazza Santa Maria Assunta 2",
-    addressLocality: "Villa Lagarina",
-    postalCode: "38060",
-    addressRegion: "TN",
-    addressCountry: "IT",
-  },
-  url: `${process.env.BASE_URL}`,
-  telephone: "+390464411420",
-  servesCuisine: ["Italian", "Indian"],
-  openingHoursSpecification: [
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: [
-        "Monday",
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ],
-      opens: "12:00",
-      closes: "14:30",
-    },
-    {
-      "@type": "OpeningHoursSpecification",
-      dayOfWeek: [
-        "Tuesday",
-        "Wednesday",
-        "Thursday",
-        "Friday",
-        "Saturday",
-        "Sunday",
-      ],
-      opens: "18:30",
-      closes: "23:00",
-    },
-  ],
 };
 
 export default async function Home() {
   const tenantId = await getTenantId();
   const tenantData = await getTenantDetails(tenantId);
-  const tenantLogo = await getTenantLogo(tenantId);
+  const tenantAssets = await getTenantAssets(tenantId);
   const tenantCategories = await getTenantCategories(tenantId);
 
   const phoneIconUrl = getIcon("phoneIcon");
 
   return (
     <main className={styles.hero}>
-      <Script
-        id="json-ld"
-        type="application/ld+json"
-        dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
-      />
       <section className={styles.heroHeading}>
         <div className={`container ${styles.heroHeadingContainer}`}>
           <Image
-            src={tenantLogo}
+            src={tenantAssets.logoUrl}
             alt={`Takeaway - ${tenantData.name} - Logo`}
             width={100}
             height={100}
@@ -116,11 +38,7 @@ export default async function Home() {
           />
           <div>
             <h1>{tenantData.name}</h1>
-            <p
-              dangerouslySetInnerHTML={{
-                __html: DOMPurify.sanitize(tenantData.address),
-              }}
-            />
+            <p>{tenantData.address} <br /> {tenantData.city} ({tenantData.region})</p>
             <a
               href={`tel:+39${tenantData.phone}`}
               aria-label={`Chiama il ristorante al numero ${tenantData.phone}`}

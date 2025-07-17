@@ -4,11 +4,14 @@ import { cookies } from "next/headers";
 import Link from "next/link";
 
 export const metadata = {
-  title: "Carrello - All'Amicizia Takeaway",
-  description: "Il tuo carrello",
+  title: "Carrello",
+  description: "Gestisci il tuo carrello e procedi all'acquisto",
   robots: {
     index: false,
     follow: true,
+  },
+  alternates: {
+    canonical: "/carrello",
   },
 };
 

@@ -32,7 +32,6 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
         <PostponementModal
           setShowPostponement={setShowPostponement}
           orderId={orderId}
-          setSuccess={setSuccess}
         />
       )}
       <div className="container">

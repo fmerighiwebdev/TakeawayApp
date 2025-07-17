@@ -1,8 +1,13 @@
 import Maintenance from "@/components/maintenance/maintenance";
 import "./globals.css";
 
-import supabase from "@/lib/supabaseClient";
-import { getTenantId, getTenantTheme } from "@/lib/tenantDetails";
+import {
+  getTenantAssets,
+  getTenantDetails,
+  getTenantId,
+  getTenantMetadata,
+  getTenantTheme,
+} from "@/lib/tenantDetails";
 
 import {
   Montserrat,
@@ -195,28 +200,138 @@ const fontThemes = {
   },
 };
 
-export const metadata = {
-  title: "All'Amicizia Takeaway",
-  description:
-    "Ordina i tuoi piatti preferiti da portare via grazie alla nostra nuova app!",
-  icons: {
-    icon: [
-      { url: "/favicon-96x96.png", sizes: "96x96", type: "image/png" },
-      { url: "/favicon.svg", type: "image/svg+xml" },
-      { url: "/favicon.ico" },
-    ],
-    apple: "/apple-touch-icon.png",
-  },
-  appleWebApp: {
-    title: "All'Amicizia Takeaway",
-  },
+export async function generateMetadata() {
+  const tenantId = await getTenantId();
+  const tenantAssets = await getTenantAssets(tenantId);
+  const tenantMetadata = await getTenantMetadata(tenantId);
+  const tenantDetails = await getTenantDetails(tenantId);
+
+  return {
+    title: {
+      default: `${tenantMetadata.title} | Takeaway`,
+      template: `%s | ${tenantMetadata.title} | Takeaway`,
+    },
+    description: tenantMetadata.description,
+    metadataBase: new URL(`https://${tenantDetails.domain}`),
+    icons: {
+      icon: [
+        { url: tenantAssets.favicon96 || "/favicon-96x96.png" },
+        { url: tenantAssets.faviconIco || "/favicon.ico" },
+        { url: tenantAssets.faviconSvg || "/favicon.svg" },
+      ],
+      apple: tenantAssets.appleTouchIconUrl || "/apple-touch-icon.png",
+      shortcut: tenantAssets.shortcutIconUrl || "/shortcut-icon.png",
+    },
+    appleWebApp: {
+      title: `${tenantMetadata.title}`,
+      statusBarStyle: "default",
+      capable: true,
+      navigationBarColor: tenantAssets.primaryColor || "#000000",
+    },
+    openGraph: {
+      title: `${tenantMetadata.title} | Takeaway`,
+      description: tenantMetadata.description,
+      url: `https://${tenantDetails.domain}`,
+      type: "website",
+      locale: "it_IT",
+      images: [
+        {
+          url: tenantAssets.ogImage || "/default-og.webp",
+          width: 1200,
+          height: 630,
+          alt: `${tenantMetadata.title} | Takeaway`,
+        },
+      ],
+      siteName: tenantMetadata.title,
+    },
+    twitter: {
+      card: "summary_large_image",
+      title: `${tenantMetadata.title} | Takeaway`,
+      description: tenantMetadata.description,
+      images: [tenantAssets.ogImage],
+    },
+  };
+}
+
+export const viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
+
+function WebsiteJsonLd({ tenantDetails, tenantAssets }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebSite",
+          name: tenantDetails.name,
+          url: `https://${tenantDetails.domain}`,
+          description: tenantDetails.description,
+          image: tenantAssets.ogImage || "/default-og.webp",
+        }),
+      }}
+    />
+  );
+}
+
+function WebApplicationJsonLd({ tenantDetails, tenantAssets }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "WebApplication",
+          name: tenantDetails.name,
+          url: `https://${tenantDetails.domain}`,
+          description: tenantDetails.description,
+          image: tenantAssets.ogImage || "/default-og.webp",
+          applicationCategory: "FoodOrdering",
+          operatingSystem: "All",
+          browserRequirements: "JavaScript richiesto",
+        }),
+      }}
+    />
+  );
+}
+
+function RestaurantJsonLd({ tenantDetails, tenantAssets }) {
+  return (
+    <script
+      type="application/ld+json"
+      dangerouslySetInnerHTML={{
+        __html: JSON.stringify({
+          "@context": "https://schema.org",
+          "@type": "Restaurant",
+          name: tenantDetails.name,
+          image: tenantAssets.ogImage || "/default-og.webp",
+          address: {
+            "@type": "PostalAddress",
+            streetAddress: tenantDetails.address,
+            addressLocality: tenantDetails.city,
+            postalCode: tenantDetails.postal_code,
+            addressRegion: tenantDetails.region,
+            addressCountry: "IT",
+          },
+          url: `https://${tenantDetails.domain}`,
+          telephone: tenantDetails.phone,
+          email: tenantDetails.email,
+          servesCuisine: tenantDetails.cuisine || ["Italian", "Indian"],
+        }),
+      }}
+    />
+  );
+}
 
 export default async function RootLayout({ children }) {
   const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
 
   const tenantId = await getTenantId();
   const tenantTheme = await getTenantTheme(tenantId);
+  const tenantAssets = await getTenantAssets(tenantId);
+  const tenantDetails = await getTenantDetails(tenantId);
 
   const fontKey = tenantTheme.fontKey || "clean";
   const selectedFonts = fontThemes[fontKey] || fontThemes["clean"];
@@ -232,6 +347,18 @@ export default async function RootLayout({ children }) {
           "--secondaryColor": tenantTheme.secondaryColor || "#ffffff",
         }}
       >
+        <WebsiteJsonLd
+          tenantDetails={tenantDetails}
+          tenantAssets={tenantAssets}
+        />
+        <WebApplicationJsonLd
+          tenantDetails={tenantDetails}
+          tenantAssets={tenantAssets}
+        />
+        <RestaurantJsonLd
+          tenantDetails={tenantDetails}
+          tenantAssets={tenantAssets}
+        />
         {isMaintenance ? <Maintenance /> : children}
       </body>
     </html>
