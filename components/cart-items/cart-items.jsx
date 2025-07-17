@@ -26,6 +26,21 @@ export default function CartItems() {
     return <Loader />;
   } */
 
+  if (cart.length === 0) {
+    return (
+      <main className={styles.cartPage}>
+        <div className="container">
+          <section className={styles.cartItems}>
+            <h1>Il carrello è vuoto</h1>
+            <Link href="/" className={styles.backToShopNoItems}>
+              Torna allo shop
+            </Link>
+          </section>
+        </div>
+      </main>
+    );
+  }
+
   return (
     <section className={styles.cartItems}>
       <h1>Il tuo ordine</h1>

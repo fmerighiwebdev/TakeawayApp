@@ -66,7 +66,9 @@ export const useCartStore = create(
 
         if (typeof window !== "undefined") {
           const hostname = window.location.hostname;
-          document.cookie = `cart-count-${hostname}=${get().cart.length}; path=/; SameSite=Lax`;
+          document.cookie = `cart-count-${hostname}=${
+            get().cart.length
+          }; path=/; SameSite=Lax`;
         }
       },
 
@@ -95,7 +97,9 @@ export const useCartStore = create(
 
         if (typeof window !== "undefined") {
           const hostname = window.location.hostname;
-          document.cookie = `cart-count-${hostname}=${get().cart.length}; path=/; SameSite=Lax`;
+          document.cookie = `cart-count-${hostname}=${
+            get().cart.length
+          }; path=/; SameSite=Lax`;
         }
       },
 
@@ -138,7 +142,13 @@ export const useCartStore = create(
       },
 
       // Clear the entire cart
-      clearCart: () => set({ cart: [] }),
+      clearCart: () => {
+        set({ cart: [] });
+        if (typeof window !== "undefined") {
+          const hostname = window.location.hostname;
+          document.cookie = `cart-count-${hostname}=0; path=/; SameSite=Lax`;
+        }
+      },
 
       // Get total cart price
       getTotalPrice: () => {
