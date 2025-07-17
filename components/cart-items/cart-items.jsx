@@ -7,9 +7,7 @@ import Image from "next/image";
 import { useCartStore } from "@/store/cart";
 import Loader from "../loader/loader";
 
-import removeIcon from "@/assets/delete-icon.svg";
-import plusIcon from "@/assets/plus.svg";
-import minusIcon from "@/assets/minus.svg";
+import { getIcon } from "@/lib/icons";
 
 export default function CartItems() {
   const { cart, removeFromCart, updateQuantity, hydrated, getTotalPrice } =
@@ -17,14 +15,14 @@ export default function CartItems() {
 
   const total = getTotalPrice();
 
+  const deleteIcon = getIcon("deleteIcon");
+  const minusIcon = getIcon("minusIcon");
+  const plusIcon = getIcon("plusIcon");
+
   const formattedTotal = new Intl.NumberFormat("it-IT", {
     style: "currency",
     currency: "EUR",
   }).format(total);
-
-  /* if (!hydrated) {
-    return <Loader />;
-  } */
 
   if (cart.length === 0) {
     return (
@@ -106,7 +104,7 @@ export default function CartItems() {
                           }
                           className={styles.removeItem}
                         >
-                          <Image src={removeIcon} alt="Rimuovi elemento" />
+                          <Image src={deleteIcon} alt="Rimuovi elemento" width={24} height={24} />
                         </div>
                       </div>
                       {item.description && (
@@ -176,8 +174,8 @@ export default function CartItems() {
                           <Image
                             src={minusIcon}
                             alt="Diminuisci quantità"
-                            width={14}
-                            height={14}
+                            width={16}
+                            height={16}
                           />
                         </button>
                         <span>x{item.quantity}</span>
@@ -198,8 +196,8 @@ export default function CartItems() {
                           <Image
                             src={plusIcon}
                             alt="Aumenta quantità"
-                            width={14}
-                            height={14}
+                            width={16}
+                            height={16}
                           />
                         </button>
                       </div>

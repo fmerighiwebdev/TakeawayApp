@@ -3,17 +3,19 @@ import styles from "./product-item.module.css";
 import { useState } from "react";
 import { motion, AnimatePresence } from "motion/react";
 
-import checkBoldIcon from "@/assets/check-bold.svg";
-import addToCartIcon from "@/assets/add-to-cart.svg";
-import pepperIcon from "@/assets/pepper-icon.svg";
 import Image from "next/image";
 import VariationsModal from "../variations-modal/variations-modal";
+import { getIcon } from "@/lib/icons";
 
 export default function ProductItem({ product }) {
   const { addToCart } = useCartStore();
 
   const [success, setSuccess] = useState(null);
   const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const addToCartIcon = getIcon("addToCart");
+  const checkIcon = getIcon("checkIcon");
+  const pepperIcon = getIcon("pepperIcon");
 
   const formattedPrice = new Intl.NumberFormat("it-IT", {
     style: "currency",
@@ -159,7 +161,7 @@ export default function ProductItem({ product }) {
           >
             {success ? (
               <Image
-                src={checkBoldIcon}
+                src={checkIcon}
                 alt=""
                 aria-hidden="true"
                 width={20}

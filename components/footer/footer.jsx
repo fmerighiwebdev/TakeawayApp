@@ -4,7 +4,7 @@ import DOMPurify from "isomorphic-dompurify";
 
 import Link from "next/link";
 
-export default function Footer({ tenantData, tenantTheme }) {
+export default function Footer({ tenantData, tenantLogo }) {
   const currentYear = new Date().getFullYear();
 
   return (
@@ -14,7 +14,7 @@ export default function Footer({ tenantData, tenantTheme }) {
     >
       <div className={`container ${styles.footerContainer}`}>
         <Image
-          src={tenantTheme.logoUrl}
+          src={tenantLogo}
           alt={`Asporto ${tenantData.name} Logo`}
           width={40}
           height={40}

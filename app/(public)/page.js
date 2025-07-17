@@ -1,8 +1,6 @@
 import Link from "next/link";
 import styles from "./page.module.css";
 
-import phoneIcon from "@/assets/phone.svg";
-
 import Image from "next/image";
 import Script from "next/script";
 import DOMPurify from "isomorphic-dompurify";
@@ -10,8 +8,9 @@ import {
   getTenantCategories,
   getTenantDetails,
   getTenantId,
-  getTenantTheme,
+  getTenantLogo,
 } from "@/lib/tenantDetails";
+import { getIcon } from "@/lib/icons";
 
 export const metadata = {
   title: "Ristorante Pizzeria All'Amicizia - Takeaway",
@@ -94,8 +93,10 @@ const jsonLd = {
 export default async function Home() {
   const tenantId = await getTenantId();
   const tenantData = await getTenantDetails(tenantId);
-  const tenantTheme = await getTenantTheme(tenantId);
+  const tenantLogo = await getTenantLogo(tenantId);
   const tenantCategories = await getTenantCategories(tenantId);
+
+  const phoneIconUrl = getIcon("phoneIcon");
 
   return (
     <main className={styles.hero}>
@@ -107,7 +108,7 @@ export default async function Home() {
       <section className={styles.heroHeading}>
         <div className={`container ${styles.heroHeadingContainer}`}>
           <Image
-            src={tenantTheme.logoUrl}
+            src={tenantLogo}
             alt={`Takeaway - ${tenantData.name} - Logo`}
             width={100}
             height={100}
@@ -124,7 +125,7 @@ export default async function Home() {
               href={`tel:+39${tenantData.phone}`}
               aria-label={`Chiama il ristorante al numero ${tenantData.phone}`}
             >
-              <Image src={phoneIcon} alt="" aria-hidden="true" />
+              <Image src={phoneIconUrl} alt="" aria-hidden="true" width={32} height={32} />
               <span>{tenantData.phone}</span>
             </a>
           </div>

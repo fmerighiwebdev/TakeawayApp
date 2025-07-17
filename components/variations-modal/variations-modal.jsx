@@ -5,17 +5,14 @@ import { createPortal } from "react-dom";
 import { motion, AnimatePresence } from "motion/react";
 import axios from "axios";
 
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { useCartStore } from "@/store/cart";
-
-import addToCartIcon from "@/assets/add-to-cart.svg";
-import downArrow from "@/assets/down-arrow.svg";
-import closeIcon from "@/assets/close-icon.svg";
 
 import Checkbox from "../checkbox/checkbox";
 import Radio from "../radio/radio";
 import Loader from "../loader/loader";
 import useSWR from "swr";
+import { getIcon } from "@/lib/icons";
 
 export default function VariationsModal({
   product,
@@ -35,6 +32,10 @@ export default function VariationsModal({
     cookingOptions: false,
     spiceLevels: false,
   });
+
+  const addToCartIcon = getIcon("addToCart");
+  const closeIcon = getIcon("closeIcon");
+  const downArrow = getIcon("downArrow");
 
   const { addToCart } = useCartStore();
 

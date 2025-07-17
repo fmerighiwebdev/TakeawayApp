@@ -3,17 +3,17 @@
 import styles from "./order-details.module.css";
 import { useState } from "react";
 import Image from "next/image";
-import detailsIcon from "@/assets/details.svg";
-import clockIcon from "@/assets/clock.svg";
-import userIcon from "@/assets/user.svg";
-import shapeUp from "@/assets/shape-up.svg";
-import shapeDown from "@/assets/shape-down.svg";
 import ConfirmationModal from "../confirmation-modal/confirmation-modal";
 import PostponementModal from "../postponement-modal/postponement-modal";
+import { getIcon } from "@/lib/icons";
 
 export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
   const [showConfirmation, setShowConfirmation] = useState(false);
   const [showPostponement, setShowPostponement] = useState(false);
+
+  const userIcon = getIcon("userIcon");
+  const clockIcon = getIcon("clockIcon");
+  const detailsIcon = getIcon("detailsIcon");
 
   const formattedTotalPrice = new Intl.NumberFormat("it-IT", {
     style: "currency",
@@ -37,15 +37,14 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
       )}
       <div className="container">
         <div className={styles.orderDetailsCard}>
-          <Image src={shapeDown} alt="Forma" className={styles.shapeDown} />
           <div className={styles.orderDetails}>
             <div className={styles.orderDetailsHeading}>
-              <Image src={detailsIcon} alt="Dettagli ordine" />
+              <Image src={detailsIcon} alt="Dettagli ordine" width={48} height={48} />
               <h2>Dettagli ordine</h2>
             </div>
             <div className={styles.orderDetailsWrapper}>
               <div className={styles.customerDetails}>
-                <Image src={userIcon} alt="Nome cliente" />
+                <Image src={userIcon} alt="Nome cliente" width={32} height={32} />
                 <div>
                   <p className={styles.customerName}>
                     {orderDetails.customer_name}
@@ -55,7 +54,7 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
                 </div>
               </div>
               <div className={styles.orderTime}>
-                <Image src={clockIcon} alt="Orario di ritiro" />
+                <Image src={clockIcon} alt="Orario di ritiro" width={32} height={32} />
                 <p>{orderDetails.pickup_time}</p>
               </div>
               {!publicDetails && orderDetails.status === "In Attesa" && (
@@ -175,7 +174,6 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
               </p>
             </div>
           </div>
-          <Image src={shapeUp} alt="Forma" className={styles.shapeUp} />
         </div>
       </div>
     </div>

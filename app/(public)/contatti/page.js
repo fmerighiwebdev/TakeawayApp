@@ -1,13 +1,10 @@
 import Image from "next/image";
 import styles from "./contacts.module.css";
 
-import clockOrangeIcon from "@/assets/clock-orange.svg";
-import phoneOrangeIcon from "@/assets/phone-orange.svg";
-import locationOrangeIcon from "@/assets/location-orange.svg";
-import emailOrangeIcon from "@/assets/email-orange.svg";
 import Script from "next/script";
 import DOMPurify from "isomorphic-dompurify";
 import { getTenantDetails, getTenantId } from "@/lib/tenantDetails";
+import { getIcon } from "@/lib/icons";
 
 export const metadata = {
   title: "Contatti - All'Amicizia Takeaway",
@@ -61,6 +58,11 @@ export default async function ContactsPage() {
   const tenantId = await getTenantId();
   const tenantData = await getTenantDetails(tenantId);
 
+  const clockIcon = getIcon("clockIcon");
+  const phoneIcon = getIcon("phoneIcon");
+  const locationIcon = getIcon("locationIcon");
+  const emailIcon = getIcon("emailIcon");
+
   return (
     <main className={styles.contactsPage}>
       <Script
@@ -78,7 +80,7 @@ export default async function ContactsPage() {
             <ul>
               <li className={styles.contactItem}>
                 <Image
-                  src={clockOrangeIcon}
+                  src={clockIcon}
                   alt="Orari di apertura"
                   width={50}
                   height={50}
@@ -90,7 +92,7 @@ export default async function ContactsPage() {
               </li>
               <li className={styles.contactItem}>
                 <Image
-                  src={phoneOrangeIcon}
+                  src={phoneIcon}
                   alt="Telefono"
                   width={50}
                   height={50}
@@ -99,7 +101,7 @@ export default async function ContactsPage() {
               </li>
               <li className={styles.contactItem}>
                 <Image
-                  src={locationOrangeIcon}
+                  src={locationIcon}
                   alt="Indirizzo"
                   width={50}
                   height={50}
@@ -114,7 +116,7 @@ export default async function ContactsPage() {
               </li>
               <li className={styles.contactItem}>
                 <Image
-                  src={emailOrangeIcon}
+                  src={emailIcon}
                   alt="Email"
                   width={50}
                   height={50}

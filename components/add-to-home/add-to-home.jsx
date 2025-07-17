@@ -3,12 +3,14 @@
 import { useCallback, useState, useEffect } from "react";
 import styles from "./add-to-home.module.css"; // Assuming you have this CSS module
 import Image from "next/image"; // Assuming you've added this for your SVG
-import shareIcon from "@/assets/share-icon.svg"; // Assuming this is the correct path to your SVG
+import { getIcon } from "@/lib/icons";
 
 export default function AddToHomeScreenPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isVisible, setIsVisible] = useState(false);
-  const [isIOSDevice, setIsIOSDevice] = useState(false); // State to specifically track if the OS is iOS
+  const [isIOSDevice, setIsIOSDevice] = useState(false);
+
+  const shareIcon = getIcon("shareIcon");
 
   // Function to check if the OS is iOS (does not check for PWA mode)
   const runningOnIOS = () => {

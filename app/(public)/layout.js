@@ -4,7 +4,7 @@ import Header from "@/components/header/header";
 import {
   getTenantDetails,
   getTenantId,
-  getTenantTheme,
+  getTenantLogo,
 } from "@/lib/tenantDetails";
 import Script from "next/script";
 
@@ -15,7 +15,7 @@ export const metadata = {
 export default async function PublicLayout({ children }) {
   const tenantId = await getTenantId();
   const tenantData = await getTenantDetails(tenantId);
-  const tenantTheme = await getTenantTheme(tenantId);
+  const tenantLogo = await getTenantLogo(tenantId);
 
   return (
     <>
@@ -23,9 +23,9 @@ export default async function PublicLayout({ children }) {
         id="cookieyes"
         src={`https://cdn-cookieyes.com/client_data/d521c03e28eb7f8fcd179382/script.js`}
       ></Script>
-      <Header tenantData={tenantData} tenantTheme={tenantTheme} />
+      <Header tenantData={tenantData} tenantLogo={tenantLogo} />
       {children}
-      <Footer tenantData={tenantData} tenantTheme={tenantTheme} />
+      <Footer tenantData={tenantData} tenantLogo={tenantLogo} />
       <AddToHomeScreenPrompt />
     </>
   );

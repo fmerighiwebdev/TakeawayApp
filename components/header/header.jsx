@@ -4,18 +4,19 @@ import Image from "next/image";
 
 import styles from "./header.module.css";
 
-import shopBag from "@/assets/bag.svg";
-
 import { useCartStore } from "@/store/cart";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { differenceInDays, differenceInYears } from "date-fns";
 import { useEffect, useState } from "react";
+import { getIcon } from "@/lib/icons";
 
-export default function Header({ tenantData, tenantTheme }) {
+export default function Header({ tenantData, tenantLogo }) {
   const { cart } = useCartStore();
   const pathname = usePathname();
   const [isHydrated, setIsHydrated] = useState(false);
+
+  const bagIcon = getIcon("shoppingBag");
 
   useEffect(() => {
     setIsHydrated(true);
@@ -47,7 +48,7 @@ export default function Header({ tenantData, tenantTheme }) {
           <div className={styles.headerHeading}>
             <Link href="/">
               <Image
-                src={tenantTheme.logoUrl}
+                src={tenantLogo}
                 className={styles.headerLogo}
                 alt={`Takeaway - ${tenantData.name} Logo`}
                 width={100}
@@ -57,12 +58,17 @@ export default function Header({ tenantData, tenantTheme }) {
             </Link>
             <span>{tenantData.slogan}</span>
           </div>
-          <Link href="/carrello">
+          <Link
+            href="/carrello"
+            aria-label="Vai al carrello con i tuoi piatti selezionati"
+          >
             <div className={styles.shopBagWrapper}>
               <Image
-                src={shopBag}
+                src={bagIcon}
+                width={48}
+                height={48}
                 className={styles.shopBag}
-                alt="Vai al carrello con i tuoi piatti selezionati"
+                alt=""
               />
               {isHydrated && (
                 <span className={styles.shopBagCounter}>{cart.length}</span>
