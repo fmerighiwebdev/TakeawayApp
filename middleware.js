@@ -4,9 +4,15 @@ import supabase from "./lib/supabaseClient";
 // Middleware per la gestione dei tenant basata sul dominio
 // Questo middleware intercetta le richieste e determina il tenant in base al dominio
 export async function middleware(request) {
+  const { pathname } = request.nextUrl;
   const host = request.headers.get("host") || "";
 
   console.log("Middleware tenant check for host:", host);
+
+  // Escludo le richieste per CRON-JOB clear-orders bypassando il middleware
+  if (pathname.startsWith("/api/cron/clear-orders")) {
+    return NextResponse.next();
+  }
 
   // Controlla se il dominio è localhost
   // Se sì, usa un tenant predefinito o quello specificato nell'ambiente
