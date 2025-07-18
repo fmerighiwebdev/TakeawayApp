@@ -336,6 +336,9 @@ export default async function RootLayout({ children }) {
   const fontKey = tenantTheme.fontKey || "clean";
   const selectedFonts = fontThemes[fontKey] || fontThemes["clean"];
 
+  const primaryColorDark = `color-mix(in srgb, ${tenantTheme.primaryColor} 80%, black 20%)`;
+  const secondaryColorDark = `color-mix(in srgb, ${tenantTheme.secondaryColor} 80%, black 20%)`;
+
   return (
     <html
       lang="it"
@@ -345,6 +348,8 @@ export default async function RootLayout({ children }) {
         style={{
           "--primaryColor": tenantTheme.primaryColor || "#000000",
           "--secondaryColor": tenantTheme.secondaryColor || "#ffffff",
+          "--primaryColorDark": primaryColorDark,
+          "--secondaryColorDark": secondaryColorDark,
         }}
       >
         <WebsiteJsonLd

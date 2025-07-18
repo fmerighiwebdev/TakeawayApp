@@ -27,7 +27,6 @@
 
 .ordersNav button.active {
   background-color: var(--primaryColor);
-  box-shadow: 0 0 15px rgba(224, 123, 16, 0.5);
   color: white;
   font-weight: var(--fw-600);
 }

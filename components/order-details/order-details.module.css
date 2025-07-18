@@ -257,7 +257,7 @@
 }
 
 .lateOrder {
-  background-color: var(--accent-red);
+  background-color: var(--secondaryColor);
   color: white;
   font-size: 1rem;
   display: block;
@@ -271,7 +271,7 @@
 }
 
 .lateOrder:hover {
-  background-color: var(--accent-red-dark);
+  background-color: var(--secondaryColorDark);
 }
 
 @media screen and (max-width: 768px) {

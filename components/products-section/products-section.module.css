@@ -20,7 +20,7 @@
 .removeFilter {
   color: white;
   cursor: pointer;
-  background-color: #eb675b;
+  background-color: var(--secondaryColor);
   border: none;
   width: fit-content;
   padding: 0.25rem 0.5rem;
@@ -31,7 +31,7 @@
 }
 
 .removeFilter:hover {
-  background-color: var(--accent-red);
+  background-color: var(--secondaryColorDark);
 }
 
 @keyframes fadeInFromBottom {
