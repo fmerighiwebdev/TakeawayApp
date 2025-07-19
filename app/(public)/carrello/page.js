@@ -26,9 +26,6 @@ export default async function CartPage() {
   const cookieStore = await cookies();
   const cartCount = Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;
 
-  console.log("Hostname:", hostname);
-  console.log("Cart count:", cartCount);
-
   if (cartCount === 0) {
     return (
       <main className={styles.cartPage}>

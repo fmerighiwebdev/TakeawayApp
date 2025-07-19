@@ -30,3 +30,28 @@
   color: white;
   font-weight: var(--fw-600);
 }
+
+.newOrdersNotification {
+  background-color: var(--primaryColor);
+  color: white;
+  padding: 0.5rem 1rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  cursor: pointer;
+  width: fit-content;
+  animation: pulse 1.5s infinite;
+  margin: 0 auto;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.05);
+  }
+  100% {
+    transform: scale(1);
+  }
+}

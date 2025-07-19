@@ -11,7 +11,7 @@ export default async function AdminDashboard() {
 
   const tenantId = await getTenantId();
 
-  const orders = await getOrdersByTenantId(tenantId);
+  const initialOrders = await getOrdersByTenantId(tenantId);
 
   return (
     <AuthGuard>
@@ -21,7 +21,7 @@ export default async function AdminDashboard() {
           <p>{formattedDate}</p>
         </div>
         <div className="container">
-          <Orders orders={orders} />
+          <Orders initialOrders={initialOrders} tenantId={tenantId} />
         </div>
       </section>
     </AuthGuard>

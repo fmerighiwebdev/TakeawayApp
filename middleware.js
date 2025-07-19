@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import supabase from "./lib/supabaseClient";
+import supabaseServer from "./lib/supabaseServer";
 
 // Middleware per la gestione dei tenant basata sul dominio
 // Questo middleware intercetta le richieste e determina il tenant in base al dominio
@@ -25,7 +25,7 @@ export async function middleware(request) {
   }
 
   // Altrimenti, cerca il tenant nel database in base al dominio
-  const { data, error } = await supabase
+  const { data, error } = await supabaseServer
     .from("tenants")
     .select("id")
     .eq("domain", host)

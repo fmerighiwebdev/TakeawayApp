@@ -69,7 +69,8 @@ button,
 label,
 input,
 select,
-button {
+button,
+span {
   font-family: var(--ffBody);
   color: var(--bodyText);
 }

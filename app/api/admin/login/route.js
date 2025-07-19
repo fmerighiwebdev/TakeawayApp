@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-import supabase from "@/lib/supabaseClient";
+import supabaseServer from "@/lib/supabaseServer";
 import bcrypt from "bcrypt";
 
 export async function POST(req) {
@@ -12,7 +12,7 @@ export async function POST(req) {
   }
 
   // Cerca l'utente nel DB
-  const { data: admin, error } = await supabase
+  const { data: admin, error } = await supabaseServer
     .from("tenant_admins")
     .select("*")
     .eq("username", user)
