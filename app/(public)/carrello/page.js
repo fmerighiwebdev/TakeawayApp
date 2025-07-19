@@ -1,6 +1,6 @@
 import CartItems from "@/components/cart-items/cart-items";
 import styles from "./cart.module.css";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
 import Link from "next/link";
 
 export const metadata = {
@@ -16,13 +16,18 @@ export const metadata = {
 };
 
 export default async function CartPage() {
-  const hostname =
-    typeof window !== "undefined" ? window.location.hostname : "localhost";
+  const headersList = await headers();
+  let hostname = headersList.get("host") || "localhost";
+
+  if (hostname === "localhost:3000") {
+    hostname = "localhost";
+  }
+
   const cookieStore = await cookies();
   const cartCount = Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;
 
   console.log("Hostname:", hostname);
-  console.log("Cart count from cookies:", cartCount);
+  console.log("Cart count:", cartCount);
 
   if (cartCount === 0) {
     return (
