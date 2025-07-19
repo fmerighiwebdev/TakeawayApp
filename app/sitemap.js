@@ -1,5 +1,11 @@
+import { getTenantCategories, getTenantDetails, getTenantId } from "@/lib/tenantDetails";
+
 export default async function sitemap() {
-  const baseUrl = process.env.BASE_URL;
+  const tenantId = await getTenantId();
+  const tenantDetails = await getTenantDetails(tenantId);
+  const tenantCategories = await getTenantCategories(tenantId);
+
+  const baseUrl = `https://${tenantDetails.domain}`;
 
   const staticPages = [
     {
@@ -22,5 +28,12 @@ export default async function sitemap() {
     }
   ];
 
-  return [...staticPages];
+  const categoryPages = tenantCategories.map(category => ({
+    url: `${baseUrl}/${category.slug}`,
+    lastModified: new Date(),
+    changeFrequency: 'monthly',
+    priority: 0.8
+  }));
+
+  return [...staticPages, ...categoryPages];
 }

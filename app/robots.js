@@ -1,4 +1,9 @@
-export default function robots() {
+import { getTenantDetails, getTenantId } from "@/lib/tenantDetails"
+
+export default async function robots() {
+    const tenantId = await getTenantId();
+    const tenantDetails = await getTenantDetails(tenantId);
+
     return {
       rules: [{
         userAgent: '*',
@@ -10,6 +15,6 @@ export default function robots() {
           '/admin/*'
         ],
       }],
-      sitemap: `${process.env.BASE_URL}/sitemap.xml`,
+      sitemap: `https://${tenantDetails.domain}/sitemap.xml`,
     }
   }
