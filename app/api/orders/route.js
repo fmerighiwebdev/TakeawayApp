@@ -65,6 +65,7 @@ export async function POST(req, res) {
         orderItems: items,
         total: total_price,
         pickupTime: time,
+        tenantId,
         orderId: orderIds.id,
         orderPublicId: orderIds.publicId,
       });
