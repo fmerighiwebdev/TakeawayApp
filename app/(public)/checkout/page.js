@@ -4,6 +4,7 @@ import CheckoutItems from "@/components/checkout-items/checkout-items";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import { getTenantId, getTenantPickupTimes } from "@/lib/tenantDetails";
+import { headers } from "next/headers";
 
 export const metadata = {
   title: "Checkout",
@@ -18,8 +19,8 @@ export const metadata = {
 };
 
 export default async function CheckoutPage() {
-  const hostname =
-    typeof window !== "undefined" ? window.location.hostname : "localhost";
+  const headersList = await headers();
+  const hostname = (headersList.get("host") || "localhost").split(":")[0];;
 
   console.log("Hostname:", hostname);
   
