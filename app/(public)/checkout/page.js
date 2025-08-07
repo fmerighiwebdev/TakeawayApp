@@ -20,6 +20,9 @@ export const metadata = {
 export default async function CheckoutPage() {
   const hostname =
     typeof window !== "undefined" ? window.location.hostname : "localhost";
+
+  console.log("Hostname:", hostname);
+  
   const cookieStore = await cookies();
   const cartCount =
     Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;
