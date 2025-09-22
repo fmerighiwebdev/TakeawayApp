@@ -20,7 +20,7 @@ export default async function Maintenance() {
             height={400}
           />
           <h1>Applicazione non disponibile</h1>
-          <p>L'applicazione è temporaneamente non disponibile. <br /> Ci scusiamo per l'inconveniente. <br /> Torneremo al più presto.</p>
+          <p>L&apos;applicazione è temporaneamente non disponibile. <br /> Ci scusiamo per l&apos;inconveniente. <br /> Torneremo al più presto.</p>
         </section>
       </div>
     </main>
