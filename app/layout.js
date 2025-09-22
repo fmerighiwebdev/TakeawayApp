@@ -326,12 +326,12 @@ function RestaurantJsonLd({ tenantDetails, tenantAssets }) {
 }
 
 export default async function RootLayout({ children }) {
-  const isMaintenance = process.env.NEXT_PUBLIC_MAINTENANCE_MODE === "true";
-
   const tenantId = await getTenantId();
   const tenantTheme = await getTenantTheme(tenantId);
   const tenantAssets = await getTenantAssets(tenantId);
   const tenantDetails = await getTenantDetails(tenantId);
+
+  const isActive = tenantDetails.active;
 
   const fontKey = tenantTheme.fontKey || "clean";
   const selectedFonts = fontThemes[fontKey] || fontThemes["clean"];
@@ -364,7 +364,7 @@ export default async function RootLayout({ children }) {
           tenantDetails={tenantDetails}
           tenantAssets={tenantAssets}
         />
-        {isMaintenance ? <Maintenance /> : children}
+        {!isActive ? <Maintenance /> : children}
       </body>
     </html>
   );

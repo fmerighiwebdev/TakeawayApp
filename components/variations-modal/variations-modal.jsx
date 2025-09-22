@@ -104,6 +104,8 @@ export default function VariationsModal({
     }).format(value);
   }
 
+  console.log(customizations);
+
   return createPortal(
     <div className={styles.modalOverlay}>
       <AnimatePresence>
@@ -276,7 +278,7 @@ export default function VariationsModal({
                   )}
                 </div>
               )}
-              {customizations.cookingoptions?.some((option) => option.id) && (
+              {customizations.cookings?.some((option) => option.id) && (
                 <div className={styles.variationExtras}>
                   <div
                     className={styles.variationHeading}
@@ -303,7 +305,7 @@ export default function VariationsModal({
                   </div>
                   {menuOpen.cookingOptions && (
                     <ul>
-                      {customizations.cookingoptions.map((option, index) => (
+                      {customizations.cookings.map((option, index) => (
                         <li key={index}>
                           <Radio
                             label={option.label}
@@ -321,7 +323,7 @@ export default function VariationsModal({
                   )}
                 </div>
               )}
-              {customizations.spicelevels?.some((option) => option.id) && (
+              {customizations.spiceLevels?.some((option) => option.id) && (
                 <div className={styles.variationExtras}>
                   <div
                     className={styles.variationHeading}
@@ -348,7 +350,7 @@ export default function VariationsModal({
                   </div>
                   {menuOpen.spiceLevels && (
                     <ul>
-                      {customizations.spicelevels.map((option, index) => (
+                      {customizations.spiceLevels.map((option, index) => (
                         <li key={index}>
                           <Radio
                             label={option.label}
