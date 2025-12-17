@@ -148,10 +148,10 @@ export default function CheckoutForm({ pickupTimes }) {
       {errors?.order && (
         <Alert variant="destructive">
           <AlertCircle />
-          <AlertTitle>Errore durante l'invio dell'ordine.</AlertTitle>
+          <AlertTitle>Errore durante l&apos;invio dell&apos;ordine.</AlertTitle>
           <AlertDescription>
             <p>
-              Si è verificato un errore durante l'invio dell'ordine. Per favore,
+              Si è verificato un errore durante l&apos;invio dell&apos;ordine. Per favore,
               riprova più tardi.
             </p>
           </AlertDescription>

@@ -144,7 +144,7 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
                           Completa ordine n.{orderId}
                         </DialogTitle>
                         <DialogDescription className="text-md">
-                          L'azione non può essere annullata.
+                          L&apos;azione non può essere annullata.
                         </DialogDescription>
                       </DialogHeader>
                       <DialogFooter>
@@ -178,7 +178,7 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
                           Nuovo orario ritiro ordine
                         </DialogTitle>
                         <DialogDescription className="text-md">
-                          Seleziona il nuovo orario di ritiro dell'ordine:
+                          Seleziona il nuovo orario di ritiro dell&apos;ordine:
                         </DialogDescription>
                       </DialogHeader>
                       <div>
