@@ -3,6 +3,7 @@ import "./globals.css";
 
 import {
   getTenantAssets,
+  getTenantCompletion,
   getTenantDetails,
   getTenantId,
   getTenantMetadata,
@@ -31,6 +32,7 @@ import {
   Bitter,
   Karla,
 } from "next/font/google";
+import { Toaster } from "@/components/ui/sonner";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -318,7 +320,7 @@ function RestaurantJsonLd({ tenantDetails, tenantAssets }) {
           url: `https://${tenantDetails.domain}`,
           telephone: tenantDetails.phone,
           email: tenantDetails.email,
-          servesCuisine: tenantDetails.cuisine || ["Italian", "Indian"],
+          servesCuisine: tenantDetails.cuisine || ["Italian"],
         }),
       }}
     />
@@ -331,7 +333,8 @@ export default async function RootLayout({ children }) {
   const tenantAssets = await getTenantAssets(tenantId);
   const tenantDetails = await getTenantDetails(tenantId);
 
-  const isActive = tenantDetails.active;
+  const isCompleted = await getTenantCompletion(tenantId);
+  const isActive = tenantDetails.active && isCompleted;
 
   const fontKey = tenantTheme.fontKey || "clean";
   const selectedFonts = fontThemes[fontKey] || fontThemes["clean"];
@@ -346,10 +349,10 @@ export default async function RootLayout({ children }) {
     >
       <body
         style={{
-          "--primaryColor": tenantTheme.primaryColor || "#000000",
-          "--secondaryColor": tenantTheme.secondaryColor || "#ffffff",
-          "--primaryColorDark": primaryColorDark,
-          "--secondaryColorDark": secondaryColorDark,
+          "--color-primary": tenantTheme.primaryColor || "#000000",
+          "--color-primary-content": "#ffffffe0",
+          "--color-secondary": tenantTheme.secondaryColor || "#ffffff",
+          "--color-secondary-content": "#000000e0",
         }}
       >
         <WebsiteJsonLd
@@ -365,6 +368,7 @@ export default async function RootLayout({ children }) {
           tenantAssets={tenantAssets}
         />
         {!isActive ? <Maintenance /> : children}
+        <Toaster position="top-center" richColors expand={true} theme="light" />
       </body>
     </html>
   );

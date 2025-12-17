@@ -1,5 +1,12 @@
-import CartItems from "@/components/cart-items/cart-items";
-import styles from "./cart.module.css";
+import CartItems from "@/components/cart-items";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import FloatingBack from "@/components/ui/floating-back";
 import { cookies, headers } from "next/headers";
 import Link from "next/link";
 
@@ -24,28 +31,60 @@ export default async function CartPage() {
   }
 
   const cookieStore = await cookies();
-  const cartCount = Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;
+  const cartCount =
+    Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;
 
   if (cartCount === 0) {
     return (
-      <main className={styles.cartPage}>
-        <div className="container">
-          <section className={styles.cartItems}>
-            <h1>Il carrello è vuoto</h1>
-            <Link href="/" className={styles.backToShopNoItems}>
-              Torna allo shop
-            </Link>
-          </section>
-        </div>
+      <main className="w-screen h-dvh flex items-center justify-center py-24">
+        <section>
+          <div className="container flex flex-col items-center gap-12">
+            <h1 className="text-6xl font-medium text-(--muted-text) text-center">
+              Il carrello è vuoto
+            </h1>
+            <button className="btn btn-primary">
+              <Link href="/" className="text-lg">
+                Torna allo shop
+              </Link>
+            </button>
+          </div>
+        </section>
       </main>
     );
   }
 
   return (
-    <main className={styles.cartPage}>
-      <div className="container">
+    <main className="py-24 min-h-dvh">
+      <div className="container flex flex-col gap-10">
+        <Breadcrumb>
+          <BreadcrumbList>
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link href="/" className="text-lg">
+                  Home
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+            <BreadcrumbSeparator />
+            <BreadcrumbItem>
+              <BreadcrumbLink asChild>
+                <Link
+                  href={`/carrello`}
+                  className="text-lg text-primary font-semibold"
+                >
+                  Carrello
+                </Link>
+              </BreadcrumbLink>
+            </BreadcrumbItem>
+          </BreadcrumbList>
+        </Breadcrumb>
+        <div className="flex flex-col gap-2">
+          <h1 className="text-6xl text-primary font-medium">Il tuo ordine</h1>
+          <div className="separator-horizontal"></div>
+        </div>
         <CartItems />
       </div>
+      <FloatingBack href="/" />
     </main>
   );
 }

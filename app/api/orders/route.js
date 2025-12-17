@@ -5,7 +5,7 @@ import { sendOrderConfirmationEmail } from "@/lib/emails/sendOrderConfirmationEm
 import { getTenantId } from "@/lib/tenantDetails";
 
 export async function POST(req, res) {
-  const { name, surname, time, phone, email, items } = await req.json();
+  const { name, surname, time, phone, email, notes, items } = await req.json();
 
   if (!name || !surname || !time || !phone || !email || !items) {
     return NextResponse.json({ message: "Dati mancanti" }, { status: 400 });
@@ -51,6 +51,7 @@ export async function POST(req, res) {
       phone,
       total_price,
       email,
+      notes,
       items,
     };
 

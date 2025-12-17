@@ -1,28 +1,34 @@
-import ProductsSection from "@/components/products-section/products-section";
+import ProductsSection from "@/components/products-section";
 
-import styles from "./category.module.css";
 import { notFound } from "next/navigation";
 import Link from "next/link";
-import Image from "next/image";
 
 import {
-  getTenantCategories,
+  getTenantCategoryBySlug,
   getTenantDetails,
   getTenantId,
   getTenantSubcategories,
 } from "@/lib/tenantDetails";
 import { getTenantProductsByCategory } from "@/lib/products";
-import { getIcon } from "@/lib/icons";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbPage,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import FloatingBack from "@/components/ui/floating-back";
 
 export async function generateMetadata({ params }) {
   const { category: categorySlug } = await params;
 
   const tenantId = await getTenantId();
-  const tenantCategories = await getTenantCategories(tenantId);
+  const activeCategory = await getTenantCategoryBySlug(tenantId, categorySlug);
 
-  const activeCategory = tenantCategories.find(
-    (category) => category.slug === categorySlug
-  );
+  if (!activeCategory) {
+    notFound();
+  }
 
   return {
     title: activeCategory.name,
@@ -87,17 +93,13 @@ export default async function CategoryPage({ params }) {
 
   const tenantId = await getTenantId();
   const tenantDetails = await getTenantDetails(tenantId);
-  const tenantCategories = await getTenantCategories(tenantId);
-
-  const leftArrowIcon = getIcon("leftArrow");
-
-  const activeCategory = tenantCategories.find(
-    (category) => category.slug === categorySlug
-  );
+  const activeCategory = await getTenantCategoryBySlug(tenantId, categorySlug);
 
   if (!activeCategory) {
     notFound();
   }
+
+  console.log("Active Category:", activeCategory);
 
   const subcategories = await getTenantSubcategories(
     tenantId,
@@ -119,24 +121,40 @@ export default async function CategoryPage({ params }) {
         tenantDetails={tenantDetails}
         activeCategory={activeCategory}
       />
-      <main className={styles.categoryPage}>
-        <div className="container">
-          <Link href="/" className={styles.backButton}>
-            <Image
-              src={leftArrowIcon}
-              alt=""
-              aria-hidden="true"
-              width={32}
-              height={32}
-            />
-            <span>Home</span>
-          </Link>
-          <h1>{activeCategory.name}</h1>
+      <main className="py-24">
+        <div className="container flex flex-col gap-10">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/" className="text-lg">
+                    Home
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link
+                    href={`/${activeCategory.slug}`}
+                    className="text-lg text-primary font-semibold"
+                  >
+                    {activeCategory.name}
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
           <ProductsSection
+            activeCategory={activeCategory}
             subcategories={subcategories}
             categoryProducts={categoryProducts}
           />
+          {categoryProducts.length === 0 && (
+            <p style={{ textAlign: "center" }}>Nessun prodotto disponibile.</p>
+          )}
         </div>
+        <FloatingBack href="/" />
       </main>
     </>
   );
