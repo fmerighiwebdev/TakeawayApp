@@ -163,6 +163,17 @@ export default function VariationsModal({
           </p>
         )}
 
+        {!customizations?.doughs.length > 0 &&
+          !customizations?.extras.length > 0 &&
+          !customizations?.removals.length > 0 &&
+          !customizations?.cookings.length > 0 &&
+          !customizations?.spiceLevels.length > 0 &&
+          !isLoading && (
+            <p className="text-(--muted-text) my-4">
+              Non ci sono personalizzazioni disponibili per questo prodotto.
+            </p>
+          )}
+
         {customizations && (
           <Accordion type="multiple" className="w-full space-y-4">
             {/* Impasti */}
@@ -367,10 +378,7 @@ export default function VariationsModal({
 
         <DialogFooter className="flex flex-row items-center gap-2">
           <DialogClose asChild>
-            <button
-              type="button"
-              className="btn btn-link"
-            >
+            <button type="button" className="btn btn-link">
               Annulla
             </button>
           </DialogClose>

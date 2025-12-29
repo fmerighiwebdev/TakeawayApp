@@ -1,4 +1,4 @@
-import Maintenance from "@/components/maintenance/maintenance";
+import Maintenance from "@/components/maintenance";
 import "./globals.css";
 
 import {

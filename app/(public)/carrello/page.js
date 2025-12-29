@@ -68,12 +68,9 @@ export default async function CartPage() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link
-                  href={`/carrello`}
-                  className="text-lg text-primary font-semibold"
-                >
+                <span className="text-lg text-primary font-semibold">
                   Carrello
-                </Link>
+                </span>
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>

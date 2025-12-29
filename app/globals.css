@@ -43,6 +43,11 @@
   --sidebar-ring: oklch(0.708 0 0);
 }
 
+html {
+  scroll-behavior: smooth;
+  background-color: var(--white);
+}
+
 body {
   overflow-x: hidden;
   background-color: var(--white);
@@ -158,6 +163,21 @@ div {
 
 .new-orders-notification {
   animation: bounce 1s infinite;
+}
+
+.not-found-section {
+  animation: fadeUp 0.25s ease-out;
+}
+
+@keyframes fadeUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 @keyframes bounce {

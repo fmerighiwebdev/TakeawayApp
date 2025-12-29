@@ -23,7 +23,7 @@ export default async function Home() {
   const tenantCategories = await getTenantCategories(tenantId);
 
   return (
-    <main className="w-screen min-h-dvh pb-24 flex flex-col gap-12">
+    <main className="w-screen min-h-dvh py-24 flex flex-col gap-12">
       <section className="h-[60dvh] relative">
         <div className="container h-full">
           <div className="flex flex-col gap-4 h-full justify-center">
@@ -33,19 +33,20 @@ export default async function Home() {
                 alt={`Takeaway | ${tenantData.name} | Logo`}
                 width={100}
                 height={100}
+                className="w-20 md:w-24 h-auto"
                 priority
               />
             )}
-            <div className="w-full max-w-1/2">
+            <div className="w-full md:max-w-1/2">
               <p className="text-(--muted-light-text) font-medium">TAKEAWAY</p>
-              <h1 className="text-6xl text-primary font-medium">
+              <h1 className="text-5xl text-primary font-medium">
                 {tenantData.name ? tenantData.name : "[Nome]"}
               </h1>
-              <h2 className="text-(--muted-text) text-xl">
+              <h2 className="text-(--muted-text) text-lg md:text-xl">
                 <em>{tenantData.slogan}</em>
               </h2>
             </div>
-            <div className="flex flex-col gap-4 card bg-(--color-primary) bg-opacity-90 p-4 max-w-xs shadow-sm">
+            <div className="flex flex-col gap-4 card bg-primary bg-opacity-90 p-4 max-w-xs shadow-sm">
               <div className="flex gap-2">
                 <MapPin
                   size={32}
@@ -70,7 +71,7 @@ export default async function Home() {
                     color="var(--color-primary-content)"
                     strokeWidth={1.5}
                   />
-                  <span className="text-(--color-primary-content) text-lg">
+                  <span className="text-primary-foreground text-lg">
                     {tenantData.phone}
                   </span>
                 </a>
@@ -78,14 +79,14 @@ export default async function Home() {
             </div>
           </div>
         </div>
-        <div className="absolute top-0 right-0 w-200 h-full">
+        <div className="block md:absolute md:top-0 md:right-0 md:w-200 md:h-full">
           <Image
             src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-1.webp"
             alt="Hero Image"
             width={4096}
             height={2304}
             className="w-full h-full object-cover shadow-sm rounded-lg"
-            style={{ boxShadow: "-30px 30px 0 var(--color-primary)" }}
+            style={{ boxShadow: "-20px 20px 0 var(--color-primary)" }}
           />
         </div>
       </section>
@@ -108,7 +109,7 @@ export default async function Home() {
                   >
                     <figure className="absolute z-0 top-0 left-0 w-full h-full">
                       <Image
-                        src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-2.webp"
+                        src={category.image_url}
                         width={400}
                         height={200}
                         className="w-full h-full object-cover"
@@ -117,7 +118,7 @@ export default async function Home() {
                     </figure>
                     <div className="bg-black/50 absolute z-1 top-0 left-0 w-full h-full"></div>
                     <div className="absolute z-2 bottom-5 left-5">
-                      <h3 className="text-3xl uppercase text-(--color-primary-content) transition-transform duration-300 relative w-fit">
+                      <h3 className="text-3xl uppercase text-primary-foreground transition-transform duration-300 relative w-fit">
                         {category.name}
                       </h3>
                     </div>

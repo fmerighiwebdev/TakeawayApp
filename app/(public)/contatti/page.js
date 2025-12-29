@@ -1,9 +1,14 @@
 import Image from "next/image";
-import styles from "./contacts.module.css";
-
-import DOMPurify from "isomorphic-dompurify";
 import { getTenantDetails, getTenantId } from "@/lib/tenantDetails";
-import { getIcon } from "@/lib/icons";
+import {
+  Breadcrumb,
+  BreadcrumbItem,
+  BreadcrumbLink,
+  BreadcrumbList,
+  BreadcrumbSeparator,
+} from "@/components/ui/breadcrumb";
+import Link from "next/link";
+import { Mail, MapPin, Phone } from "lucide-react";
 
 export const metadata = {
   title: "Contatti",
@@ -72,72 +77,76 @@ export default async function ContactsPage() {
   const tenantId = await getTenantId();
   const tenantDetails = await getTenantDetails(tenantId);
 
-  const clockIcon = getIcon("clockIcon");
-  const phoneIcon = getIcon("phoneIcon");
-  const locationIcon = getIcon("locationIcon");
-  const emailIcon = getIcon("emailIcon");
-
   return (
     <>
       <BreadcrumbJsonLd tenantDetails={tenantDetails} />
       <ContactPageJsonLd tenantDetails={tenantDetails} />
-      <main className={styles.contactsPage}>
-        <div className="container">
-          <div className={styles.contactsPageHeading}>
-            <h1>Contatti</h1>
-            <p>Per qualsiasi informazione, non esitare a contattarci!</p>
+      <main className="py-24">
+        <div className="container flex flex-col gap-10">
+          <Breadcrumb>
+            <BreadcrumbList>
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <Link href="/" className="text-lg">
+                    Home
+                  </Link>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+              <BreadcrumbSeparator />
+              <BreadcrumbItem>
+                <BreadcrumbLink asChild>
+                  <span className="text-lg text-primary font-semibold hover:text-primary">
+                    Contatti
+                  </span>
+                </BreadcrumbLink>
+              </BreadcrumbItem>
+            </BreadcrumbList>
+          </Breadcrumb>
+          <div className="flex flex-col gap-2">
+            <h1 className="text-5xl md:text-6xl text-primary font-medium">Contatti</h1>
+            <p className="text-(--muted-light-text) text-lg md:text-xl">
+              Per qualsiasi informazione, non esitare a contattarci!
+            </p>
+            <div className="separator-horizontal"></div>
           </div>
-          <div className={styles.contactsInfo}>
-            <div className={styles.contactsInfoCol}>
-              <ul>
-                <li className={styles.contactItem}>
-                  <Image
-                    src={clockIcon}
-                    alt="Orari di apertura"
-                    width={50}
-                    height={50}
-                  />
-                  <div>
-                    <p>12:00-14:30 18:30-23:00</p>
-                    <p>Lunedì sera chiuso</p>
-                  </div>
-                </li>
-                <li className={styles.contactItem}>
-                  <Image
-                    src={phoneIcon}
-                    alt="Telefono"
-                    width={50}
-                    height={50}
-                  />
-                  <p>{tenantDetails.phone}</p>
-                </li>
-                <li className={styles.contactItem}>
-                  <Image
-                    src={locationIcon}
-                    alt="Indirizzo"
-                    width={50}
-                    height={50}
-                  />
-                  <div>
-                    <p
-                      dangerouslySetInnerHTML={{
-                        __html: DOMPurify.sanitize(tenantDetails.address),
-                      }}
-                    ></p>
-                  </div>
-                </li>
-                <li className={styles.contactItem}>
-                  <Image src={emailIcon} alt="Email" width={50} height={50} />
-                  <p>{tenantDetails.email}</p>
-                </li>
-              </ul>
+          <div className="flex flex-col md:flex-row items-start gap-10">
+            <div className="flex-1 flex flex-col gap-6">
+              <div className="flex items-center gap-4">
+                <Phone
+                  size={36}
+                  color="var(--color-primary)"
+                  strokeWidth={1.5}
+                />
+                <p className="text-2xl lg:text-3xl text-(--muted-text)">{tenantDetails.phone}</p>
+              </div>
+              <div className="flex items-start gap-4">
+                <MapPin
+                  size={36}
+                  color="var(--color-primary)"
+                  strokeWidth={1.5}
+                />
+                <p className="text-2xl lg:text-3xl text-(--muted-text)">
+                  {tenantDetails.address} <br />
+                  {tenantDetails.city} ({tenantDetails.region}), {tenantDetails.postal_code}
+                </p>
+              </div>
+              <div className="flex items-center gap-4">
+                <Mail
+                  size={36}
+                  color="var(--color-primary)"
+                  strokeWidth={1.5}
+                />
+                <p className="text-2xl lg:text-3xl text-(--muted-text)">{tenantDetails.email}</p>
+              </div>
             </div>
-            <div className={styles.contactsInfoCol}>
+            <div className="flex-1 w-full h-full">
               <Image
-                src="/product-images/test.webp"
-                alt="Ristorante Pizzeria All'Amicizia"
-                width={500}
-                height={500}
+                src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-1.webp"
+                alt="Contatti"
+                width={600}
+                height={400}
+                className="w-full h-full object-cover rounded-lg"
+                style={{ boxShadow: "-20px 20px 0 var(--color-primary)" }}
               />
             </div>
           </div>

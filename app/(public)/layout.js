@@ -1,5 +1,5 @@
 import AddToHomeScreenPrompt from "@/components/add-to-home/add-to-home";
-import Footer from "@/components/footer/footer";
+import Footer from "@/components/footer";
 import FloatingCart from "@/components/ui/floating-cart";
 import {
   getTenantAssets,

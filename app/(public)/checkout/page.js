@@ -66,12 +66,11 @@ export default async function CheckoutPage() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link
-                  href={`/checkout`}
+                <span
                   className="text-lg text-primary font-semibold"
                 >
                   Checkout
-                </Link>
+                </span>
               </BreadcrumbLink>
             </BreadcrumbItem>
           </BreadcrumbList>

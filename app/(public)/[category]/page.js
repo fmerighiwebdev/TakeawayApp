@@ -135,12 +135,9 @@ export default async function CategoryPage({ params }) {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link
-                    href={`/${activeCategory.slug}`}
-                    className="text-lg text-primary font-semibold"
-                  >
+                  <span className="text-lg text-primary font-semibold">
                     {activeCategory.name}
-                  </Link>
+                  </span>
                 </BreadcrumbLink>
               </BreadcrumbItem>
             </BreadcrumbList>
@@ -150,9 +147,6 @@ export default async function CategoryPage({ params }) {
             subcategories={subcategories}
             categoryProducts={categoryProducts}
           />
-          {categoryProducts.length === 0 && (
-            <p style={{ textAlign: "center" }}>Nessun prodotto disponibile.</p>
-          )}
         </div>
         <FloatingBack href="/" />
       </main>

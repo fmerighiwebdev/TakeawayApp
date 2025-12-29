@@ -14,13 +14,16 @@ export default function FloatingCart() {
   }, []);
 
   return (
-    <div className="fixed bottom-12 right-0 w-full z-999">
+    <div className="fixed bottom-16 right-0 w-full z-999">
       <div className="container flex justify-end">
-        <Link href="/carrello" className="card bg-primary bg-opacity-90 shadow-sm rounded-full h-24 w-24 flex items-center justify-center">
+        <Link
+          href="/carrello"
+          className="card bg-primary bg-opacity-90 shadow-sm rounded-full h-20 w-20 md:h-24 md:w-24 flex items-center justify-center"
+        >
           <div className="relative w-fit h-fit">
             <ShoppingBag
-              size={48}
               color="var(--color-primary-content)"
+              className="w-11 h-11 md:w-12 md:h-12"
               strokeWidth={1.5}
             />
             {isHydrated && (
