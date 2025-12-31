@@ -54,15 +54,14 @@ export default async function Footer({
               <ul className="text-body font-medium">
                 {tenantData.website_url && (
                   <li className="mb-2">
-                    <button className="btn btn-primary text-md">
                       <a
                         href={tenantData.website_url}
                         target="_blank"
                         rel="noopener noreferrer"
+                        className="text-primary font-bold"
                       >
                         Visita il nostro sito
                       </a>
-                    </button>
                   </li>
                 )}
                 <li>

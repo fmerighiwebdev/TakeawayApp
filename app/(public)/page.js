@@ -23,10 +23,10 @@ export default async function Home() {
   const tenantCategories = await getTenantCategories(tenantId);
 
   return (
-    <main className="w-screen min-h-dvh py-24 flex flex-col gap-12">
-      <section className="h-[60dvh] relative">
-        <div className="container h-full">
-          <div className="flex flex-col gap-4 h-full justify-center">
+    <main className="w-screen min-h-dvh pt-24 pb-24 lg:pt-0 flex flex-col gap-12 lg:gap-8">
+      <section className="lg:h-[60dvh] relative">
+        <div className="container h-full flex flex-col lg:flex-row items-start">
+          <div className="flex flex-1 flex-col gap-4 h-full justify-center relative">
             {tenantAssets.logoUrl && (
               <Image
                 src={tenantAssets.logoUrl}
@@ -37,7 +37,7 @@ export default async function Home() {
                 priority
               />
             )}
-            <div className="w-full md:max-w-1/2">
+            <div className="w-full lg:max-w-lg">
               <p className="text-(--muted-light-text) font-medium">TAKEAWAY</p>
               <h1 className="text-5xl text-primary font-medium">
                 {tenantData.name ? tenantData.name : "[Nome]"}
@@ -46,48 +46,59 @@ export default async function Home() {
                 <em>{tenantData.slogan}</em>
               </h2>
             </div>
-            <div className="flex flex-col gap-4 card bg-primary bg-opacity-90 p-4 max-w-xs shadow-sm">
-              <div className="flex gap-2">
-                <MapPin
-                  size={32}
-                  color="var(--color-primary-content)"
-                  strokeWidth={1.5}
-                />
-                {tenantData.address && (
-                  <p className="text-(--color-primary-content) text-lg">
-                    {tenantData.address} <br /> {tenantData.city} (
-                    {tenantData.region})
-                  </p>
-                )}
-              </div>
-              {tenantData.phone && (
-                <a
-                  href={`tel:+39${tenantData.phone}`}
-                  aria-label={`Chiama il ristorante al numero ${tenantData.phone}`}
-                  className="flex gap-2 items-center"
-                >
-                  <Phone
-                    size={32}
+            <div className="flex flex-start flex-col xs:flex-row">
+              <div className="flex-1 p-4 h-fit gap-4 card rounded-bl-none max-w-64 xs:rounded-bl-sm rounded-br-none xs:rounded-br-none xs:rounded-tr-none lg:rounded-br-sm lg:rounded-tr-sm bg-primary bg-opacity-90 lg:max-w-xs shadow-sm">
+                <div className="flex gap-2">
+                  <MapPin
                     color="var(--color-primary-content)"
                     strokeWidth={1.5}
+                    className="size-7 md:size-8"
                   />
-                  <span className="text-primary-foreground text-lg">
-                    {tenantData.phone}
-                  </span>
-                </a>
-              )}
+                  {tenantData.address && (
+                    <p className="text-primary-foreground text-md md:text-lg">
+                      {tenantData.address} <br /> {tenantData.city} (
+                      {tenantData.region})
+                    </p>
+                  )}
+                </div>
+                {tenantData.phone && (
+                  <a
+                    href={`tel:+39${tenantData.phone}`}
+                    aria-label={`Chiama il ristorante al numero ${tenantData.phone}`}
+                    className="flex gap-2 items-center"
+                  >
+                    <Phone
+                      color="var(--color-primary-content)"
+                      strokeWidth={1.5}
+                      className="size-7 md:size-8"
+                    />
+                    <span className="text-primary-foreground text-md md:text-lg">
+                      {tenantData.phone}
+                    </span>
+                  </a>
+                )}
+              </div>
+              <div className="flex-2 block lg:hidden">
+                <Image
+                  src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-1.webp"
+                  alt="Hero Image"
+                  width={4096}
+                  height={2304}
+                  className="w-full h-full object-cover rounded-sm rounded-tl-none xs:rounded-tl-sm shadow-sm"
+                />
+              </div>
             </div>
           </div>
-        </div>
-        <div className="block md:absolute md:top-0 md:right-0 md:w-200 md:h-full">
-          <Image
-            src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-1.webp"
-            alt="Hero Image"
-            width={4096}
-            height={2304}
-            className="w-full h-full object-cover shadow-sm rounded-lg"
-            style={{ boxShadow: "-20px 20px 0 var(--color-primary)" }}
-          />
+          <div className="flex-1 hidden lg:block">
+            <Image
+              src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-1.webp"
+              alt="Hero Image"
+              width={4096}
+              height={2304}
+              className="w-full h-full object-cover shadow-sm rounded-lg"
+              style={{ boxShadow: "-20px 20px 0 var(--color-primary)" }}
+            />
+          </div>
         </div>
       </section>
       <section>

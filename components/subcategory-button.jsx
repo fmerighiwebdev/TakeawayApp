@@ -5,7 +5,7 @@ export default function SubcategoryButton({ subcategory, isActive, onClick }) {
         type="button"
         className={
           !isActive
-            ? `text-lg btn btn-link no-underline transition-all hover:bg-gray-100`
+            ? `text-lg btn btn-link no-underline transition-all hover:bg-gray-100 border-primary/30`
             : `btn btn-primary text-lg transition-all`
         }
         aria-pressed={isActive}

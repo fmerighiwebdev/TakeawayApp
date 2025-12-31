@@ -19,7 +19,7 @@ export default function ProductItem({ product }) {
   }
 
   return (
-    <Card className="p-6 flex flex-col justify-between">
+    <Card className="p-6 flex flex-col gap-4 md:gap-6 justify-between">
       <div>
         <h2 className="text-3xl font-medium text-(--muted-text)">
           {product.name}

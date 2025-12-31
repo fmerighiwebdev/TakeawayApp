@@ -39,7 +39,7 @@ export default async function CartPage() {
       <main className="w-screen h-dvh flex items-center justify-center py-24">
         <section>
           <div className="container flex flex-col items-center gap-12">
-            <h1 className="text-6xl font-medium text-(--muted-text) text-center">
+            <h1 className="text-5xl md:text-6xl font-medium text-(--muted-text) text-center">
               Il carrello è vuoto
             </h1>
             <button className="btn btn-primary">
@@ -76,7 +76,7 @@ export default async function CartPage() {
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex flex-col gap-2">
-          <h1 className="text-6xl text-primary font-medium">Il tuo ordine</h1>
+          <h1 className="text-5xl md:text-6xl text-primary font-medium">Il tuo ordine</h1>
           <div className="separator-horizontal"></div>
         </div>
         <CartItems />

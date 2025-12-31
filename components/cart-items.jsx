@@ -58,7 +58,7 @@ export default function CartItems() {
     return (
       <section className="w-screen h-dvh absolute top-0 left-0 flex items-center justify-center py-24">
         <div className="container flex flex-col items-center gap-12">
-          <h1 className="text-6xl font-medium text-(--muted-text) text-center">
+          <h1 className="text-5xl md:text-6xl font-medium text-(--muted-text) text-center">
             Il carrello è vuoto
           </h1>
           <button className="btn btn-primary">
@@ -78,7 +78,7 @@ export default function CartItems() {
           <Spinner className="size-12 text-primary" />
         </div>
       ) : (
-        <div className="flex items-start gap-4">
+        <div className="flex items-start gap-8 md:gap-4 flex-col md:flex-row">
           <div className="flex-2">
             <Card className="w-full">
               <CardContent>
@@ -238,7 +238,7 @@ export default function CartItems() {
                 </Link>
               </button>
               <button className="btn btn-link">
-                <Link href="/" className="text-lg">
+                <Link href="/" className="text-md md:text-lg">
                   Torna allo shop
                 </Link>
               </button>

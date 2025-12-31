@@ -16,13 +16,13 @@ export default function ProductsSection({
 
   return (
     <>
-      <section className="flex gap-4">
-        <div className="flex-3 flex flex-col gap-8">
+      <section className="flex gap-8 lg:gap-4 flex-col lg:flex-row">
+        <div className="flex-3 flex flex-col gap-8 order-1 lg:order-0">
           <div className="flex flex-col gap-2">
-            <h1 className="text-6xl font-medium text-primary">
+            <h1 className="text-4xl md:text-5xl font-medium text-primary">
               {activeCategory.name}
             </h1>
-            <p className="text-(--muted-text) text-lg">
+            <p className="text-(--muted-text) text-md md:text-lg">
               {activeCategory.description}
             </p>
           </div>

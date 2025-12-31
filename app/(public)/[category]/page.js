@@ -99,8 +99,6 @@ export default async function CategoryPage({ params }) {
     notFound();
   }
 
-  console.log("Active Category:", activeCategory);
-
   const subcategories = await getTenantSubcategories(
     tenantId,
     activeCategory.id
