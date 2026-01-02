@@ -76,13 +76,13 @@ export default async function CheckoutPage() {
           </BreadcrumbList>
         </Breadcrumb>
         <div className="flex flex-col gap-2">
-          <h1 className="text-6xl text-primary font-medium">
+          <h1 className="text-5xl md:text-6xl text-primary font-medium">
             Conferma il tuo ordine
           </h1>
           <div className="separator-horizontal"></div>
         </div>
-        <section className="flex items-start gap-4 relative">
-          <div className="flex-1 sticky top-24">
+        <section className="flex items-start gap-10 lg:gap-4 flex-col lg:flex-row relative">
+          <div className="flex-1 lg:sticky top-24 w-full">
             <CheckoutForm pickupTimes={pickupTimes} />
           </div>
           <div className="flex-1">

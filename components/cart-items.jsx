@@ -103,7 +103,7 @@ export default function CartItems() {
                       >
                         <div className="flex flex-col">
                           <div className="flex items-center gap-2 justify-between">
-                            <h3 className="text-4xl text-(--muted-text)">
+                            <h3 className="text-3xl md:text-4xl text-(--muted-text)">
                               {item.name}
                             </h3>
                             <button
@@ -120,10 +120,10 @@ export default function CartItems() {
                                 );
                               }}
                             >
-                              <Trash className="text-red-700 hover:text-red-900 transition duration-300 cursor-pointer" />
+                              <Trash className="text-red-700 hover:text-red-900 transition duration-300 cursor-pointer size-5 md:size-7" />
                             </button>
                           </div>
-                          <p className="font-semibold text-2xl text-primary">
+                          <p className="font-semibold text-xl md:text-2xl text-primary">
                             +{formattedItemPrice}
                           </p>
 
@@ -173,7 +173,7 @@ export default function CartItems() {
                         </div>
 
                         {item.description && (
-                          <p className="font-medium text-(--muted-light-text)">
+                          <p className="font-medium text-md text-(--muted-light-text)">
                             <em>{item.description}</em>
                           </p>
                         )}
@@ -194,9 +194,9 @@ export default function CartItems() {
                             aria-label="Diminuisci quantità"
                             className="btn btn-primary btn-sm"
                           >
-                            <Minus />
+                            <Minus className="size-5 md:size-7" />
                           </button>
-                          <span className="text-xl text-(--muted-text)">
+                          <span className="text-lg md:text-xl text-(--muted-text)">
                             x{item.quantity}
                           </span>
                           <button
@@ -214,7 +214,7 @@ export default function CartItems() {
                             aria-label="Aumenta quantità"
                             className="btn btn-primary btn-sm"
                           >
-                            <Plus />
+                            <Plus className="size-5 md:size-7" />
                           </button>
                         </div>
                       </motion.div>

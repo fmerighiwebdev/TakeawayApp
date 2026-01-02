@@ -51,8 +51,8 @@ export default function Orders({ initialOrders, tenantId }) {
         <button
           className={
             status === "waiting"
-              ? "btn btn-primary btn-lg"
-              : "btn btn-link btn-lg no-underline hover:bg-gray-100"
+              ? "btn btn-primary md:btn-lg"
+              : "btn btn-link md:btn-lg no-underline hover:bg-gray-100"
           }
           onClick={() => setStatus("waiting")}
         >
@@ -61,8 +61,8 @@ export default function Orders({ initialOrders, tenantId }) {
         <button
           className={
             status === "completed"
-              ? "btn btn-primary btn-lg"
-              : "btn btn-link btn-lg no-underline hover:bg-gray-100"
+              ? "btn btn-primary md:btn-lg"
+              : "btn btn-link md:btn-lg no-underline hover:bg-gray-100"
           }
           onClick={() => setStatus("completed")}
         >

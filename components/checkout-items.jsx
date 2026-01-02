@@ -75,10 +75,10 @@ export default function CheckoutItems() {
                       className="flex flex-col gap-4 relative cart-item"
                     >
                       <div className="flex flex-col">
-                        <h3 className="text-4xl text-(--muted-text)">
+                        <h3 className="text-3xl md:text-4xl text-(--muted-text)">
                           {item.name}
                         </h3>
-                        <p className="font-semibold text-2xl text-primary">
+                        <p className="font-semibold text-xl md:text-2xl text-primary">
                           +{formattedItemPrice}
                         </p>
                         {item.selectedDough && (

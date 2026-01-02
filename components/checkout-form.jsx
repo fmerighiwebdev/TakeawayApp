@@ -144,7 +144,7 @@ export default function CheckoutForm({ pickupTimes }) {
   }
 
   return (
-    <form className="flex flex-col gap-8" onSubmit={handleSubmit}>
+    <form className="flex flex-col gap-6 lg:gap-8" onSubmit={handleSubmit}>
       {errors?.order && (
         <Alert variant="destructive">
           <AlertCircle />
@@ -176,7 +176,7 @@ export default function CheckoutForm({ pickupTimes }) {
           <div className="flex flex-col">
             <Label
               htmlFor="name"
-              className={`text-lg text-(--muted-text) gap-0.5 ${
+              className={`text-md md:text-lg text-(--muted-text) gap-0.5 ${
                 errors?.name ? "text-red-600" : ""
               }`}
             >
@@ -204,7 +204,7 @@ export default function CheckoutForm({ pickupTimes }) {
           <div className="flex flex-col">
             <Label
               htmlFor="surname"
-              className={`text-lg text-(--muted-text) gap-0.5 ${
+              className={`text-md md:text-lg text-(--muted-text) gap-0.5 ${
                 errors?.surname ? "text-red-600" : ""
               }`}
             >
@@ -235,7 +235,7 @@ export default function CheckoutForm({ pickupTimes }) {
           <div>
             <Label
               htmlFor="time"
-              className={`text-lg text-(--muted-text) gap-0.5 ${
+              className={`text-md md:text-lg text-(--muted-text) gap-0.5 ${
                 errors?.time ? "text-red-600" : ""
               }`}
             >
@@ -279,7 +279,7 @@ export default function CheckoutForm({ pickupTimes }) {
         <div>
           <Label
             htmlFor="phone"
-            className={`text-lg text-(--muted-text) gap-0.5 ${
+            className={`text-md md:text-lg text-(--muted-text) gap-0.5 ${
               errors?.phone ? "text-red-600" : ""
             }`}
           >
@@ -308,7 +308,7 @@ export default function CheckoutForm({ pickupTimes }) {
         <div>
           <Label
             htmlFor="email"
-            className={`text-lg text-(--muted-text) gap-0.5 ${
+            className={`text-md md:text-lg text-(--muted-text) gap-0.5 ${
               errors?.email ? "text-red-600" : ""
             }`}
           >
@@ -335,7 +335,7 @@ export default function CheckoutForm({ pickupTimes }) {
 
         {/* Note aggiuntive (facoltative) */}
         <div>
-          <Label htmlFor="notes" className="text-lg text-(--muted-text)">
+          <Label htmlFor="notes" className="text-md md:text-lg text-(--muted-text)">
             Informazioni aggiuntive per l&apos;ordine{" "}
             <span className="text-(--muted-light-text) text-xs">
               (facoltativo)

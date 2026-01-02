@@ -20,12 +20,12 @@ export default function OrdersList({ orders, status }) {
   return (
     <div className="flex flex-col gap-4">
       {status === "completed" && completedOrders.length === 0 && (
-        <p className="text-center text-lg text-(--muted-text)">
+        <p className="text-center text-md md:text-lg text-(--muted-text)">
           Nessun ordine completato
         </p>
       )}
       {status === "waiting" && waitingOrders.length === 0 && (
-        <p className="text-center text-lg text-(--muted-text)">
+        <p className="text-center text-md md:text-lg text-(--muted-text)">
           Nessun ordine in attesa
         </p>
       )}
@@ -38,7 +38,7 @@ export default function OrdersList({ orders, status }) {
         />
       ))}
       {status === "completed" /* && completedOrders.length > 0 */ && (
-        <div className="absolute bottom-15 left-1/2 -translate-x-1/2 w-full max-w-3xl border rounded-md bg-white py-4 px-6">
+        <div className="absolute bottom-15 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl border rounded-md bg-white py-4 px-6">
           <p className="text-xl text-center uppercase font-medium text-(--muted-text)">
             Totale giornaliero
           </p>

@@ -28,7 +28,7 @@ export default async function LoginPage() {
   return (
     <main className="w-screen h-dvh flex items-center justify-center py-24">
       <div className="container flex flex-col items-center gap-12">
-        <h1 className="text-6xl font-medium text-primary">Gestione Ordini</h1>
+        <h1 className="text-5xl md:text-6xl text-center font-medium text-primary">Gestione Ordini</h1>
         <section className="w-full max-w-md">
           <AdminForm tenantId={tenantId} />
         </section>

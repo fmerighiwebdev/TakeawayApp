@@ -92,7 +92,7 @@ export default function AdminForm({ tenantId }) {
           <div>
             <Label
               htmlFor="user"
-              className={`text-lg text-(--muted-text) gap-0.5 ${
+              className={`text-md md:text-lg text-(--muted-text) gap-0.5 ${
                 errors?.user ? "text-red-600" : ""
               }`}
             >
@@ -121,7 +121,7 @@ export default function AdminForm({ tenantId }) {
           <div>
             <Label
               htmlFor="password"
-              className={`text-lg text-(--muted-text) gap-0.5 ${
+              className={`text-md md:text-lg text-(--muted-text) gap-0.5 ${
                 errors?.password ? "text-red-600" : ""
               }`}
             >

@@ -94,27 +94,27 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
       <div className="flex flex-col gap-10">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <h2 className="text-4xl text-(--muted-text)">Dettagli ordine</h2>
+            <h2 className="text-3xl md:text-4xl text-(--muted-text)">Dettagli ordine</h2>
             <div className="separator-horizontal"></div>
           </div>
-          <div className="flex items-start justify-between gap-2">
+          <div className="flex items-start justify-between flex-col md:flex-row gap-2">
             <div className="flex flex-col gap-5">
-              <span className="text-3xl text-white bg-primary px-2 rounded-sm w-fit">
+              <span className="text-2xl md:text-3xl text-white bg-primary px-2 rounded-sm w-fit">
                 #{orderDetails.id}
               </span>
               <div className="flex flex-col">
-                <p className="text-3xl text-(--muted-text)">
+                <p className="text-2xl md:text-3xl text-(--muted-text)">
                   {orderDetails.customer_name}
                 </p>
                 <a
                   href={`tel:${orderDetails.customer_phone}`}
-                  className="text-lg text-(--muted-light-text)"
+                  className="text-md md:text-lg text-(--muted-light-text)"
                 >
                   {orderDetails.customer_phone}
                 </a>
                 <a
                   href={`mailto:${orderDetails.customer_email}`}
-                  className="text-lg text-(--muted-light-text)"
+                  className="text-md md:text-lg text-(--muted-light-text)"
                 >
                   {orderDetails.customer_email}
                 </a>
@@ -123,7 +123,7 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
             <div className="flex flex-col items-end gap-4">
               <div className="flex items-center gap-2">
                 <Clock className="w-8 h-8 text-primary" strokeWidth={1.5} />
-                <p className="text-2xl text-primary font-medium">
+                <p className="text-xl md:text-2xl text-primary font-medium">
                   {pickupTime}
                 </p>
               </div>
@@ -211,7 +211,7 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
         </div>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <h2 className="text-4xl text-(--muted-text)">Prodotti</h2>
+            <h2 className="text-3xl md:text-4xl text-(--muted-text)">Prodotti</h2>
             <div className="separator-horizontal"></div>
           </div>
           <Card className="w-full">
@@ -301,20 +301,20 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
         {orderDetails.notes && (
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <h2 className="text-4xl text-(--muted-text)">Note aggiuntive</h2>
+              <h2 className="text-3xl md:text-4xl text-(--muted-text)">Note aggiuntive</h2>
               <div className="separator-horizontal"></div>
             </div>
-            <p className="text-(--muted-light-text) text-lg">{orderDetails.notes}</p>
+            <p className="text-(--muted-light-text) text-md md:text-lg">{orderDetails.notes}</p>
           </div>
         )}
 
         {/* Totale ordine */}
         <div className="flex justify-end">
           <div className="text-right">
-            <p className="text-2xl uppercase font-medium text-(--muted-text)">
+            <p className="text-xl md:text-2xl uppercase font-medium text-(--muted-text)">
               Totale
             </p>
-            <p className="text-4xl font-semibold text-primary">
+            <p className="text-3xl md:text-4xl font-semibold text-primary">
               {formattedTotalPrice}
             </p>
           </div>
