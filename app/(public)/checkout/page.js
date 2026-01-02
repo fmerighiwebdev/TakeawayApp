@@ -50,7 +50,7 @@ export default async function CheckoutPage() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/" className="text-lg">
+                <Link href="/" className="text-md md:text-lg">
                   Home
                 </Link>
               </BreadcrumbLink>
@@ -58,7 +58,7 @@ export default async function CheckoutPage() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href={`/carrello`} className="text-lg">
+                <Link href={`/carrello`} className="text-md md:text-lg">
                   Carrello
                 </Link>
               </BreadcrumbLink>
@@ -67,7 +67,7 @@ export default async function CheckoutPage() {
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
                 <span
-                  className="text-lg text-primary font-semibold"
+                  className="text-md md:text-lg text-primary font-semibold"
                 >
                   Checkout
                 </span>

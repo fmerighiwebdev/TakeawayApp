@@ -87,7 +87,7 @@ export default async function ContactsPage() {
             <BreadcrumbList>
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <Link href="/" className="text-lg">
+                  <Link href="/" className="text-md md:text-lg">
                     Home
                   </Link>
                 </BreadcrumbLink>
@@ -95,7 +95,7 @@ export default async function ContactsPage() {
               <BreadcrumbSeparator />
               <BreadcrumbItem>
                 <BreadcrumbLink asChild>
-                  <span className="text-lg text-primary font-semibold hover:text-primary">
+                  <span className="text-md md:text-lg text-primary font-semibold hover:text-primary">
                     Contatti
                   </span>
                 </BreadcrumbLink>

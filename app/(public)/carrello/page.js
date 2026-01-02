@@ -60,7 +60,7 @@ export default async function CartPage() {
           <BreadcrumbList>
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <Link href="/" className="text-lg">
+                <Link href="/" className="text-md: md:text-lg">
                   Home
                 </Link>
               </BreadcrumbLink>
@@ -68,7 +68,7 @@ export default async function CartPage() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <span className="text-lg text-primary font-semibold">
+                <span className="text-md md:text-lg text-primary font-semibold">
                   Carrello
                 </span>
               </BreadcrumbLink>

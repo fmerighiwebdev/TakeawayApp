@@ -37,7 +37,7 @@ export default function OrdersList({ orders, status }) {
           numberOfItems={order.order_items.length}
         />
       ))}
-      {status === "completed" /* && completedOrders.length > 0 */ && (
+      {status === "completed" && (
         <div className="absolute bottom-15 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl border rounded-md bg-white py-4 px-6">
           <p className="text-xl text-center uppercase font-medium text-(--muted-text)">
             Totale giornaliero
@@ -49,33 +49,4 @@ export default function OrdersList({ orders, status }) {
       )}
     </div>
   );
-
-  /* return (
-    <div className={styles.ordersList}>
-      <>
-        {status === "completed" && orders.length === 0 && (
-          <p className={styles.noOrders}>Nessun ordine completato</p>
-        )}
-        {status === "waiting" && orders.length === 0 && (
-          <p className={styles.noOrders}>Nessun ordine in attesa</p>
-        )}
-        {orders.map((order) => (
-          <Order
-            key={order.id}
-            order={order}
-            status={status}
-            numberOfItems={orders.length}
-          />
-        ))}
-        {status === "completed" && (
-          <div className={styles.ordersTotal}>
-            <p>Totale giornaliero</p>
-            <p>
-              <span>{formattedOrdersTotal}</span>
-            </p>
-          </div>
-        )}
-      </>
-    </div>
-  ); */
 }
