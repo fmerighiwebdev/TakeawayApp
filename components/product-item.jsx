@@ -29,7 +29,7 @@ export default function ProductItem({ product }) {
       <p className="text-(--muted-light-text)">
         <em>{product.description}</em>
       </p>
-      <div className="flex items-center justify-between">
+      <div className={`flex items-center ${product.has_customizations ? 'justify-between' : 'justify-end'}`}>
         {product.has_customizations && (
           <CustomizationsModal
             product={product}

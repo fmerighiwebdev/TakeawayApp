@@ -1,7 +1,7 @@
 import Orders from "@/components/orders";
 import AuthGuard from "@/components/auth-guard";
 import { getTenantId } from "@/lib/tenantDetails";
-import { getOrdersByTenantId } from "@/lib/orders";
+import { getTodayOrdersByTenantId } from "@/lib/orders";
 
 export default async function AdminDashboard() {
   const today = new Date();
@@ -10,7 +10,7 @@ export default async function AdminDashboard() {
 
   const tenantId = await getTenantId();
 
-  const initialOrders = await getOrdersByTenantId(tenantId);
+  const initialOrders = await getTodayOrdersByTenantId(tenantId);
 
   return (
     <AuthGuard>

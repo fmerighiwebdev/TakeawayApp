@@ -1,5 +1,4 @@
 import OrderDetails from "@/components/order-details";
-import styles from "../dashboard.module.css";
 import { getOrderByIdWithDetails } from "@/lib/orders";
 import { getTenantId } from "@/lib/tenantDetails";
 import { notFound } from "next/navigation";
