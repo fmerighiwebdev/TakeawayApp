@@ -23,25 +23,23 @@ export default function FloatingBack({ href }) {
   }, [handleScroll]);
 
   return (
-    <>
-      {isVisible && (
-        <div className="fixed top-12 left-0 w-full">
-          <div className="container">
-            <Link
-              href={href}
-              className="card bg-(--white) bg-opacity-90 shadow-sm rounded-full h-12 w-12 flex items-center justify-center"
-            >
-              <div className="relative w-fit h-fit">
-                <ArrowLeft
-                  size={32}
-                  color="var(--muted-text)"
-                  strokeWidth={1.5}
-                />
-              </div>
-            </Link>
+    <div
+      className={`fixed top-12 left-0 w-full ${
+        isVisible
+          ? "opacity-100 scale-100 pointer-events-auto transition-all duration-300"
+          : "opacity-0 scale-95 pointer-events-none transition-all duration-300"
+      }`}
+    >
+      <div className="container">
+        <Link
+          href={href}
+          className="card bg-(--white) bg-opacity-90 shadow-sm rounded-full h-12 w-12 flex items-center justify-center"
+        >
+          <div className="relative w-fit h-fit">
+            <ArrowLeft size={32} color="var(--muted-text)" strokeWidth={1.5} />
           </div>
-        </div>
-      )}
-    </>
+        </Link>
+      </div>
+    </div>
   );
 }

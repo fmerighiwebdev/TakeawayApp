@@ -1,16 +1,27 @@
 import Link from "next/link";
 import { Card, CardContent } from "./ui/card";
 import { Badge } from "./ui/badge";
-import { CheckCheck, Clock, HandPlatter } from "lucide-react";
+import { Check, CheckCheck, Clock, HandPlatter } from "lucide-react";
 
-export default function Order({ order, status, numberOfItems }) {
+export default function Order({ order, numberOfItems }) {
   const formattedTotalPrice = new Intl.NumberFormat("it-IT", {
     style: "currency",
     currency: "EUR",
   }).format(order.total_price);
 
+  // created_at deve essere rappresentato come -> GG MM - HH:MM
+  const formattedCreatedAt = new Date(order.created_at).toLocaleString(
+    "it-IT",
+    {
+      day: "2-digit",
+      month: "2-digit",
+      hour: "2-digit",
+      minute: "2-digit",
+    }
+  );
+
   return (
-    <Link href={`/dashboard/${order.id}`}>
+    <Link href={`/dashboard/ordine/${order.id}`}>
       <Card>
         <CardContent>
           <div className="flex items-start justify-between relative">
@@ -38,21 +49,28 @@ export default function Order({ order, status, numberOfItems }) {
                 </p>
               </div>
             </div>
-              <Badge
-                className={`text-xs md:text-md absolute top-0 right-0 shadow-sm ${
-                  status === "waiting"
-                    ? "bg-yellow-400 text-yellow-900"
-                    : "bg-green-500 text-white"
-                }`}
-              >
-                {status === "waiting" ? (
-                  <HandPlatter className="text-yellow-900" strokeWidth={1.75} />
-                ) : (
-                  <CheckCheck className="text-white" />
-                )}
-                {status === "waiting" ? "In Attesa" : "Completato"}
-              </Badge>
+            <Badge
+              className={`text-xs md:text-md absolute top-0 right-0 shadow-sm ${
+                order.status === "In Attesa"
+                  ? "bg-yellow-400 text-yellow-900"
+                  : order.status === "Completato"
+                  ? "bg-green-500 text-white"
+                  : "bg-blue-500 text-white"
+              }`}
+            >
+              {order.status === "In Attesa" ? (
+                <HandPlatter className="text-yellow-900" strokeWidth={1.75} />
+              ) : order.status === "Completato" ? (
+                <CheckCheck className="text-white" />
+              ) : (
+                <Check className="text-white" />
+              )}
+              {order.status === "In Attesa" ? "In Attesa" : order.status === "Completato" ? "Completato" : "Pronto"}
+            </Badge>
             <div className="flex flex-col items-end gap-2 mt-7">
+              <p className="text-xs md:text-md text-(--muted-light-text)">
+                {formattedCreatedAt}
+              </p>
               <div className="items-center gap-2 hidden sm:flex">
                 <Clock className="size-6 text-primary" strokeWidth={1.5} />
                 <p className="text-xl md:text-2xl text-primary font-medium">

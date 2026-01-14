@@ -10,7 +10,7 @@ export default function OrdersList({ orders, status }) {
     currency: "EUR",
   }).format(ordersTotal);
 
-  const waitingOrders = orders.filter((order) => order.status === "In Attesa");
+  const waitingOrders = orders.filter((order) => order.status === "In Attesa" || order.status === "Pronto");
   const completedOrders = orders.filter(
     (order) => order.status === "Completato"
   );

@@ -28,6 +28,7 @@ export default function Orders({ initialOrders, tenantId }) {
         (payload) => {
           const newOrder = payload.new;
           if (!existingOrdersIds.has(newOrder.id)) {
+            existingOrdersIds.add(newOrder.id);
             setNewOrdersCount((count) => count + 1);
           }
         }

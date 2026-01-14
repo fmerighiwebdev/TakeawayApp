@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 
-export default function PublicTemplate({ children }) {
+export default function AdminTemplate({ children }) {
   return (
     <AnimatePresence mode="wait">
       <motion.div

@@ -1,4 +1,3 @@
-import AddToHomeScreenPrompt from "@/components/add-to-home/add-to-home";
 import Footer from "@/components/footer";
 import FloatingCart from "@/components/ui/floating-cart";
 import {
@@ -28,7 +27,7 @@ export default async function PublicLayout({ children }) {
       {children}
       <Footer tenantData={tenantData} tenantLogo={tenantAssets.logoUrl} tenantCategories={tenantCategories} />
       <FloatingCart />
-      <AddToHomeScreenPrompt />
+      {/* <AddToHomeScreenPrompt /> */}
     </>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Clock } from "lucide-react";
+import { Bell, Clock } from "lucide-react";
 import { Card, CardContent } from "./ui/card";
 import {
   Dialog,
@@ -58,13 +58,21 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
 
   const [completeOpen, setShowConfirmation] = useState(false);
   const [postponeOpen, setShowPostponement] = useState(false);
+  const [readyOpen, setShowReady] = useState(false);
 
   const [postponementTime, setPostponementTime] = useState("");
   const [pickupTime, setPickupTime] = useState(orderDetails.pickup_time);
 
+  const isCompleted = orderDetails.status === "Completato";
+  const isWaiting = orderDetails.status === "In Attesa";
+  const isReady = orderDetails.status === "Pronto";
+
+  const canShowActions = !publicDetails && (isWaiting || isReady);
+  const canShowExtraActions = !publicDetails && isWaiting;
+
   async function handleCompleteOrder() {
     try {
-      const response = await axios.patch(`/api/admin/orders/${orderId}`, {
+      await axios.patch(`/api/admin/orders/${orderId}`, {
         newStatus: "Completato",
       });
 
@@ -89,12 +97,30 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
     }
   }
 
+  async function handleReadyOrder() {
+    try {
+      await axios.patch(`/api/admin/orders/${orderId}`, {
+        newStatus: "Pronto",
+      });
+
+      toast.success("Notifica inviata al cliente!");
+      setShowReady(false);
+      router.replace("/dashboard");
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
+  console.log("ORDER DETAILS:", orderDetails);
+
   return (
     <div className="max-w-3xl w-full">
       <div className="flex flex-col gap-10">
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <h2 className="text-3xl md:text-4xl text-(--muted-text)">Dettagli ordine</h2>
+            <h2 className="text-3xl md:text-4xl text-(--muted-text)">
+              Dettagli ordine
+            </h2>
             <div className="separator-horizontal"></div>
           </div>
           <div className="flex items-start justify-between flex-col md:flex-row gap-2">
@@ -127,8 +153,8 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
                   {pickupTime}
                 </p>
               </div>
-              {!publicDetails && (
-                <div className="flex flex-col gap-2">
+              {canShowActions && (
+                <div className="flex flex-col gap-2 w-full">
                   <Dialog
                     open={completeOpen}
                     onOpenChange={setShowConfirmation}
@@ -143,6 +169,7 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
                         <DialogTitle className="text-primary text-2xl">
                           Completa ordine n.{orderId}
                         </DialogTitle>
+                        <div className="separator-horizontal"></div>
                         <DialogDescription className="text-md">
                           L&apos;azione non può essere annullata.
                         </DialogDescription>
@@ -163,47 +190,101 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
                       </DialogFooter>
                     </DialogContent>
                   </Dialog>
-                  <Dialog
-                    open={postponeOpen}
-                    onOpenChange={setShowPostponement}
-                  >
-                    <DialogTrigger asChild>
-                      <button className="btn btn-link btn-sm">
-                        Posticipa orario ritiro
-                      </button>
-                    </DialogTrigger>
-                    <DialogContent className="sm:max-w-md">
-                      <DialogHeader>
-                        <DialogTitle className="text-primary text-2xl">
-                          Nuovo orario ritiro ordine
-                        </DialogTitle>
-                        <DialogDescription className="text-md">
-                          Seleziona il nuovo orario di ritiro dell&apos;ordine:
-                        </DialogDescription>
-                      </DialogHeader>
-                      <div>
-                        <Input
-                          type="time"
-                          value={postponementTime}
-                          onChange={(e) => setPostponementTime(e.target.value)}
-                        />
-                      </div>
-                      <DialogFooter>
-                        <DialogClose asChild>
-                          <button type="button" className="btn btn-link">
-                            Annulla
+
+                  {canShowExtraActions ? (
+                    <>
+                      <Dialog open={readyOpen} onOpenChange={setShowReady}>
+                        <DialogTrigger asChild>
+                          <button className="btn btn-link btn-sm">
+                            Ordine pronto per il ritiro
                           </button>
-                        </DialogClose>
-                        <button
-                          type="button"
-                          className="btn btn-primary"
-                          onClick={handlePostponeTime}
-                        >
-                          Conferma
-                        </button>
-                      </DialogFooter>
-                    </DialogContent>
-                  </Dialog>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle className="text-primary text-2xl">
+                              Ordine n.{orderId} pronto per il ritiro
+                            </DialogTitle>
+                            <div className="separator-horizontal"></div>
+                            <DialogDescription className="text-md">
+                              Premendo &quot;Conferma&quot; verrà inviato un
+                              messaggio al cliente per informarlo che
+                              l&apos;ordine è pronto per il ritiro.
+                            </DialogDescription>
+                          </DialogHeader>
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <button type="button" className="btn btn-link">
+                                Annulla
+                              </button>
+                            </DialogClose>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={handleReadyOrder}
+                            >
+                              Conferma
+                            </button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+
+                      <Dialog
+                        open={postponeOpen}
+                        onOpenChange={setShowPostponement}
+                      >
+                        <DialogTrigger asChild>
+                          <button className="btn btn-link btn-sm">
+                            Posticipa orario ritiro
+                          </button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-md">
+                          <DialogHeader>
+                            <DialogTitle className="text-primary text-2xl">
+                              Nuovo orario ritiro ordine
+                            </DialogTitle>
+                            <div className="separator-horizontal"></div>
+                            <DialogDescription className="text-md">
+                              Seleziona il nuovo orario di ritiro
+                              dell&apos;ordine:
+                            </DialogDescription>
+                          </DialogHeader>
+                          <div>
+                            <Input
+                              type="time"
+                              value={postponementTime}
+                              onChange={(e) =>
+                                setPostponementTime(e.target.value)
+                              }
+                            />
+                          </div>
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <button type="button" className="btn btn-link">
+                                Annulla
+                              </button>
+                            </DialogClose>
+                            <button
+                              type="button"
+                              className="btn btn-primary"
+                              onClick={handlePostponeTime}
+                            >
+                              Conferma
+                            </button>
+                          </DialogFooter>
+                        </DialogContent>
+                      </Dialog>
+                    </>
+                  ) : (
+                    <div className="flex items-center gap-1 justify-center">
+                      <Bell
+                        className="text-(--muted-light-text) size-4.5"
+                        strokeWidth={1.5}
+                      />
+                      <p className="text-sm text-(--muted-light-text)">
+                        Notificato
+                      </p>
+                    </div>
+                  )}
                 </div>
               )}
             </div>
@@ -211,7 +292,9 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
         </div>
         <div className="flex flex-col gap-6">
           <div className="flex flex-col gap-2">
-            <h2 className="text-3xl md:text-4xl text-(--muted-text)">Prodotti</h2>
+            <h2 className="text-3xl md:text-4xl text-(--muted-text)">
+              Prodotti
+            </h2>
             <div className="separator-horizontal"></div>
           </div>
           <Card className="w-full">
@@ -301,10 +384,14 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
         {orderDetails.notes && (
           <div className="flex flex-col gap-6">
             <div className="flex flex-col gap-2">
-              <h2 className="text-3xl md:text-4xl text-(--muted-text)">Note aggiuntive</h2>
+              <h2 className="text-3xl md:text-4xl text-(--muted-text)">
+                Note aggiuntive
+              </h2>
               <div className="separator-horizontal"></div>
             </div>
-            <p className="text-(--muted-light-text) text-md md:text-lg">{orderDetails.notes}</p>
+            <p className="text-(--muted-light-text) text-md md:text-lg">
+              {orderDetails.notes}
+            </p>
           </div>
         )}
 

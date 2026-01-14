@@ -3,7 +3,6 @@ import OrderDetails from "@/components/order-details";
 import { getOrderByPublicIdWithDetails } from "@/lib/orders";
 import { getTenantId } from "@/lib/tenantDetails";
 import ClearCartOnMount from "@/components/clear-cart";
-import { getIcon } from "@/lib/icons";
 import FloatingBack from "@/components/ui/floating-back";
 import { notFound } from "next/navigation";
 
@@ -16,6 +15,13 @@ export const metadata = {
   },
 };
 
+function isOlderThan24h(createdAt) {
+  const created = new Date(createdAt).getTime();
+  const now = Date.now();
+  const diffMs = now - created;
+  return diffMs > 24 * 60 * 60 * 1000;
+}
+
 export default async function SuccessPage({ params }) {
   const { order: orderPublicId } = await params;
 
@@ -26,6 +32,10 @@ export default async function SuccessPage({ params }) {
   );
 
   if (!orderDetails) {
+    notFound();
+  }
+
+  if (!orderDetails.created_at || isOlderThan24h(orderDetails.created_at)) {
     notFound();
   }
 

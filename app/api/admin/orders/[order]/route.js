@@ -11,6 +11,7 @@ import { sendOrderPostponementEmail } from "@/lib/emails/sendOrderPostponementEm
 import jwt from "jsonwebtoken";
 import { getTenantId } from "@/lib/tenantDetails";
 import { cookies } from "next/headers";
+import { sendOrderReadyEmail } from "@/lib/emails/sendOrderReadyEmail";
 
 function verifyToken(token) {
   try {
@@ -39,11 +40,42 @@ export async function PATCH(req, { params }) {
 
   if (body.newStatus) {
     const { newStatus } = body;
-    if (newStatus !== "In Attesa" && newStatus !== "Completato") {
+    if (
+      newStatus !== "In Attesa" &&
+      newStatus !== "Completato" &&
+      newStatus !== "Pronto"
+    ) {
       return NextResponse.json({ error: "Stato non valido" }, { status: 400 });
     }
 
     await updateOrderStatus(orderId, newStatus, tenantId);
+
+    if (newStatus === "Pronto") {
+      try {
+        const customerData = await getOrderCustomerDetails(tenantId, orderId);
+        const customerFullName = customerData.customer_name;
+        const customerName = customerFullName.split(" ")[0];
+        const customerEmail = customerData.customer_email;
+
+        await sendOrderReadyEmail({
+          customerName,
+          customerEmail,
+          tenantId,
+        });
+      } catch (error) {
+        console.error(
+          "Stato ordine aggiornato a 'Pronto', errore durante l'invio dell'email:",
+          error
+        );
+        return NextResponse.json(
+          {
+            error:
+              "Stato ordine aggiornato, errore durante l'invio dell'email di avviso",
+          },
+          { status: 500 }
+        );
+      }
+    }
 
     return NextResponse.json(
       { message: "Stato ordine aggiornato" },
@@ -75,7 +107,7 @@ export async function PATCH(req, { params }) {
           customerEmail,
           postponementTime,
           tenantId,
-          orderId
+          orderId,
         });
       } catch (error) {
         console.error(
