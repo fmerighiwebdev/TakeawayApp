@@ -2,14 +2,16 @@ import { NextResponse } from "next/server";
 import { clearOrders } from "@/lib/orders";
 
 export async function GET(req) {
-  const cronSecret = req.headers.get("x-cron-secret");
-  if (cronSecret !== process.env.CRON_SECRET) {
-    return NextResponse.json(
-      { error: "Unauthorized" },
-      { status: 401 }
-    );
+  const secret = process.env.CRON_SECRET;
+
+  // Vercel Cron invia: Authorization: Bearer <CRON_SECRET>
+  const auth = req.headers.get("authorization");
+  const expected = secret ? `Bearer ${secret}` : null;
+
+  if (!expected || auth !== expected) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
   }
-  
+
   try {
     await clearOrders();
     return NextResponse.json(

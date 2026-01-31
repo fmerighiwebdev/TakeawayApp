@@ -2,10 +2,7 @@
   "crons": [
     {
       "path": "/api/cron/clear-orders",
-      "schedule": "0 0 1 * *",
-      "header": {
-        "x-cron-secret": "@CRON_SECRET"
-      }
+      "schedule": "0 0 1 * *"
     }
   ]
 }
