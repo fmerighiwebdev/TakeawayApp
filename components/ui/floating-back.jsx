@@ -7,27 +7,26 @@ import { useEffect, useState } from "react";
 export default function FloatingBack({ href }) {
   const [isVisible, setIsVisible] = useState(false);
 
-  function handleScroll() {
-    if (window.scrollY > 200) {
-      setIsVisible(true);
-    } else {
-      setIsVisible(false);
-    }
-  }
-
+  
   useEffect(() => {
-    window.addEventListener("scroll", handleScroll);
+    function handleScroll() {
+      setIsVisible(window.scrollY > 200);
+    }
+
+    handleScroll();
+
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => {
       window.removeEventListener("scroll", handleScroll);
     };
-  }, [handleScroll]);
+  }, []);
 
   return (
     <div
-      className={`fixed top-12 left-0 w-full ${
+      className={`fixed top-12 left-0 w-full transition-all duration-300 ${
         isVisible
-          ? "opacity-100 scale-100 pointer-events-auto transition-all duration-300"
-          : "opacity-0 scale-95 pointer-events-none transition-all duration-300"
+          ? "opacity-100 scale-100 pointer-events-auto"
+          : "opacity-0 scale-95 pointer-events-none"
       }`}
     >
       <div className="container">

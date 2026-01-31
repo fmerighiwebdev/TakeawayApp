@@ -3,7 +3,7 @@ import supabaseServer from "./lib/supabaseServer";
 
 // Middleware per la gestione dei tenant basata sul dominio
 // Questo middleware intercetta le richieste e determina il tenant in base al dominio
-export async function middleware(request) {
+export async function proxy(request) {
   const { pathname } = request.nextUrl;
   const host = request.headers.get("host") || "";
 
