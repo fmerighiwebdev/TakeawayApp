@@ -35,7 +35,7 @@ export default function CookieBanner({ slug }) {
           <button
             className="bg-primary px-4 py-1 w-30 rounded-md shadow-lg text-primary-foreground"
             onClick={() => {
-              setCookie("cookieConsent", "accepted");
+              setCookie(`cookieConsent-${slug}`, "accepted");
               setVisible(false);
             }}
           >
