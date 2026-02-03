@@ -12,7 +12,6 @@ export async function GET(req, { params }) {
       tenantId,
       orderPublicId
     );
-    console.log("Dettagli ordine recuperati:", orderDetails);
     return NextResponse.json({ orderDetails: orderDetails }, { status: 200 });
   } catch (error) {
     return NextResponse.json({ error: "Ordine non trovato" }, { status: 404 });

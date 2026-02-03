@@ -56,7 +56,6 @@ export async function POST(req, res) {
     };
 
     const tenantId = await getTenantId();
-    console.log("Ordine in arrivo:", orderData);
     const orderIds = await createOrder(orderData, tenantId);
 
     try {

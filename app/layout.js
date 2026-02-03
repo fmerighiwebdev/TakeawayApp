@@ -33,6 +33,7 @@ import {
   Karla,
 } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
+import CookieBanner from "@/components/cookie-banner";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -368,6 +369,7 @@ export default async function RootLayout({ children }) {
           tenantAssets={tenantAssets}
         />
         {!isActive ? <Maintenance /> : children}
+        <CookieBanner slug={tenantDetails.slug} />
         <Toaster position="top-center" richColors expand={true} theme="light" />
       </body>
     </html>

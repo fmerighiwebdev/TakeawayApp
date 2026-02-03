@@ -111,8 +111,6 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
     }
   }
 
-  console.log("ORDER DETAILS:", orderDetails);
-
   return (
     <div className="max-w-3xl w-full">
       <div className="flex flex-col gap-10">

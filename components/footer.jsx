@@ -9,8 +9,6 @@ export default async function Footer({
 }) {
   const currentYear = new Date().getFullYear();
 
-  console.log("Rendering footer for tenant:", tenantData);
-
   return (
     <footer className="bg-neutral-primary-soft">
       <div className="mx-auto w-full max-w-7xl p-4 py-6 lg:py-8">

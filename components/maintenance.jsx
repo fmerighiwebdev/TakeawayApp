@@ -5,8 +5,6 @@ export default async function Maintenance() {
   const tenantId = await getTenantId();
   const tenantAssets = await getTenantAssets(tenantId);
 
-  console.log(tenantAssets);
-
   return (
     <main className="min-h-dvh w-screen flex flex-col items-center justify-center">
       <div className="container">
