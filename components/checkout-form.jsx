@@ -22,8 +22,20 @@ import { Spinner } from "./ui/spinner";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
+import { Button } from "./ui/button";
+import { set } from "date-fns";
 
-export default function CheckoutForm({ pickupTimes }) {
+function normalizeCode(code) {
+  return (code ?? "").trim().toUpperCase().replace(/\s+/g, "");
+}
+
+export default function CheckoutForm({
+  pickupTimes,
+  tenantFeatures,
+  tenantDiscounts,
+  appliedDiscount,
+  setAppliedDiscount,
+}) {
   const router = useRouter();
   const { cart } = useCartStore();
 
@@ -39,6 +51,7 @@ export default function CheckoutForm({ pickupTimes }) {
     phone: "",
     email: "",
     notes: "",
+    coupon: "",
     terms: false,
   });
 
@@ -48,7 +61,7 @@ export default function CheckoutForm({ pickupTimes }) {
     const minutes = now.getMinutes();
     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(
       2,
-      "0"
+      "0",
     )}`;
   };
 
@@ -124,7 +137,8 @@ export default function CheckoutForm({ pickupTimes }) {
       time: form.time,
       phone: form.phone,
       email: form.email,
-      notes: form.notes, // nuova textarea opzionale
+      notes: form.notes,
+      discount_code: appliedDiscount?.code || null,
       items: cart,
     };
 
@@ -143,6 +157,25 @@ export default function CheckoutForm({ pickupTimes }) {
     setLoading(false);
   }
 
+  const couponVisible = tenantFeatures.discounts;
+
+  function validateCoupon() {
+    const couponCode = normalizeCode(form.coupon);
+    const validCoupon = tenantDiscounts.find(
+      (discount) => normalizeCode(discount.code) === couponCode,
+    );
+    if (validCoupon) {
+      setAppliedDiscount({ code: validCoupon.code, percent_off: validCoupon.percent_off });
+      clearFieldError("coupon");
+    } else {
+      setAppliedDiscount(null);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        coupon: "Codice sconto non valido.",
+      }));
+    }
+  }
+
   return (
     <form className="flex flex-col gap-6 lg:gap-8" onSubmit={handleSubmit}>
       {errors?.order && (
@@ -151,8 +184,8 @@ export default function CheckoutForm({ pickupTimes }) {
           <AlertTitle>Errore durante l&apos;invio dell&apos;ordine.</AlertTitle>
           <AlertDescription>
             <p>
-              Si è verificato un errore durante l&apos;invio dell&apos;ordine. Per favore,
-              riprova più tardi.
+              Si è verificato un errore durante l&apos;invio dell&apos;ordine.
+              Per favore, riprova più tardi.
             </p>
           </AlertDescription>
         </Alert>
@@ -335,7 +368,10 @@ export default function CheckoutForm({ pickupTimes }) {
 
         {/* Note aggiuntive (facoltative) */}
         <div>
-          <Label htmlFor="notes" className="text-md md:text-lg text-(--muted-text)">
+          <Label
+            htmlFor="notes"
+            className="text-md md:text-lg text-(--muted-text)"
+          >
             Informazioni aggiuntive per l&apos;ordine{" "}
             <span className="text-(--muted-light-text) text-xs">
               (facoltativo)
@@ -351,6 +387,57 @@ export default function CheckoutForm({ pickupTimes }) {
             }
           />
         </div>
+
+        {/* Coupon */}
+        {couponVisible && (
+          <div>
+            <Label
+              htmlFor="coupon"
+              className={`text-md md:text-lg text-(--muted-text) gap-0.5 ${
+                errors?.coupon ? "text-red-600" : ""
+              }`}
+            >
+              Hai un codice sconto?
+            </Label>
+            <div className="flex items-center gap-2">
+              <Input
+                id="coupon"
+                name="coupon"
+                type="text"
+                value={form.coupon}
+                onChange={(e) => {
+                  setForm((prev) => ({ ...prev, coupon: e.target.value }));
+                  clearFieldError("coupon");
+                }}
+                onBlur={() =>
+                  setForm((prev) => ({
+                    ...prev,
+                    coupon: normalizeCode(prev.coupon),
+                  }))
+                }
+                aria-invalid={!!errors?.coupon}
+                aria-describedby={errors?.coupon ? "coupon-error" : undefined}
+              />
+              <button
+                className="btn btn-primary btn-sm"
+                onClick={validateCoupon}
+                type="button"
+              >
+                Applica
+              </button>
+            </div>
+            {errors?.coupon && (
+              <p id="coupon-error" className="text-red-600 text-sm">
+                {errors.coupon}
+              </p>
+            )}
+            {appliedDiscount && (
+              <p className="text-green-600 text-sm mt-1">
+                Codice sconto applicato: <strong>-{appliedDiscount.percent_off}%</strong> sul totale
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Termini e condizioni */}
         <div className="mt-4">

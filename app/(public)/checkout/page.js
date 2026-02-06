@@ -2,7 +2,12 @@ import CheckoutForm from "@/components/checkout-form";
 import CheckoutItems from "@/components/checkout-items";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
-import { getTenantId, getTenantPickupTimes } from "@/lib/tenantDetails";
+import {
+  getTenantDiscounts,
+  getTenantFeatures,
+  getTenantId,
+  getTenantPickupTimes,
+} from "@/lib/tenantDetails";
 import { headers } from "next/headers";
 import {
   Breadcrumb,
@@ -13,6 +18,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import FloatingBack from "@/components/ui/floating-back";
+import CheckoutSection from "@/components/checkout-section";
 
 export const metadata = {
   title: "Checkout",
@@ -42,6 +48,8 @@ export default async function CheckoutPage() {
 
   const tenantId = await getTenantId();
   const pickupTimes = await getTenantPickupTimes(tenantId);
+  const tenantFeatures = await getTenantFeatures(tenantId);
+  const tenantDiscounts = await getTenantDiscounts(tenantId);
 
   return (
     <main className="py-24">
@@ -66,9 +74,7 @@ export default async function CheckoutPage() {
             <BreadcrumbSeparator />
             <BreadcrumbItem>
               <BreadcrumbLink asChild>
-                <span
-                  className="text-md md:text-lg text-primary font-semibold"
-                >
+                <span className="text-md md:text-lg text-primary font-semibold">
                   Checkout
                 </span>
               </BreadcrumbLink>
@@ -81,14 +87,11 @@ export default async function CheckoutPage() {
           </h1>
           <div className="separator-horizontal"></div>
         </div>
-        <section className="flex items-start gap-10 lg:gap-4 flex-col lg:flex-row relative">
-          <div className="flex-1 lg:sticky top-24 w-full">
-            <CheckoutForm pickupTimes={pickupTimes} />
-          </div>
-          <div className="flex-1">
-            <CheckoutItems />
-          </div>
-        </section>
+        <CheckoutSection
+          pickupTimes={pickupTimes}
+          tenantFeatures={tenantFeatures}
+          tenantDiscounts={tenantDiscounts}
+        />
       </div>
       <FloatingBack href="/" />
     </main>

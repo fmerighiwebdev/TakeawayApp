@@ -128,8 +128,8 @@ export default async function Home() {
                       />
                     </figure>
                     <div className="bg-black/50 absolute z-1 top-0 left-0 w-full h-full"></div>
-                    <div className="absolute z-2 bottom-5 left-5">
-                      <h3 className="text-3xl uppercase text-primary-foreground transition-transform duration-300 relative w-fit">
+                    <div className="absolute inset-0 z-10 flex items-end">
+                      <h3 className="text-3xl uppercase text-white transition-transform duration-300 p-5 relative">
                         {category.name}
                       </h3>
                     </div>

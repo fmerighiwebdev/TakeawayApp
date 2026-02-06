@@ -10,7 +10,7 @@ export default async function Footer({
   const currentYear = new Date().getFullYear();
 
   return (
-    <footer className="bg-neutral-primary-soft">
+    <footer className="bg-gray-50">
       <div className="mx-auto w-full max-w-7xl p-4 py-6 lg:py-8">
         <div className="md:flex md:justify-between">
           <div className="mb-6 md:mb-0 flex flex-col gap-2">

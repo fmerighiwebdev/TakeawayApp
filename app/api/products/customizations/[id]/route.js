@@ -4,7 +4,7 @@ import { getProductCustomizations } from "@/lib/products";
 import { getTenantId } from "@/lib/tenantDetails";
 
 export async function GET(req, { params }) {
-  const { id } = params;
+  const { id } = await params;
   const tenantId = await getTenantId();
 
   try {

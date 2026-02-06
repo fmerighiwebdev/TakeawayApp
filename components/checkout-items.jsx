@@ -33,22 +33,24 @@ function getItemRowPrice(item) {
   const doughPrice = item.selectedDough?.price || 0;
   const extrasTotal = item.selectedExtras.reduce(
     (acc, extra) => acc + extra.price,
-    0
+    0,
   );
 
   const singleUnitPrice = base + doughPrice + extrasTotal;
   return singleUnitPrice * item.quantity;
 }
 
-export default function CheckoutItems() {
+export default function CheckoutItems({ appliedDiscount }) {
   const { cart, hydrated, getTotalPrice } = useCartStore();
 
   const total = getTotalPrice();
+  const percentOff = appliedDiscount ? appliedDiscount.percent_off : 0;
+  const discountAmount = percentOff > 0 ? (total * percentOff) / 100 : 0;
+  const discountedTotal = Math.max(total - discountAmount, 0);
 
-  const formattedTotal = new Intl.NumberFormat("it-IT", {
-    style: "currency",
-    currency: "EUR",
-  }).format(total);
+  const formattedTotal = formatCurrency(total);
+  const formattedDiscountAmount = formatCurrency(discountAmount);
+  const formattedDiscountedTotal = formatCurrency(discountedTotal);
 
   return (
     <div className="w-full">
@@ -140,9 +142,27 @@ export default function CheckoutItems() {
           <div className="flex flex-col gap-6">
             <div className="flex flex-col">
               <h2 className="text-4xl text-(--muted-text)">Totale ordine</h2>
-              <p className="text-3xl font-semibold text-primary">
-                {formattedTotal}
-              </p>
+
+              {!appliedDiscount ? (
+                <p className="text-3xl font-semibold text-primary">
+                  {formattedTotal}
+                </p>
+              ) : (
+                <div className="flex flex-col">
+                  <p className="text-sm text-(--muted-light-text)">
+                    Subtotale:{" "}
+                    <span className="line-through">{formattedTotal}</span>
+                  </p>
+
+                  <p className="text-sm text-green-700">
+                    Sconto ({percentOff}%): -{formattedDiscountAmount}
+                  </p>
+
+                  <p className="text-3xl font-semibold text-primary">
+                    {formattedDiscountedTotal}
+                  </p>
+                </div>
+              )}
             </div>
           </div>
         </div>

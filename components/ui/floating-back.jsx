@@ -35,7 +35,7 @@ export default function FloatingBack({ href }) {
           className="card bg-(--white) bg-opacity-90 shadow-sm rounded-full h-12 w-12 flex items-center justify-center"
         >
           <div className="relative w-fit h-fit">
-            <ArrowLeft size={32} color="var(--muted-text)" strokeWidth={1.5} />
+            <ArrowLeft size={32} color="var(--color-primary)" strokeWidth={1.5} />
           </div>
         </Link>
       </div>

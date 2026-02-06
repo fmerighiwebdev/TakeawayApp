@@ -1,11 +1,30 @@
+// app/api/orders/route.js
 import { NextResponse } from "next/server";
 
 import { createOrder } from "@/lib/orders";
 import { sendOrderConfirmationEmail } from "@/lib/emails/sendOrderConfirmationEmail";
 import { getTenantId } from "@/lib/tenantDetails";
+import supabaseServer from "@/lib/supabaseServer";
 
-export async function POST(req, res) {
-  const { name, surname, time, phone, email, notes, items } = await req.json();
+function normalizeCode(code) {
+  return (code ?? "").trim().toUpperCase().replace(/\s+/g, "");
+}
+
+function round2(n) {
+  return Math.round((n + Number.EPSILON) * 100) / 100;
+}
+
+export async function POST(req) {
+  const {
+    name,
+    surname,
+    time,
+    phone,
+    email,
+    notes,
+    items,
+    discount_code,
+  } = await req.json();
 
   if (!name || !surname || !time || !phone || !email || !items) {
     return NextResponse.json({ message: "Dati mancanti" }, { status: 400 });
@@ -33,18 +52,55 @@ export async function POST(req, res) {
   }
 
   try {
-    const total_price = items
-      .reduce(
-        (total, item) =>
-          total +
-          item.price * item.quantity +
-          (item.selectedDough?.price || 0) * item.quantity +
-          item.selectedExtras.reduce((sum, extra) => sum + extra.price, 0) *
-            item.quantity,
-        0
-      )
-      .toFixed(2);
+    const tenantId = await getTenantId();
+
+    // totale carrello
+    const totalNumber = items.reduce((total, item) => {
+      const base = item.price * item.quantity;
+      const dough = (item.selectedDough?.price || 0) * item.quantity;
+      const extras =
+        item.selectedExtras.reduce((sum, extra) => sum + extra.price, 0) *
+        item.quantity;
+
+      return total + base + dough + extras;
+    }, 0);
+    const total_price = round2(totalNumber);
+
     const full_name = `${name} ${surname}`;
+
+    // sconto: se c'è un codice sconto
+    let appliedDiscountCode = null;
+    let percent_off = null;
+    let discounted_price = null;
+
+    const normalized = normalizeCode(discount_code);
+    if (normalized) {
+      const { data: discount, error } = await supabaseServer
+        .from("discount_codes")
+        .select("code, percent_off")
+        .eq("tenant_id", tenantId)
+        .eq("code", normalized)
+        .maybeSingle();
+
+      if (error) {
+        console.error("Errore lookup discount code:", error);
+        return NextResponse.json(
+          { message: "Errore validazione codice sconto" },
+          { status: 500 }
+        );
+      }
+
+      if (discount) {
+        appliedDiscountCode = discount.code;
+        percent_off = discount.percent_off;
+
+        const multiplier = 1 - percent_off / 100;
+        discounted_price = round2(total_price * multiplier);
+      } else {
+        // ignoro senza bloccare l'ordine, ma non applico sconto
+      }
+    }
+
     const orderData = {
       full_name,
       time,
@@ -53,20 +109,20 @@ export async function POST(req, res) {
       email,
       notes,
       items,
+      // sconto
+      discount_code: appliedDiscountCode,
+      percent_off,
+      discounted_price,
     };
 
-    const tenantId = await getTenantId();
     const orderIds = await createOrder(orderData, tenantId);
 
     try {
       await sendOrderConfirmationEmail({
         customerName: name,
         customerEmail: email,
-        orderItems: items,
-        total: total_price,
         pickupTime: time,
         tenantId,
-        orderId: orderIds.id,
         orderPublicId: orderIds.publicId,
       });
     } catch (emailError) {

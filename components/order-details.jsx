@@ -44,7 +44,7 @@ function getOrderItemRowPrice(item) {
   const doughPrice = item.dough?.price || 0;
   const extrasTotal = item.extras.reduce(
     (acc, extra) => acc + Number(extra.price),
-    0
+    0,
   );
 
   const singleUnitPrice = base + doughPrice + extrasTotal;
@@ -53,6 +53,25 @@ function getOrderItemRowPrice(item) {
 
 export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
   const formattedTotalPrice = formatCurrency(orderDetails?.total_price);
+  const total = Number(orderDetails?.total_price ?? 0);
+  const discounted =
+    orderDetails?.discounted_price != null
+      ? Number(orderDetails.discounted_price)
+      : null;
+
+  const hasDiscount =
+    !!orderDetails?.discount_code &&
+    orderDetails?.percent_off != null &&
+    discounted != null &&
+    discounted < total;
+
+  const formattedDiscountedPrice =
+    discounted != null ? formatCurrency(discounted) : null;
+
+  const discountAmount = hasDiscount ? total - discounted : 0;
+  const formattedDiscountAmount = hasDiscount
+    ? formatCurrency(discountAmount)
+    : null;
 
   const router = useRouter();
 
@@ -399,9 +418,37 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
             <p className="text-xl md:text-2xl uppercase font-medium text-(--muted-text)">
               Totale
             </p>
-            <p className="text-3xl md:text-4xl font-semibold text-primary">
-              {formattedTotalPrice}
-            </p>
+
+            {!hasDiscount ? (
+              <p className="text-3xl md:text-4xl font-semibold text-primary">
+                {formattedTotalPrice}
+              </p>
+            ) : (
+              <div className="flex flex-col items-end gap-1">
+                {/* Totale originale barrato */}
+                <p className="text-lg md:text-xl text-(--muted-light-text) line-through">
+                  {formattedTotalPrice}
+                </p>
+
+                {/* Riga sconto */}
+                <p className="text-sm md:text-base text-green-600">
+                  Sconto{" "}
+                  <strong>
+                    {orderDetails.discount_code} (-{orderDetails.percent_off}%)
+                  </strong>{" "}
+                  {formattedDiscountAmount ? (
+                    <span className="text-(--muted-light-text)">
+                      = -{formattedDiscountAmount}
+                    </span>
+                  ) : null}
+                </p>
+
+                {/* Totale finale */}
+                <p className="text-3xl md:text-4xl font-semibold text-primary">
+                  {formattedDiscountedPrice}
+                </p>
+              </div>
+            )}
           </div>
         </div>
       </div>

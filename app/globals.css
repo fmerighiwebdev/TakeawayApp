@@ -6,9 +6,9 @@
 
 :root {
   --white: #ffffff;
-  --text: #1A1A1A;
-  --muted-light-text: #7E8794;
-  --muted-text: #4A4A4A;
+  --text: #1a1a1a;
+  --muted-light-text: #7e8794;
+  --muted-text: #4a4a4a;
   --radius: 0.625rem;
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -119,21 +119,6 @@ div {
   transform: translateY(-5px);
 }
 
-.categoryCard h3::after {
-  content: "";
-  position: absolute;
-  bottom: -5px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background-color: var(--color-primary-content);
-  transition: width .3s;
-}
-
-.categoryCard:hover h3::after {
-  width: 100%;
-}
-
 .cart-item {
   padding-block: 1rem;
 }
@@ -181,7 +166,8 @@ div {
 }
 
 @keyframes bounce {
-  0%, 100% {
+  0%,
+  100% {
     transform: scale(0);
   }
   50% {
@@ -244,7 +230,7 @@ div {
 
 ::selection {
   background: var(--color-primary);
-  color: var(--white);
+  color: var(--color-primary-content);
 }
 
 @theme inline {
