@@ -22,7 +22,7 @@ export default async function LoginPage() {
   }
 
   if (isAuthenticated) {
-    redirect("/dashboard");
+    redirect("/admin/dashboard");
   }
 
   return (

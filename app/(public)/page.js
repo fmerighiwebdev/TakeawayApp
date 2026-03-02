@@ -7,8 +7,12 @@ import {
   getTenantCategories,
   getTenantDetails,
   getTenantId,
+  getTenantUI,
 } from "@/lib/tenantDetails";
 import { MapPin, Phone } from "lucide-react";
+import Marquee from "react-fast-marquee";
+import HeroCarousel from "@/components/hero-carousel";
+import Hero from "daisyui/components/hero";
 
 export const metadata = {
   alternates: {
@@ -21,12 +25,14 @@ export default async function Home() {
   const tenantData = await getTenantDetails(tenantId);
   const tenantAssets = await getTenantAssets(tenantId);
   const tenantCategories = await getTenantCategories(tenantId);
+  const tenantUI = await getTenantUI(tenantId);
+  const tenantImages = tenantUI.home.carousel.images || [];
 
   return (
-    <main className="w-screen min-h-dvh pt-24 pb-24 lg:pt-0 flex flex-col gap-12 lg:gap-8">
+    <main className="w-screen min-h-dvh pt-20 pb-24 lg:pt-16 flex flex-col gap-12 lg:gap-8">
       <section className="lg:h-[60dvh] relative">
         <div className="container h-full flex flex-col lg:flex-row items-start">
-          <div className="flex flex-1 flex-col gap-4 h-full justify-center relative">
+          <div className="flex flex-1 flex-col gap-4 w-full h-full justify-center relative">
             {tenantAssets.logoUrl && (
               <Image
                 src={tenantAssets.logoUrl}
@@ -78,29 +84,40 @@ export default async function Home() {
                   </a>
                 )}
               </div>
-              <div className="flex-2 block lg:hidden">
-                <Image
-                  src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-1.webp"
-                  alt="Hero Image"
-                  width={4096}
-                  height={2304}
-                  className="w-full h-full object-cover rounded-sm rounded-tl-none xs:rounded-tl-sm shadow-sm"
+              <div className="block lg:hidden relative w-full h-64 xs:h-72 shadow-sm rounded-sm rounded-tl-none overflow-hidden">
+                <HeroCarousel
+                  images={tenantImages}
+                  className="relative w-full h-full"
+                  autoplayDelay={3500}
                 />
               </div>
             </div>
           </div>
-          <div className="flex-1 hidden lg:block">
-            <Image
-              src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-1.webp"
-              alt="Hero Image"
-              width={4096}
-              height={2304}
-              className="w-full h-full object-cover shadow-sm rounded-lg"
-              style={{ boxShadow: "-20px 20px 0 var(--color-primary)" }}
+          <div
+            className="flex-1 hidden lg:block relative w-full h-[50dvh] shadow-sm rounded-lg overflow-hidden"
+            style={{ boxShadow: "-20px 20px 0 var(--color-primary)" }}
+          >
+            <HeroCarousel
+              images={tenantImages}
+              className="relative w-full h-full"
+              autoplayDelay={3500}
             />
           </div>
         </div>
       </section>
+      {tenantUI.home.banner.active && (
+        <section className="container">
+          <Marquee
+            pauseOnHover={true}
+            speed={50}
+            className="rounded-sm shadow-sm bg-secondary text-secondary-foreground py-4 px-8"
+          >
+            <p className="text-lg font-medium">
+              {tenantUI.home.banner.content}
+            </p>
+          </Marquee>
+        </section>
+      )}
       <section>
         <div className="container">
           <h3 className="text-3xl font-normal text-(--muted-text)">

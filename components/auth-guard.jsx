@@ -10,13 +10,13 @@ export default async function AuthGuard({ children }) {
   const authToken = cookieStore.get(tokenKey)?.value;
 
   if (!authToken) {
-    redirect("/login");
+    redirect("/admin/login");
   }
 
   try {
     jwt.verify(authToken, process.env.JWT_SECRET);
   } catch (error) {
-    redirect("/login");
+    redirect("/admin/login");
   }
 
   return <>{children}</>;

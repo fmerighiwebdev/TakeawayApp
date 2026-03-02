@@ -34,7 +34,6 @@ import {
 } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
 import CookieBanner from "@/components/cookie-banner";
-import { getAccessibleTextColor } from "@/lib/colors";
 
 const montserrat = Montserrat({
   subsets: ["latin"],
@@ -340,16 +339,11 @@ export default async function RootLayout({ children }) {
 
   const fontKey = tenantTheme.fontKey || "clean";
   const selectedFonts = fontThemes[fontKey] || fontThemes["clean"];
+  const fontColorPrimary = tenantTheme.fontColorPrimary || "dark";
+  const fontColorSecondary = tenantTheme.fontColorSecondary || "dark";
 
-  const primaryColorDark = `color-mix(in srgb, ${tenantTheme.primaryColor} 80%, black 20%)`;
-  const secondaryColorDark = `color-mix(in srgb, ${tenantTheme.secondaryColor} 80%, black 20%)`;
-
-  const primaryContent = getAccessibleTextColor(
-    tenantTheme.primaryColor || "#000000"
-  );
-  const secondaryContent = getAccessibleTextColor(
-    tenantTheme.secondaryColor || "#ffffff"
-  );
+  const primaryContent = fontColorPrimary === "dark" ? "#0F172A" : "#F8FAFC";
+  const secondaryContent = fontColorSecondary === "dark" ? "#0F172A" : "#F8FAFC";
 
   return (
     <html

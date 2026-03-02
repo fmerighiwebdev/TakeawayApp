@@ -8,9 +8,11 @@ export async function GET() {
   const tenantTheme = await getTenantTheme(tenantId);
 
   const manifest = {
+    id: "/",
     name: `${tenantMetadata.title} Takeaway`,
     short_name: `${tenantMetadata.title}`,
-    start_url: "/",
+    start_url: "/?source=pwa",
+    scope: "/",
     display: "standalone",
     background_color: "#ffffff",
     theme_color: tenantTheme.primaryColor || "#000000",

@@ -6,7 +6,6 @@ import {
   getTenantDetails,
   getTenantId,
 } from "@/lib/tenantDetails";
-import Script from "next/script";
 
 export const metadata = {
   manifest: "/api/manifest",
@@ -20,10 +19,6 @@ export default async function PublicLayout({ children }) {
 
   return (
     <>
-      <Script
-        id="cookieyes"
-        src={`https://cdn-cookieyes.com/client_data/d521c03e28eb7f8fcd179382/script.js`}
-      ></Script>
       {children}
       <Footer tenantData={tenantData} tenantLogo={tenantAssets.logoUrl} tenantCategories={tenantCategories} />
       <FloatingCart />

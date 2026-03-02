@@ -64,7 +64,7 @@ export default function AdminForm({ tenantId }) {
         tenantId,
       });
 
-      router.push("/dashboard");
+      router.push("/admin/dashboard");
     } catch (error) {
       const message =
         error?.response?.data?.message || "Credenziali non valide. Riprova.";

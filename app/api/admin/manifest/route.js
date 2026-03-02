@@ -1,33 +1,40 @@
-import { NextResponse } from 'next/server';
+import { getTenantAssets, getTenantId, getTenantMetadata, getTenantTheme } from "@/lib/tenantDetails";
+import { NextResponse } from "next/server";
 
 export async function GET() {
+  const tenantId = await getTenantId();
+  const tenantAssets = await getTenantAssets(tenantId);
+  const tenantMetadata = await getTenantMetadata(tenantId);
+  const tenantTheme = await getTenantTheme(tenantId);
+
   const manifest = {
-    name: "All'Amicizia Admin",
-    short_name: "All'Amicizia Admin",
-    start_url: "/admin/dashboard",
+    id: "/admin/",
+    name: `${tenantMetadata.title} Admin`,
+    short_name: `${tenantMetadata.title} Admin`,
+    start_url: "/admin/dashboard?source=pwa",
     scope: "/admin/",
     display: "standalone",
     icons: [
-        {
-        "src": "/web-app-manifest-192x192.png",
-        "sizes": "192x192",
-        "type": "image/png",
-        "purpose": "any"
-        },
-        {
-        "src": "/web-app-manifest-512x512.png",
-        "sizes": "512x512",
-        "type": "image/png",
-        "purpose": "any"
-        }
+      {
+        src: tenantAssets.webAppManifest192,
+        sizes: "192x192",
+        type: "image/png",
+        purpose: "any",
+      },
+      {
+        src: tenantAssets.webAppManifest512,
+        sizes: "512x512",
+        type: "image/png",
+        purpose: "any",
+      },
     ],
-    theme_color: "#000000", // Colore tema specifico admin
-    background_color: "#ffffff" // Colore sfondo splash screen admin
+    theme_color: tenantTheme.primaryColor || "#000000",
+    background_color: "#ffffff",
   };
 
   return NextResponse.json(manifest, {
     headers: {
-      'Content-Type': 'application/manifest+json',
+      "Content-Type": "application/manifest+json",
     },
   });
 }
