@@ -35,7 +35,7 @@ export default async function OrderPage({ params }) {
                 <BreadcrumbList>
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                      <Link href="/dashboard" className="text-md md:text-lg">
+                      <Link href="/admin/dashboard" className="text-md md:text-lg">
                         Dashboard
                       </Link>
                     </BreadcrumbLink>
@@ -57,7 +57,7 @@ export default async function OrderPage({ params }) {
           </section>
         </div>
       </main>
-      <FloatingBack href="/dashboard" />
+      <FloatingBack href="/admin/dashboard" />
     </AuthGuard>
   );
 }

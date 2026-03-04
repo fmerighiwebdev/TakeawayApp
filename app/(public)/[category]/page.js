@@ -6,10 +6,14 @@ import Link from "next/link";
 import {
   getTenantCategoryBySlug,
   getTenantDetails,
+  getTenantFeatures,
   getTenantId,
   getTenantSubcategories,
 } from "@/lib/tenantDetails";
-import { getTenantProductsByCategory } from "@/lib/products";
+import {
+  getTenantProductsByCategory,
+  getTopProductsByCategory,
+} from "@/lib/products";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -94,6 +98,7 @@ export default async function CategoryPage({ params }) {
   const tenantId = await getTenantId();
   const tenantDetails = await getTenantDetails(tenantId);
   const activeCategory = await getTenantCategoryBySlug(tenantId, categorySlug);
+  const tenantFeatures = await getTenantFeatures(tenantId);
 
   if (!activeCategory) {
     notFound();
@@ -101,13 +106,21 @@ export default async function CategoryPage({ params }) {
 
   const subcategories = await getTenantSubcategories(
     tenantId,
-    activeCategory.id
+    activeCategory.id,
   );
 
   const categoryProducts = await getTenantProductsByCategory(
     activeCategory.id,
-    tenantId
+    tenantId,
   );
+
+  let topCategoryProducts = [];
+  if (tenantFeatures.topProducts) {
+    topCategoryProducts = await getTopProductsByCategory(
+      activeCategory.id,
+      tenantId,
+    );
+  }
 
   return (
     <>
@@ -144,6 +157,7 @@ export default async function CategoryPage({ params }) {
             activeCategory={activeCategory}
             subcategories={subcategories}
             categoryProducts={categoryProducts}
+            topCategoryProducts={topCategoryProducts}
           />
         </div>
         <FloatingBack href="/" />

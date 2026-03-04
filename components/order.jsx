@@ -32,7 +32,7 @@ export default function Order({ order, numberOfItems }) {
   });
 
   return (
-    <Link href={`/dashboard/ordine/${order.id}`}>
+    <Link href={`/admin/dashboard/ordine/${order.id}`}>
       <Card>
         <CardContent>
           <div className="flex items-start justify-between relative">

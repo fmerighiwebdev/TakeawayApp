@@ -93,7 +93,7 @@ export default async function RiepilogoOrdiniPage() {
                 <BreadcrumbList>
                   <BreadcrumbItem>
                     <BreadcrumbLink asChild>
-                      <Link href="/dashboard" className="text-md md:text-lg">
+                      <Link href="/admin/dashboard" className="text-md md:text-lg">
                         Dashboard
                       </Link>
                     </BreadcrumbLink>
@@ -136,7 +136,7 @@ export default async function RiepilogoOrdiniPage() {
           </section>
         </div>
       </main>
-      <FloatingBack href="/dashboard" />
+      <FloatingBack href="/admin/dashboard" />
     </AuthGuard>
   );
 }

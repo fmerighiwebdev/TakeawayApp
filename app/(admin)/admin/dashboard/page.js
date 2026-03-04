@@ -4,12 +4,30 @@ import { getTenantFeatures, getTenantId } from "@/lib/tenantDetails";
 import { getTodayOrdersByTenantId } from "@/lib/orders";
 import Link from "next/link";
 import TodayDate from "@/components/today-date";
+import { DashboardMenu } from "@/components/dashboard-menu";
 
 export default async function AdminDashboard() {
   const tenantId = await getTenantId();
 
   const initialOrders = await getTodayOrdersByTenantId(tenantId);
   const tenantFeatures = await getTenantFeatures(tenantId);
+
+  let menuItems = [
+    { name: "Riepilogo ordini", href: "/admin/dashboard/riepilogo-ordini" },
+    { name: "Statistiche", href: "/admin/dashboard/statistiche" },
+  ];
+
+  if (!tenantFeatures.pastOrders) {
+    menuItems = menuItems.filter(
+      (item) => item.href !== "/admin/dashboard/riepilogo-ordini",
+    );
+  }
+
+  if (!tenantFeatures.topProducts) {
+    menuItems = menuItems.filter(
+      (item) => item.href !== "/admin/dashboard/statistiche",
+    );
+  }
 
   return (
     <AuthGuard>
@@ -22,12 +40,10 @@ export default async function AdminDashboard() {
                   <h1 className="text-5xl text-primary font-medium">Ordini</h1>
                   <TodayDate />
                 </div>
-                {tenantFeatures.pastOrders && (
-                  <button className="btn btn-primary btn-sm md:btn-md">
-                    <Link href="/dashboard/riepilogo-ordini">
-                      Riepilogo ordini
-                    </Link>
-                  </button>
+                {menuItems.length > 0 && (
+                  <div className="flex items-center gap-2">
+                    <DashboardMenu menuItems={menuItems} />
+                  </div>
                 )}
               </div>
               <div className="separator-horizontal"></div>

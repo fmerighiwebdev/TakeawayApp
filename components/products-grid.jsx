@@ -3,7 +3,7 @@
 import { motion, AnimatePresence } from "motion/react";
 import ProductItem from "./product-item";
 
-export default function ProductsGrid({ categoryProducts, activeSubcategory }) {
+export default function ProductsGrid({ categoryProducts, activeSubcategory, topProductsIds }) {
   const displayedProducts = activeSubcategory
     ? categoryProducts.filter(
         (product) => product.subcategory_id === activeSubcategory
@@ -25,7 +25,7 @@ export default function ProductsGrid({ categoryProducts, activeSubcategory }) {
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
           >
             {displayedProducts.map((product) => (
-              <ProductItem key={product.id} product={product} />
+              <ProductItem key={product.id} product={product} isTopProduct={topProductsIds.has(product.id)} />
             ))}
           </motion.div>
         ) : (

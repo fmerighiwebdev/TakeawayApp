@@ -38,7 +38,7 @@ export default function OrdersList({ orders, status }) {
         />
       ))}
       {status === "completed" && (
-        <div className="absolute bottom-15 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl border rounded-md bg-white py-4 px-6">
+        <div className="fixed bottom-15 left-1/2 -translate-x-1/2 w-[90%] max-w-3xl border rounded-md bg-white py-4 px-6">
           <p className="text-xl text-center uppercase font-medium text-(--muted-text)">
             Totale giornaliero
           </p>

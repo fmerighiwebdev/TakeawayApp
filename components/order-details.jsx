@@ -96,7 +96,7 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
       });
 
       toast.success("Ordine completato con successo!");
-      router.replace("/dashboard");
+      router.replace("/admin/dashboard");
     } catch (error) {
       console.error(error);
     }
@@ -124,7 +124,7 @@ export default function OrderDetails({ orderDetails, publicDetails, orderId }) {
 
       toast.success("Notifica inviata al cliente!");
       setShowReady(false);
-      router.replace("/dashboard");
+      router.replace("/admin/dashboard");
     } catch (error) {
       console.error(error);
     }
