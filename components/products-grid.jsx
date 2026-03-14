@@ -3,14 +3,38 @@
 import { motion, AnimatePresence } from "motion/react";
 import ProductItem from "./product-item";
 
-export default function ProductsGrid({ categoryProducts, activeSubcategory, topProductsIds }) {
-  const displayedProducts = activeSubcategory
-    ? categoryProducts.filter(
-        (product) => product.subcategory_id === activeSubcategory
-      )
-    : categoryProducts;
+function normalizeText(value) {
+  return (value ?? "")
+    .toString()
+    .toLowerCase()
+    .normalize("NFKD")
+    .replace(/[\u0300-\u036f]/g, "")
+    .trim();
+}
 
-  const gridKey = activeSubcategory ? activeSubcategory : "all-products";
+export default function ProductsGrid({
+  categoryProducts,
+  activeSubcategory,
+  topProductsIds,
+  searchQuery,
+}) {
+  const normalizedQuery = normalizeText(searchQuery);
+
+  const displayedProducts = categoryProducts.filter((product) => {
+    const matchesSubcategory = activeSubcategory
+      ? product.subcategory_id === activeSubcategory
+      : true;
+
+    const matchesSearch =
+      normalizedQuery.length === 0
+        ? true
+        : normalizeText(product.name).includes(normalizedQuery) ||
+          normalizeText(product.description).includes(normalizedQuery);
+
+    return matchesSubcategory && matchesSearch;
+  });
+
+  const gridKey = `${activeSubcategory ?? "all-products"}-${normalizedQuery || "no-search"}`;
 
   return (
     <div>
@@ -25,7 +49,11 @@ export default function ProductsGrid({ categoryProducts, activeSubcategory, topP
             className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6"
           >
             {displayedProducts.map((product) => (
-              <ProductItem key={product.id} product={product} isTopProduct={topProductsIds.has(product.id)} />
+              <ProductItem
+                key={product.id}
+                product={product}
+                isTopProduct={topProductsIds.has(product.id)}
+              />
             ))}
           </motion.div>
         ) : (
@@ -37,7 +65,9 @@ export default function ProductsGrid({ categoryProducts, activeSubcategory, topP
             transition={{ duration: 0.25, ease: "easeOut" }}
             className="text-(--muted-light-text)"
           >
-            Nessun prodotto disponibile.
+            {normalizedQuery
+              ? "Nessun prodotto corrisponde alla ricerca."
+              : "Nessun prodotto disponibile."}
           </motion.p>
         )}
       </AnimatePresence>
