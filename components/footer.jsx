@@ -78,14 +78,19 @@ export default async function Footer({
               </h2>
               <ul className="text-body font-medium">
                 <li className="mb-2">
-                  <a href="#" className="hover:text-primary text-(--muted-text) transition-colors duration-200">
+                  <Link href="/privacy-policy" className="hover:text-primary text-(--muted-text) transition-colors duration-200">
                     Privacy Policy
-                  </a>
+                  </Link>
+                </li>
+                <li className="mb-2">
+                  <Link href="/cookie-policy" className="hover:text-primary text-(--muted-text) transition-colors duration-200">
+                    Cookie Policy
+                  </Link>
                 </li>
                 <li>
-                  <a href="#" className="hover:text-primary text-(--muted-text) transition-colors duration-200">
+                  <Link href="/termini-e-condizioni" className="hover:text-primary text-(--muted-text) transition-colors duration-200">
                     Termini e condizioni
-                  </a>
+                  </Link>
                 </li>
               </ul>
             </div>

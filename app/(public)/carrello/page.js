@@ -36,7 +36,7 @@ export default async function CartPage() {
 
   if (cartCount === 0) {
     return (
-      <main className="w-screen h-dvh flex items-center justify-center py-24">
+      <main className="w-screen h-dvh flex items-center justify-center pt-20 pb-24 lg:pt-16">
         <section>
           <div className="container flex flex-col items-center gap-12">
             <h1 className="text-5xl md:text-6xl font-medium text-(--muted-text) text-center">
@@ -54,7 +54,7 @@ export default async function CartPage() {
   }
 
   return (
-    <main className="py-24 min-h-dvh">
+    <main className="pt-20 pb-24 lg:pt-16 min-h-dvh">
       <div className="container flex flex-col gap-10">
         <Breadcrumb>
           <BreadcrumbList>

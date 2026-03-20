@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getTenantDetails, getTenantId } from "@/lib/tenantDetails";
+import { getTenantDetails, getTenantId, getTenantUI } from "@/lib/tenantDetails";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -9,6 +9,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import { Mail, MapPin, Phone } from "lucide-react";
+import FloatingBack from "@/components/ui/floating-back";
 
 export const metadata = {
   title: "Contatti",
@@ -76,12 +77,15 @@ function ContactPageJsonLd({ tenantDetails }) {
 export default async function ContactsPage() {
   const tenantId = await getTenantId();
   const tenantDetails = await getTenantDetails(tenantId);
+  const tenantUI = await getTenantUI(tenantId);
+
+  const relevantImage = tenantUI.home.carousel.images[0];
 
   return (
     <>
       <BreadcrumbJsonLd tenantDetails={tenantDetails} />
       <ContactPageJsonLd tenantDetails={tenantDetails} />
-      <main className="py-24">
+      <main className="pt-20 pb-24 lg:pt-16">
         <div className="container flex flex-col gap-10">
           <Breadcrumb>
             <BreadcrumbList>
@@ -141,7 +145,7 @@ export default async function ContactsPage() {
             </div>
             <div className="flex-1 w-full h-full">
               <Image
-                src="https://woi8jmqaak1w974e.public.blob.vercel-storage.com/locale/general/general-1.webp"
+                src={relevantImage}
                 alt="Contatti"
                 width={600}
                 height={400}
@@ -151,6 +155,7 @@ export default async function ContactsPage() {
             </div>
           </div>
         </div>
+        <FloatingBack href="/" />
       </main>
     </>
   );

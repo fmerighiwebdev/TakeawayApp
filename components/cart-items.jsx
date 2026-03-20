@@ -56,7 +56,7 @@ export default function CartItems() {
 
   if (hydrated && cart.length === 0) {
     return (
-      <section className="w-screen h-dvh absolute top-0 left-0 flex items-center justify-center py-24">
+      <section className="w-screen h-dvh absolute top-0 left-0 flex items-center justify-center pt-20 pb-24 lg:pt-16">
         <div className="container flex flex-col items-center gap-12">
           <h1 className="text-5xl md:text-6xl font-medium text-(--muted-text) text-center">
             Il carrello è vuoto

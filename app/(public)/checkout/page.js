@@ -52,7 +52,7 @@ export default async function CheckoutPage() {
   const tenantDiscounts = await getTenantDiscounts(tenantId);
 
   return (
-    <main className="py-24">
+    <main className="pt-20 pb-24 lg:pt-16">
       <div className="container flex flex-col gap-10">
         <Breadcrumb>
           <BreadcrumbList>

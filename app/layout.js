@@ -357,6 +357,7 @@ export default async function RootLayout({ children }) {
           "--color-secondary": tenantTheme.secondaryColor || "#ffffff",
           "--color-secondary-content": secondaryContent,
         }}
+        className="bg-neutral-50"
       >
         <WebsiteJsonLd
           tenantDetails={tenantDetails}

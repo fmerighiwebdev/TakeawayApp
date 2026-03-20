@@ -40,7 +40,7 @@ export default async function SuccessPage({ params }) {
   }
 
   return (
-    <main className="py-24">
+    <main className="pt-20 pb-24 lg:pt-16">
       <ClearCartOnMount />
       <section>
         <div className="container flex flex-col gap-15 items-center">

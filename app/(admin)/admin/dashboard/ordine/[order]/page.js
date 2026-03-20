@@ -27,7 +27,7 @@ export default async function OrderPage({ params }) {
 
   return (
     <AuthGuard>
-      <main className="py-24 min-h-dvh">
+      <main className="pt-20 pb-24 lg:pt-16 min-h-dvh">
         <div className="container">
           <section className="w-full max-w-3xl mx-auto flex flex-col gap-15">
             <div className="flex flex-col gap-2">
