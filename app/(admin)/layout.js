@@ -6,7 +6,12 @@ export const metadata = {
     index: false,
     follow: false,
   },
-  manifest: "/api/admin/manifest"
+  manifest: "/api/admin/manifest",
+  appleWebApp: {
+    title: "Gestione ordini",
+    statusBarStyle: "default",
+    capable: true,
+  },
 };
 
 export default async function AdminLayout({ children }) {

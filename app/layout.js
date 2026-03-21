@@ -218,18 +218,17 @@ export async function generateMetadata() {
     metadataBase: new URL(`https://${tenantDetails.domain}`),
     icons: {
       icon: [
-        { url: tenantAssets.favicon96 || "/favicon-96x96.png" },
-        { url: tenantAssets.faviconIco || "/favicon.ico" },
-        { url: tenantAssets.faviconSvg || "/favicon.svg" },
+        { url: tenantAssets.favicon96 },
+        { url: tenantAssets.faviconIco },
+        { url: tenantAssets.faviconSvg },
       ],
-      apple: tenantAssets.appleTouchIconUrl || "/apple-touch-icon.png",
-      shortcut: tenantAssets.shortcutIconUrl || "/shortcut-icon.png",
+      apple: tenantAssets.appleTouchIconUrl,
+      shortcut: tenantAssets.shortcutIconUrl,
     },
     appleWebApp: {
-      title: `${tenantMetadata.title}`,
+      title: `${tenantMetadata.title} | Takeaway`,
       statusBarStyle: "default",
       capable: true,
-      navigationBarColor: tenantAssets.primaryColor || "#000000",
     },
     openGraph: {
       title: `${tenantMetadata.title} | Takeaway`,
@@ -239,7 +238,7 @@ export async function generateMetadata() {
       locale: "it_IT",
       images: [
         {
-          url: tenantAssets.ogImage || "/default-og.webp",
+          url: tenantAssets.ogImage,
           width: 1200,
           height: 630,
           alt: `${tenantMetadata.title} | Takeaway`,
@@ -256,10 +255,16 @@ export async function generateMetadata() {
   };
 }
 
-export const viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
+export async function generateViewport() {
+  const tenantId = await getTenantId();
+  const tenantTheme = await getTenantTheme(tenantId);
+
+  return {
+    width: "device-width",
+    initialScale: 1,
+    themeColor: tenantTheme.primaryColor || "#000000",
+  };
+}
 
 function WebsiteJsonLd({ tenantDetails, tenantAssets }) {
   return (
@@ -272,7 +277,7 @@ function WebsiteJsonLd({ tenantDetails, tenantAssets }) {
           name: tenantDetails.name,
           url: `https://${tenantDetails.domain}`,
           description: tenantDetails.description,
-          image: tenantAssets.ogImage || "/default-og.webp",
+          image: tenantAssets.ogImage,
         }),
       }}
     />
@@ -290,7 +295,7 @@ function WebApplicationJsonLd({ tenantDetails, tenantAssets }) {
           name: tenantDetails.name,
           url: `https://${tenantDetails.domain}`,
           description: tenantDetails.description,
-          image: tenantAssets.ogImage || "/default-og.webp",
+          image: tenantAssets.ogImage,
           applicationCategory: "FoodOrdering",
           operatingSystem: "All",
           browserRequirements: "JavaScript richiesto",
@@ -309,7 +314,7 @@ function RestaurantJsonLd({ tenantDetails, tenantAssets }) {
           "@context": "https://schema.org",
           "@type": "Restaurant",
           name: tenantDetails.name,
-          image: tenantAssets.ogImage || "/default-og.webp",
+          image: tenantAssets.ogImage,
           address: {
             "@type": "PostalAddress",
             streetAddress: tenantDetails.address,
@@ -357,7 +362,6 @@ export default async function RootLayout({ children }) {
           "--color-secondary": tenantTheme.secondaryColor || "#ffffff",
           "--color-secondary-content": secondaryContent,
         }}
-        className="bg-neutral-50"
       >
         <WebsiteJsonLd
           tenantDetails={tenantDetails}

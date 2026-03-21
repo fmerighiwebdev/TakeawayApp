@@ -1,4 +1,5 @@
 import Footer from "@/components/footer";
+import InstallPrompt from "@/components/pwa/install-prompt";
 import FloatingCart from "@/components/ui/floating-cart";
 import {
   getTenantAssets,
@@ -22,7 +23,7 @@ export default async function PublicLayout({ children }) {
       {children}
       <Footer tenantData={tenantData} tenantLogo={tenantAssets.logoUrl} tenantCategories={tenantCategories} />
       <FloatingCart />
-      {/* <AddToHomeScreenPrompt /> */}
+      <InstallPrompt />
     </>
   );
 }

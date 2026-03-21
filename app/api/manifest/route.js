@@ -9,13 +9,15 @@ export async function GET() {
 
   const manifest = {
     id: "/",
-    name: `${tenantMetadata.title} Takeaway`,
+    name: `${tenantMetadata.title} | Takeaway`,
     short_name: `${tenantMetadata.title}`,
+    description: `${tenantMetadata.title} - Ordina online dal tuo ristorante preferito!`,
     start_url: "/?source=pwa",
     scope: "/",
     display: "standalone",
     background_color: "#ffffff",
     theme_color: tenantTheme.primaryColor || "#000000",
+    prefer_related_applications: false,
     icons: [
       {
         src: tenantAssets.webAppManifest192,
@@ -30,5 +32,10 @@ export async function GET() {
     ],
   };
 
-  return NextResponse.json(manifest);
+  return NextResponse.json(manifest, {
+    headers: {
+      "Content-Type": "application/manifest+json",
+      "Cache-Control": "no-store, max-age=0",
+    },
+  });
 }

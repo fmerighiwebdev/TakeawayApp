@@ -15,7 +15,7 @@ export default function CookieBanner({ slug }) {
 
   return (
     <>
-      <div className="fixed  bottom-0 sm:bottom-5 left-1/2 -translate-x-1/2 bg-white z-999 p-4 shadow-lg rounded-lg w-full max-w-md flex flex-col gap-4">
+      <div className="fixed border bottom-5 sm:bottom-5 left-1/2 -translate-x-1/2 bg-white z-999 p-4 shadow-lg rounded-lg w-[95%] max-w-md flex flex-col gap-4">
         <p className="text-sm md:text-base">
           Utilizziamo solo cookie tecnici necessari al corretto funzionamento
           dell’app. Non utilizziamo cookie di profilazione o tracciamento.

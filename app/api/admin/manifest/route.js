@@ -9,11 +9,15 @@ export async function GET() {
 
   const manifest = {
     id: "/admin/",
-    name: `${tenantMetadata.title} Admin`,
-    short_name: `${tenantMetadata.title} Admin`,
+    name: `${tenantMetadata.title} | Gestione ordini`,
+    short_name: `${tenantMetadata.title}`,
+    description: `${tenantMetadata.title} - Gestisci i tuoi ordini in modo semplice e veloce!`,
     start_url: "/admin/dashboard?source=pwa",
     scope: "/admin/",
     display: "standalone",
+    background_color: "#ffffff",
+    theme_color: tenantTheme.primaryColor || "#000000",
+    prefer_related_applications: false,
     icons: [
       {
         src: tenantAssets.webAppManifest192,
@@ -28,13 +32,12 @@ export async function GET() {
         purpose: "any",
       },
     ],
-    theme_color: tenantTheme.primaryColor || "#000000",
-    background_color: "#ffffff",
   };
 
   return NextResponse.json(manifest, {
     headers: {
       "Content-Type": "application/manifest+json",
+      "Cache-Control": "no-store, max-age=0",
     },
   });
 }
