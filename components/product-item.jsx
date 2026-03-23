@@ -1,19 +1,12 @@
 import { useCartStore } from "@/store/cart";
 import { Card } from "./ui/card";
-import { ShoppingBag, Star } from "lucide-react";
-import { Plus } from "lucide-react";
+import { ShoppingBag, Star, Plus } from "lucide-react";
 import { toast } from "sonner";
 import CustomizationsModal from "./customizations-modal";
+import ProductDescription from "./product-description";
 
 export default function ProductItem({ product, isTopProduct }) {
   const { addToCart } = useCartStore();
-
-  console.log(
-    "Rendering ProductItem for:",
-    product.name,
-    "isTopProduct:",
-    isTopProduct,
-  );
 
   const formattedPrice = new Intl.NumberFormat("it-IT", {
     style: "currency",
@@ -26,20 +19,23 @@ export default function ProductItem({ product, isTopProduct }) {
   }
 
   return (
-    <Card className="p-6 flex flex-col gap-4 md:gap-6 justify-between relative overflow-hidden">
+    <Card className="relative self-start overflow-visible p-6 h-full flex flex-col gap-4">
       {isTopProduct && (
-        <div className="absolute -right-12 top-4 rotate-45 bg-primary text-primary-foreground px-14 py-1 shadow-sm">
-          <div className="flex items-center justify-center gap-2">
-            <Star className="size-4" strokeWidth={1.8} />
-            <span className="text-xs font-medium">TOP</span>
+        <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-xl">
+          <div className="absolute -right-12 top-4 rotate-45 bg-primary px-14 py-1 text-primary-foreground shadow-sm">
+            <div className="flex items-center justify-center gap-2">
+              <Star className="size-4" strokeWidth={1.8} />
+              <span className="text-xs font-medium">TOP</span>
+            </div>
           </div>
         </div>
       )}
+
       <div>
-        <h2 className="text-3xl font-medium text-(--muted-text)">
+        <h2 className="text-2xl font-medium text-(--muted-text)">
           {product.name}{" "}
           {product.spice_level > 0 && (
-            <span className="flex items-center">
+            <span className="inline-flex items-center">
               {Array.from({ length: product.spice_level }).map((_, i) => (
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -62,13 +58,16 @@ export default function ProductItem({ product, isTopProduct }) {
             </span>
           )}
         </h2>
+
         <p className="text-primary font-semibold text-2xl">{formattedPrice}</p>
       </div>
-      <p className="text-(--muted-light-text)">
-        <em>{product.description}</em>
-      </p>
+
+      <ProductDescription description={product.description} />
+
       <div
-        className={`flex items-center ${product.has_customizations ? "justify-between" : "justify-end"}`}
+        className={`mt-auto flex items-center ${
+          product.has_customizations ? "justify-between" : "justify-end"
+        }`}
       >
         {product.has_customizations && (
           <CustomizationsModal
@@ -77,6 +76,7 @@ export default function ProductItem({ product, isTopProduct }) {
             trigger={<button className="btn btn-link p-0">Personalizza</button>}
           />
         )}
+
         <button
           className="btn btn-primary gap-0 px-2"
           onClick={handleAddToCart}

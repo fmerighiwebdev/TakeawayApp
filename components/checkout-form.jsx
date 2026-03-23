@@ -24,6 +24,7 @@ import { AlertCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 import { Button } from "./ui/button";
 import { set } from "date-fns";
+import Link from "next/link";
 
 function normalizeCode(code) {
   return (code ?? "").trim().toUpperCase().replace(/\s+/g, "");
@@ -165,7 +166,10 @@ export default function CheckoutForm({
       (discount) => normalizeCode(discount.code) === couponCode,
     );
     if (validCoupon) {
-      setAppliedDiscount({ code: validCoupon.code, percent_off: validCoupon.percent_off });
+      setAppliedDiscount({
+        code: validCoupon.code,
+        percent_off: validCoupon.percent_off,
+      });
       clearFieldError("coupon");
     } else {
       setAppliedDiscount(null);
@@ -433,7 +437,8 @@ export default function CheckoutForm({
             )}
             {appliedDiscount && (
               <p className="text-green-600 text-sm mt-1">
-                Codice sconto applicato: <strong>-{appliedDiscount.percent_off}%</strong> sul totale
+                Codice sconto applicato:{" "}
+                <strong>-{appliedDiscount.percent_off}%</strong> sul totale
               </p>
             )}
           </div>
@@ -456,7 +461,8 @@ export default function CheckoutForm({
               htmlFor="terms"
               className="cursor-pointer gap-0.5 text-(--muted-text)"
             >
-              Ho letto e accettato i termini e le condizioni
+              Dichiaro di aver preso visione della privacy policy e di
+              accettare i termini e le condizioni del servizio.
               <span className="text-primary">*</span>
             </Label>
           </div>
@@ -468,7 +474,7 @@ export default function CheckoutForm({
         </div>
       </fieldset>
 
-      <div className="flex justify-center">
+      <div className="flex flex-col items-center gap-1.5 justify-center">
         <AnimatePresence mode="wait" initial={false}>
           {!loading ? (
             <motion.button
@@ -494,6 +500,7 @@ export default function CheckoutForm({
               <Spinner className="size-8 text-primary" />
             </motion.div>
           )}
+          <span className="text-xs text-neutral-400">con obbligo di pagamento in cassa</span>
         </AnimatePresence>
       </div>
     </form>

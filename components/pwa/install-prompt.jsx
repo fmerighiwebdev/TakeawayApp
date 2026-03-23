@@ -2,14 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/components/ui/dialog";
+import { X } from "lucide-react";
 
 const DISMISS_KEY = "pwa-install-dismissed-at";
 const ACCEPTED_KEY = "pwa-install-accepted";
@@ -37,16 +30,14 @@ function isIOSSafari() {
   if (typeof window === "undefined") return false;
 
   const ua = window.navigator.userAgent;
-  const isIOS = /iPhone|iPad|iPod/i.test(ua) ||
+  const ios =
+    /iPhone|iPad|iPod/i.test(ua) ||
     (window.navigator.platform === "MacIntel" &&
       window.navigator.maxTouchPoints > 1);
 
-  if (!isIOS) return false;
+  if (!ios) return false;
 
-  const isSafari = /Safari/i.test(ua) &&
-    !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
-
-  return isSafari;
+  return /Safari/i.test(ua) && !/CriOS|FxiOS|EdgiOS|OPiOS/i.test(ua);
 }
 
 export default function InstallPrompt() {
@@ -136,35 +127,47 @@ export default function InstallPrompt() {
   const iosSafari = isIOSSafari();
 
   return (
-    <Dialog open={open} onOpenChange={(next) => !next && dismiss()}>
-      <DialogContent>
-        <DialogHeader>
-          <DialogTitle>Installa l'app</DialogTitle>
-          <DialogDescription>
-            {ios
-              ? "Aggiungi l'app alla schermata Home per aprirla più rapidamente."
-              : "Installa l'app sul dispositivo per un accesso più veloce."}
-          </DialogDescription>
-        </DialogHeader>
+    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 px-4">
+      <div className="pointer-events-auto mx-auto w-full max-w-md rounded-2xl border bg-background p-4 shadow-xl">
+        <div className="flex items-start justify-between gap-3">
+          <div className="space-y-1">
+            <h3 className="text-sm font-semibold">Installa l&apos;app</h3>
+            <p className="text-sm text-muted-foreground">
+              {ios
+                ? "Aggiungi l'app alla schermata Home per aprirla più rapidamente."
+                : "Installa l'app sul dispositivo per un accesso più veloce."}
+            </p>
+          </div>
+
+          <Button
+            variant="ghost"
+            size="icon"
+            className="h-8 w-8 shrink-0"
+            onClick={dismiss}
+            aria-label="Chiudi suggerimento installazione"
+          >
+            <X className="h-4 w-4" />
+          </Button>
+        </div>
 
         {ios ? (
-          <div className="space-y-2 text-sm text-muted-foreground">
+          <div className="mt-3 space-y-1 text-sm text-muted-foreground">
             {iosSafari ? (
               <>
-                <p>1. Tocca il pulsante Condividi in Safari.</p>
+                <p>1. Tocca Condividi in Safari.</p>
                 <p>2. Seleziona “Aggiungi a Home”.</p>
-                <p>3. Conferma il nome e completa l’aggiunta.</p>
+                <p>3. Conferma per completare.</p>
               </>
             ) : (
               <p>
-                Su iPhone/iPad l’installazione va fatta da Safari. Apri questa
-                pagina in Safari e poi usa Condividi → Aggiungi a Home.
+                Su iPhone/iPad l’aggiunta alla Home va fatta da Safari. Apri
+                questa pagina in Safari e usa Condividi → Aggiungi a Home.
               </p>
             )}
           </div>
         ) : null}
 
-        <DialogFooter>
+        <div className="mt-4 flex items-center justify-end gap-2">
           <Button variant="ghost" onClick={dismiss}>
             Non ora
           </Button>
@@ -174,8 +177,8 @@ export default function InstallPrompt() {
               Installa
             </Button>
           ) : null}
-        </DialogFooter>
-      </DialogContent>
-    </Dialog>
+        </div>
+      </div>
+    </div>
   );
 }

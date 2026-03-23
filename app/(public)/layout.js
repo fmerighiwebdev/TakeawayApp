@@ -1,3 +1,4 @@
+import CookieBanner from "@/components/cookie-banner";
 import Footer from "@/components/footer";
 import InstallPrompt from "@/components/pwa/install-prompt";
 import FloatingCart from "@/components/ui/floating-cart";
@@ -23,6 +24,7 @@ export default async function PublicLayout({ children }) {
       {children}
       <Footer tenantData={tenantData} tenantLogo={tenantAssets.logoUrl} tenantCategories={tenantCategories} />
       <FloatingCart />
+      {/* <CookieBanner /> */}
       <InstallPrompt />
     </>
   );
