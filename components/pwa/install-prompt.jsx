@@ -1,8 +1,9 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { X } from "lucide-react";
+import { useInstallPromptOffset } from "@/components/pwa/use-install-prompt-offset";
 
 const DISMISS_KEY = "pwa-install-dismissed-at";
 const ACCEPTED_KEY = "pwa-install-accepted";
@@ -45,6 +46,10 @@ export default function InstallPrompt() {
   const [delayElapsed, setDelayElapsed] = useState(false);
   const [deferredPrompt, setDeferredPrompt] = useState(null);
   const [isInstalled, setIsInstalled] = useState(false);
+
+  const containerRef = useRef(null);
+
+  useInstallPromptOffset(open && !isInstalled, containerRef, 16);
 
   useEffect(() => {
     if (isStandalone()) {
@@ -127,14 +132,17 @@ export default function InstallPrompt() {
   const iosSafari = isIOSSafari();
 
   return (
-    <div className="pointer-events-none fixed inset-x-0 bottom-4 z-50 px-4">
-      <div className="pointer-events-auto mx-auto w-full max-w-md rounded-2xl border bg-background p-4 shadow-xl">
+    <div
+      ref={containerRef}
+      className="fixed inset-x-0 bottom-4 z-50 px-4"
+    >
+      <div className="mx-auto w-full max-w-md rounded-2xl border bg-background p-4 shadow-xl">
         <div className="flex items-start justify-between gap-3">
           <div className="space-y-1">
-            <h3 className="text-sm font-semibold">Installa l&apos;app</h3>
+            <h3 className="text-md font-semibold text-(--muted-text)">Installa l&apos;app</h3>
             <p className="text-sm text-muted-foreground">
               {ios
-                ? "Aggiungi l'app alla schermata Home per aprirla più rapidamente."
+                ? "Aggiungi l'app alla schermata Home per un accesso più veloce."
                 : "Installa l'app sul dispositivo per un accesso più veloce."}
             </p>
           </div>
@@ -142,7 +150,7 @@ export default function InstallPrompt() {
           <Button
             variant="ghost"
             size="icon"
-            className="h-8 w-8 shrink-0"
+            className="h-6 w-6 shrink-0"
             onClick={dismiss}
             aria-label="Chiudi suggerimento installazione"
           >
@@ -167,16 +175,12 @@ export default function InstallPrompt() {
           </div>
         ) : null}
 
-        <div className="mt-4 flex items-center justify-end gap-2">
-          <Button variant="ghost" onClick={dismiss}>
+        <div className="mt-5 flex items-center justify-end gap-2">
+          <Button variant="ghost" onClick={dismiss} className="cursor-pointer">
             Non ora
           </Button>
 
-          {!ios ? (
-            <Button onClick={install}>
-              Installa
-            </Button>
-          ) : null}
+          {!ios ? <Button className="bg-primary text-primary-foreground hover:bg-primary/90 shadow-md cursor-pointer" onClick={install}>Installa</Button> : null}
         </div>
       </div>
     </div>
