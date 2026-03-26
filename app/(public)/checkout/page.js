@@ -36,8 +36,6 @@ export default async function CheckoutPage() {
   const headersList = await headers();
   const hostname = (headersList.get("host") || "localhost").split(":")[0];
 
-  console.log("Hostname:", hostname);
-
   const cookieStore = await cookies();
   const cartCount =
     Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;

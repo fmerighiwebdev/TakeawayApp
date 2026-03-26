@@ -1,4 +1,5 @@
 import AuthGuard from "@/components/auth-guard";
+import ExportOrdersCsv from "@/components/export-orders-csv";
 import Order from "@/components/order";
 import { Badge } from "@/components/ui/badge";
 import {
@@ -8,6 +9,7 @@ import {
   BreadcrumbList,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
+import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import FloatingBack from "@/components/ui/floating-back";
 import { getPastOrdersByTenantId } from "@/lib/orders";
@@ -106,12 +108,17 @@ export default async function RiepilogoOrdiniPage() {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              <h1 className="text-5xl text-primary font-medium">
-                Riepilogo ordini
-              </h1>
-              <p className="text-lg md:text-xl text-(--muted-light-text)">
-                Elenco di tutti gli ordini del mese attuale
-              </p>
+              <div className="flex justify-between items-end gap-4">
+                <div className="flex flex-col gap-4">
+                  <h1 className="text-5xl text-primary font-medium">
+                    Riepilogo ordini
+                  </h1>
+                  <p className="text-lg md:text-xl text-(--muted-light-text)">
+                    Elenco di tutti gli ordini del mese attuale
+                  </p>
+                </div>
+                <ExportOrdersCsv />
+              </div>
               <div className="separator-horizontal"></div>
 
               <div className="flex flex-col gap-8">

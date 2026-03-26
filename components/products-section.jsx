@@ -36,7 +36,7 @@ export default function ProductsSection({
             </p>
           </div>
 
-          {topCategoryProducts.length > 0 && (
+          {/* {topCategoryProducts.length > 0 && (
             <div className="flex flex-col gap-2">
               <h2 className="text-2xl text-primary flex items-center gap-2">
                 I più scelti{" "}
@@ -68,7 +68,7 @@ export default function ProductsSection({
                 </Card>
               ))}
             </div>
-          )}
+          )} */}
 
           <div className="flex flex-col gap-4">
             <div className="relative w-full md:max-w-md">

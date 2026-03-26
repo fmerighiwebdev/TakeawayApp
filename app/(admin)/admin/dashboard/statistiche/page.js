@@ -27,9 +27,6 @@ export default async function AdminDashboardStats() {
     return acc;
   }, {});
 
-  console.log("Top products:", topProducts);
-  console.log("Top products per category:", categoryGroupedProducts);
-
   return (
     <AuthGuard>
       <main className="pt-20 pb-24 lg:pt-16 min-h-dvh">
