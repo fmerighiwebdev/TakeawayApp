@@ -14,7 +14,8 @@ export default async function AdminDashboard() {
 
   let menuItems = [
     { name: "Riepilogo ordini", href: "/admin/dashboard/riepilogo-ordini" },
-    { name: "Statistiche", href: "/admin/dashboard/statistiche" },
+    { name: "Statistiche", href: "/admin/dashboard/statistiche", },
+    { name: "Clienti", href: "/admin/dashboard/clienti" }
   ];
 
   if (!tenantFeatures.pastOrders) {

@@ -2,6 +2,7 @@
 import { NextResponse } from "next/server";
 
 import { createOrder } from "@/lib/orders";
+import { upsertCustomerFromOrder } from "@/lib/customers";
 import { sendOrderConfirmationEmail } from "@/lib/emails/sendOrderConfirmationEmail";
 import { getTenantId } from "@/lib/tenantDetails";
 import supabaseServer from "@/lib/supabaseServer";
@@ -64,16 +65,17 @@ export async function POST(req) {
 
       return total + base + dough + extras;
     }, 0);
-    const total_price = round2(totalNumber);
 
+    const total_price = round2(totalNumber);
     const full_name = `${name} ${surname}`;
 
-    // sconto: se c'è un codice sconto
+    // sconto
     let appliedDiscountCode = null;
     let percent_off = null;
     let discounted_price = null;
 
     const normalized = normalizeCode(discount_code);
+
     if (normalized) {
       const { data: discount, error } = await supabaseServer
         .from("discount_codes")
@@ -96,10 +98,22 @@ export async function POST(req) {
 
         const multiplier = 1 - percent_off / 100;
         discounted_price = round2(total_price * multiplier);
-      } else {
-        // ignoro senza bloccare l'ordine, ma non applico sconto
       }
     }
+
+    const effectiveTotal = discounted_price ?? total_price;
+
+    const customerId = await upsertCustomerFromOrder({
+      tenantId,
+      firstName: name,
+      lastName: surname,
+      email,
+      phone,
+      orderTotal: effectiveTotal,
+      privacyConsent: true,
+    });
+
+    console.log("Customer ID:", customerId);
 
     const orderData = {
       full_name,
@@ -109,7 +123,7 @@ export async function POST(req) {
       email,
       notes,
       items,
-      // sconto
+      customer_id: customerId,
       discount_code: appliedDiscountCode,
       percent_off,
       discounted_price,
