@@ -84,7 +84,7 @@ export default function ExportOrdersCsv() {
   return (
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>
-        <button className="btn btn-primary">
+        <button className="btn btn-primary btn-sm md:btn-md w-fit">
           <Download size={20} />
           Esporta CSV
         </button>

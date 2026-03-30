@@ -108,7 +108,7 @@ export default async function RiepilogoOrdiniPage() {
                   </BreadcrumbItem>
                 </BreadcrumbList>
               </Breadcrumb>
-              <div className="flex justify-between items-end gap-4">
+              <div className="flex flex-col md:flex-row md:justify-between md:items-end gap-4">
                 <div className="flex flex-col gap-4">
                   <h1 className="text-5xl text-primary font-medium">
                     Riepilogo ordini

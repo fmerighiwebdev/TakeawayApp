@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { buildOrdersCsv } from "@/lib/exportOrders";
-import { getPastOrdersByTenantId } from "@/lib/orders";
+import { getPastOrdersByTenantIdWithDetails } from "@/lib/orders";
 import { getTenantId } from "@/lib/tenantDetails";
 
 export const runtime = "nodejs";
@@ -24,7 +24,7 @@ function getCsvFileName() {
 export async function GET() {
   try {
     const tenantId = await getTenantId();
-    const orders = await getPastOrdersByTenantId(tenantId);
+    const orders = await getPastOrdersByTenantIdWithDetails(tenantId);
 
     const csv = buildOrdersCsv(orders);
     const fileName = getCsvFileName();
