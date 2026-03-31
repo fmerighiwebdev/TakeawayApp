@@ -145,11 +145,23 @@ export default function CheckoutForm({
       const orderPublicId = response.data.orderPublicId;
       router.replace(`/checkout/success/${orderPublicId}`);
     } catch (error) {
-      const newErrors = {};
-      newErrors.order =
+      const backendMessage =
         error?.response?.data?.message ||
         "Si è verificato un errore durante l'invio dell'ordine.";
-      setErrors(newErrors);
+
+      if (backendMessage === "Hai già utilizzato questo codice sconto.") {
+        setAppliedDiscount(null);
+        setErrors({
+          coupon: backendMessage,
+          order: backendMessage,
+        });
+        setLoading(false);
+        return;
+      }
+
+      setErrors({
+        order: backendMessage,
+      });
     }
 
     setLoading(false);
@@ -157,22 +169,55 @@ export default function CheckoutForm({
 
   const couponVisible = tenantFeatures.discounts;
 
-  function validateCoupon() {
+  async function validateCoupon() {
     const couponCode = normalizeCode(form.coupon);
-    const validCoupon = tenantDiscounts.find(
-      (discount) => normalizeCode(discount.code) === couponCode,
-    );
-    if (validCoupon) {
-      setAppliedDiscount({
-        code: validCoupon.code,
-        percent_off: validCoupon.percent_off,
-      });
-      clearFieldError("coupon");
-    } else {
+
+    if (!couponCode) {
       setAppliedDiscount(null);
       setErrors((prevErrors) => ({
         ...prevErrors,
-        coupon: "Codice sconto non valido.",
+        coupon: "Inserisci un codice sconto.",
+      }));
+      return;
+    }
+
+    if (!form.email.trim() || !form.phone.trim()) {
+      setAppliedDiscount(null);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        coupon: "Inserisci email e telefono per verificare il codice sconto.",
+      }));
+      return;
+    }
+
+    try {
+      const response = await axios.post("/api/orders/validate-coupon", {
+        email: form.email,
+        phone: form.phone,
+        code: couponCode,
+      });
+
+      if (response.data.valid) {
+        setAppliedDiscount({
+          code: response.data.code,
+          percent_off: response.data.percent_off,
+        });
+        clearFieldError("coupon");
+        clearFieldError("order");
+      } else {
+        setAppliedDiscount(null);
+        setErrors((prevErrors) => ({
+          ...prevErrors,
+          coupon: response.data.message || "Codice sconto non valido.",
+        }));
+      }
+    } catch (error) {
+      setAppliedDiscount(null);
+      setErrors((prevErrors) => ({
+        ...prevErrors,
+        coupon:
+          error?.response?.data?.message ||
+          "Errore durante la verifica del codice sconto.",
       }));
     }
   }
@@ -184,10 +229,7 @@ export default function CheckoutForm({
           <AlertCircle />
           <AlertTitle>Errore durante l&apos;invio dell&apos;ordine.</AlertTitle>
           <AlertDescription>
-            <p>
-              Si è verificato un errore durante l&apos;invio dell&apos;ordine.
-              Per favore, riprova più tardi.
-            </p>
+            <p>{errors.order}</p>
           </AlertDescription>
         </Alert>
       )}
@@ -326,7 +368,9 @@ export default function CheckoutForm({
             value={form.phone}
             onChange={(e) => {
               setForm((prev) => ({ ...prev, phone: e.target.value }));
+              setAppliedDiscount(null);
               clearFieldError("phone");
+              clearFieldError("coupon");
             }}
             aria-invalid={!!errors?.phone}
             aria-describedby={errors?.phone ? "phone-error" : undefined}
@@ -355,7 +399,9 @@ export default function CheckoutForm({
             value={form.email}
             onChange={(e) => {
               setForm((prev) => ({ ...prev, email: e.target.value }));
+              setAppliedDiscount(null);
               clearFieldError("email");
+              clearFieldError("coupon");
             }}
             aria-invalid={!!errors?.email}
             aria-describedby={errors?.email ? "email-error" : undefined}
@@ -458,8 +504,8 @@ export default function CheckoutForm({
               htmlFor="terms"
               className="cursor-pointer gap-0.5 text-(--muted-text)"
             >
-              Dichiaro di aver preso visione della privacy policy e di
-              accettare i termini e le condizioni del servizio.
+              Dichiaro di aver preso visione della privacy policy e di accettare
+              i termini e le condizioni del servizio.
               <span className="text-primary">*</span>
             </Label>
           </div>
@@ -497,7 +543,9 @@ export default function CheckoutForm({
               <Spinner className="size-8 text-primary" />
             </motion.div>
           )}
-          <span className="text-xs text-neutral-400">con obbligo di pagamento in cassa</span>
+          <span className="text-xs text-neutral-400">
+            con obbligo di pagamento in cassa
+          </span>
         </AnimatePresence>
       </div>
     </form>

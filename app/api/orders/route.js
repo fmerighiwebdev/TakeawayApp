@@ -1,15 +1,16 @@
-// app/api/orders/route.js
 import { NextResponse } from "next/server";
 
 import { createOrder } from "@/lib/orders";
-import { upsertCustomerFromOrder } from "@/lib/customers";
+import {
+  findOrCreateCustomerFromOrder,
+  updateCustomerOrderStats,
+} from "@/lib/customers";
+import {
+  validateDiscountCodeForCustomer,
+  registerDiscountCodeRedemption,
+} from "@/lib/discountCodes";
 import { sendOrderConfirmationEmail } from "@/lib/emails/sendOrderConfirmationEmail";
 import { getTenantId } from "@/lib/tenantDetails";
-import supabaseServer from "@/lib/supabaseServer";
-
-function normalizeCode(code) {
-  return (code ?? "").trim().toUpperCase().replace(/\s+/g, "");
-}
 
 function round2(n) {
   return Math.round((n + Number.EPSILON) * 100) / 100;
@@ -69,32 +70,39 @@ export async function POST(req) {
     const total_price = round2(totalNumber);
     const full_name = `${name} ${surname}`;
 
+    const customerId = await findOrCreateCustomerFromOrder({
+      tenantId,
+      firstName: name,
+      lastName: surname,
+      email,
+      phone,
+      privacyConsent: true,
+    });
+
     // sconto
     let appliedDiscountCode = null;
+    let appliedDiscountId = null;
     let percent_off = null;
     let discounted_price = null;
 
-    const normalized = normalizeCode(discount_code);
+    if (discount_code) {
+      const couponCheck = await validateDiscountCodeForCustomer({
+        tenantId,
+        customerId,
+        code: discount_code,
+      });
 
-    if (normalized) {
-      const { data: discount, error } = await supabaseServer
-        .from("discount_codes")
-        .select("code, percent_off")
-        .eq("tenant_id", tenantId)
-        .eq("code", normalized)
-        .maybeSingle();
-
-      if (error) {
-        console.error("Errore lookup discount code:", error);
+      if (couponCheck.reason === "already_used") {
         return NextResponse.json(
-          { message: "Errore validazione codice sconto" },
-          { status: 500 }
+          { message: "Hai già utilizzato questo codice sconto." },
+          { status: 400 }
         );
       }
 
-      if (discount) {
-        appliedDiscountCode = discount.code;
-        percent_off = discount.percent_off;
+      if (couponCheck.valid && couponCheck.discount) {
+        appliedDiscountId = couponCheck.discount.id;
+        appliedDiscountCode = couponCheck.discount.code;
+        percent_off = couponCheck.discount.percent_off;
 
         const multiplier = 1 - percent_off / 100;
         discounted_price = round2(total_price * multiplier);
@@ -102,18 +110,6 @@ export async function POST(req) {
     }
 
     const effectiveTotal = discounted_price ?? total_price;
-
-    const customerId = await upsertCustomerFromOrder({
-      tenantId,
-      firstName: name,
-      lastName: surname,
-      email,
-      phone,
-      orderTotal: effectiveTotal,
-      privacyConsent: true,
-    });
-
-    console.log("Customer ID:", customerId);
 
     const orderData = {
       full_name,
@@ -130,6 +126,20 @@ export async function POST(req) {
     };
 
     const orderIds = await createOrder(orderData, tenantId);
+
+    if (appliedDiscountId) {
+      await registerDiscountCodeRedemption({
+        tenantId,
+        discountCodeId: appliedDiscountId,
+        customerId,
+        orderId: orderIds.id,
+      });
+    }
+
+    await updateCustomerOrderStats({
+      customerId,
+      orderTotal: effectiveTotal,
+    });
 
     try {
       await sendOrderConfirmationEmail({
