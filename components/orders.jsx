@@ -1,20 +1,32 @@
 "use client";
 
-import supabaseClient from "@/lib/supabaseClient";
-import OrdersList from "./orders-list";
-
-import { useEffect, useState } from "react";
-import { getOrdersByTenantIdLive } from "@/lib/ordersLive";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { RotateCw } from "lucide-react";
 
-export default function Orders({ initialOrders, tenantId }) {
+import OrdersList from "./orders-list";
+import { createSupabaseBrowserClient } from "@/lib/supabaseClient";
+import { getOrdersByTenantIdLive } from "@/lib/ordersLive";
+
+export default function Orders({ initialOrders, tenantId, adminAuthToken }) {
   const [status, setStatus] = useState("waiting");
   const [orders, setOrders] = useState(initialOrders);
   const [newOrdersCount, setNewOrdersCount] = useState(0);
 
-  useEffect(() => {
-    const existingOrdersIds = new Set(initialOrders.map((order) => order.id));
+  const existingOrdersIdsRef = useRef(
+    new Set(initialOrders.map((order) => order.id)),
+  );
 
+  const supabaseClient = useMemo(() => {
+    return createSupabaseBrowserClient(adminAuthToken);
+  }, [adminAuthToken]);
+
+  useEffect(() => {
+    existingOrdersIdsRef.current = new Set(
+      initialOrders.map((order) => order.id),
+    );
+  }, [initialOrders]);
+
+  useEffect(() => {
     const channel = supabaseClient
       .channel(`orders:${tenantId}`)
       .on(
@@ -26,23 +38,32 @@ export default function Orders({ initialOrders, tenantId }) {
           filter: `tenant_id=eq.${tenantId}`,
         },
         (payload) => {
+
           const newOrder = payload.new;
-          if (!existingOrdersIds.has(newOrder.id)) {
-            existingOrdersIds.add(newOrder.id);
+
+          if (!existingOrdersIdsRef.current.has(newOrder.id)) {
+            existingOrdersIdsRef.current.add(newOrder.id);
             setNewOrdersCount((count) => count + 1);
           }
-        }
+        },
       )
-      .subscribe();
+      .subscribe((status, err) => {
+        if (err) {
+          console.error("Realtime subscription error:", err);
+        }
+      });
 
     return () => {
       supabaseClient.removeChannel(channel);
     };
-  }, [initialOrders, tenantId]);
+  }, [supabaseClient, tenantId]);
 
   async function handleRefresh() {
-    const freshOrders = await getOrdersByTenantIdLive(tenantId);
+    const freshOrders = await getOrdersByTenantIdLive(tenantId, adminAuthToken);
     setOrders(freshOrders);
+    existingOrdersIdsRef.current = new Set(
+      freshOrders.map((order) => order.id),
+    );
     setNewOrdersCount(0);
   }
 
@@ -70,6 +91,7 @@ export default function Orders({ initialOrders, tenantId }) {
           Completati
         </button>
       </nav>
+
       {newOrdersCount > 0 && status === "waiting" && (
         <button
           className="btn btn-primary w-fit new-orders-notification"
@@ -82,6 +104,7 @@ export default function Orders({ initialOrders, tenantId }) {
           </span>
         </button>
       )}
+
       <OrdersList orders={orders} status={status} />
     </div>
   );

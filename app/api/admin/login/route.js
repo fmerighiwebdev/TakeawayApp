@@ -22,7 +22,7 @@ export async function POST(req) {
   if (error || !admin) {
     return NextResponse.json(
       { message: "Credenziali errate" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
@@ -32,19 +32,20 @@ export async function POST(req) {
   if (!passwordMatch) {
     return NextResponse.json(
       { message: "Credenziali errate" },
-      { status: 401 }
+      { status: 401 },
     );
   }
 
   // Genera JWT
   const token = jwt.sign(
     {
-      tenantId: tenantId,
-      userId: admin.id,
-      role: admin.role,
+      sub: String(admin.id),
+      role: "authenticated",
+      tenant_id: tenantId,
+      app_role: admin.role,
     },
     process.env.JWT_SECRET,
-    { expiresIn: "24h" }
+    { expiresIn: "24h", algorithm: "HS256" },
   );
 
   const response = NextResponse.json({ success: true });

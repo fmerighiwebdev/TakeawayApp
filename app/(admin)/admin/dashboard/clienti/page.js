@@ -15,8 +15,6 @@ export default async function ClientiPage() {
   const tenantId = await getTenantId();
   const customers = await getCustomers(tenantId);
 
-  console.log("Customers:", customers);
-
   return (
     <AuthGuard>
       <main className="pt-20 pb-24 lg:pt-16 min-h-dvh">

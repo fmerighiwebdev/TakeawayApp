@@ -5,12 +5,15 @@ import { getTodayOrdersByTenantId } from "@/lib/orders";
 import Link from "next/link";
 import TodayDate from "@/components/today-date";
 import { DashboardMenu } from "@/components/dashboard-menu";
+import { getAdminAuthToken } from "@/lib/auth";
 
 export default async function AdminDashboard() {
   const tenantId = await getTenantId();
 
   const initialOrders = await getTodayOrdersByTenantId(tenantId);
   const tenantFeatures = await getTenantFeatures(tenantId);
+
+  const adminAuthToken = await getAdminAuthToken();
 
   let menuItems = [
     { name: "Riepilogo ordini", href: "/admin/dashboard/riepilogo-ordini" },
@@ -49,7 +52,7 @@ export default async function AdminDashboard() {
               </div>
               <div className="separator-horizontal"></div>
             </div>
-            <Orders initialOrders={initialOrders} tenantId={tenantId} />
+            <Orders initialOrders={initialOrders} tenantId={tenantId} adminAuthToken={adminAuthToken} />
           </section>
         </div>
       </main>
