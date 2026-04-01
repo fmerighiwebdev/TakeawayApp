@@ -3,11 +3,9 @@ import Link from "next/link";
 import Image from "next/image";
 
 import {
-  getTenantAssets,
   getTenantCategories,
-  getTenantDetails,
+  getTenantContext,
   getTenantId,
-  getTenantUI,
 } from "@/lib/tenantDetails";
 import { MapPin, Phone } from "lucide-react";
 import Marquee from "react-fast-marquee";
@@ -22,10 +20,13 @@ export const metadata = {
 
 export default async function Home() {
   const tenantId = await getTenantId();
-  const tenantData = await getTenantDetails(tenantId);
-  const tenantAssets = await getTenantAssets(tenantId);
-  const tenantCategories = await getTenantCategories(tenantId);
-  const tenantUI = await getTenantUI(tenantId);
+  const [tenantContext, tenantCategories] = await Promise.all([
+    getTenantContext(tenantId),
+    getTenantCategories(tenantId),
+  ]);
+  const tenantData = tenantContext.tenantDetails;
+  const tenantAssets = tenantContext.assets;
+  const tenantUI = tenantContext.ui;
   const tenantImages = tenantUI.home.carousel.images || [];
 
   return (

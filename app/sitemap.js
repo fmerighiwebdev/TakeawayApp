@@ -1,9 +1,16 @@
-import { getTenantCategories, getTenantDetails, getTenantId } from "@/lib/tenantDetails";
+import {
+  getTenantCategories,
+  getTenantContext,
+  getTenantId,
+} from "@/lib/tenantDetails";
 
 export default async function sitemap() {
   const tenantId = await getTenantId();
-  const tenantDetails = await getTenantDetails(tenantId);
-  const tenantCategories = await getTenantCategories(tenantId);
+  const [tenantContext, tenantCategories] = await Promise.all([
+    getTenantContext(tenantId),
+    getTenantCategories(tenantId),
+  ]);
+  const tenantDetails = tenantContext.tenantDetails;
 
   const baseUrl = `https://${tenantDetails.domain}`;
 

@@ -1,11 +1,10 @@
-import { getTenantAssets, getTenantId, getTenantMetadata, getTenantTheme } from "@/lib/tenantDetails";
+import { getTenantContext, getTenantId } from "@/lib/tenantDetails";
 import { NextResponse } from "next/server";
 
 export async function GET() {
   const tenantId = await getTenantId();
-  const tenantAssets = await getTenantAssets(tenantId);
-  const tenantMetadata = await getTenantMetadata(tenantId);
-  const tenantTheme = await getTenantTheme(tenantId);
+  const { assets: tenantAssets, metadata: tenantMetadata, theme: tenantTheme } =
+    await getTenantContext(tenantId);
 
   const manifest = {
     id: "/",

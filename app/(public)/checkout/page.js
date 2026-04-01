@@ -1,9 +1,8 @@
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import {
-  getTenantFeatures,
+  getTenantContext,
   getTenantId,
-  getTenantPickupTimes,
 } from "@/lib/tenantDetails";
 import { headers } from "next/headers";
 import {
@@ -30,10 +29,8 @@ export const metadata = {
 };
 
 export default async function CheckoutPage() {
-  const headersList = await headers();
+  const [headersList, cookieStore] = await Promise.all([headers(), cookies()]);
   const hostname = (headersList.get("host") || "localhost").split(":")[0];
-
-  const cookieStore = await cookies();
   const cartCount =
     Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;
 
@@ -42,8 +39,9 @@ export default async function CheckoutPage() {
   }
 
   const tenantId = await getTenantId();
-  const pickupTimes = await getTenantPickupTimes(tenantId);
-  const tenantFeatures = await getTenantFeatures(tenantId);
+  const tenantContext = await getTenantContext(tenantId);
+  const pickupTimes = tenantContext.pickupTimes;
+  const tenantFeatures = tenantContext.features;
 
   return (
     <main className="pt-20 pb-24 lg:pt-16">

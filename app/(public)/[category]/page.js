@@ -5,8 +5,7 @@ import Link from "next/link";
 
 import {
   getTenantCategoryBySlug,
-  getTenantDetails,
-  getTenantFeatures,
+  getTenantContext,
   getTenantId,
   getTenantSubcategories,
 } from "@/lib/tenantDetails";
@@ -96,31 +95,26 @@ export default async function CategoryPage({ params }) {
   const { category: categorySlug } = await params;
 
   const tenantId = await getTenantId();
-  const tenantDetails = await getTenantDetails(tenantId);
-  const activeCategory = await getTenantCategoryBySlug(tenantId, categorySlug);
-  const tenantFeatures = await getTenantFeatures(tenantId);
+  const [tenantContext, activeCategory] = await Promise.all([
+    getTenantContext(tenantId),
+    getTenantCategoryBySlug(tenantId, categorySlug),
+  ]);
 
   if (!activeCategory) {
     notFound();
   }
 
-  const subcategories = await getTenantSubcategories(
-    tenantId,
-    activeCategory.id,
-  );
+  const tenantDetails = tenantContext.tenantDetails;
+  const tenantFeatures = tenantContext.features;
 
-  const categoryProducts = await getTenantProductsByCategory(
-    activeCategory.id,
-    tenantId,
-  );
-
-  let topCategoryProducts = [];
-  if (tenantFeatures.topProducts) {
-    topCategoryProducts = await getTopProductsByCategory(
-      activeCategory.id,
-      tenantId,
-    );
-  }
+  const [subcategories, categoryProducts, topCategoryProducts] =
+    await Promise.all([
+      getTenantSubcategories(tenantId, activeCategory.id),
+      getTenantProductsByCategory(activeCategory.id, tenantId),
+      tenantFeatures.topProducts
+        ? getTopProductsByCategory(activeCategory.id, tenantId)
+        : Promise.resolve([]),
+    ]);
 
   return (
     <>

@@ -3,9 +3,8 @@ import Footer from "@/components/footer";
 import InstallPrompt from "@/components/pwa/install-prompt";
 import FloatingCart from "@/components/ui/floating-cart";
 import {
-  getTenantAssets,
   getTenantCategories,
-  getTenantDetails,
+  getTenantContext,
   getTenantId,
 } from "@/lib/tenantDetails";
 
@@ -15,9 +14,12 @@ export const metadata = {
 
 export default async function PublicLayout({ children }) {
   const tenantId = await getTenantId();
-  const tenantData = await getTenantDetails(tenantId);
-  const tenantAssets = await getTenantAssets(tenantId);
-  const tenantCategories = await getTenantCategories(tenantId);
+  const [tenantContext, tenantCategories] = await Promise.all([
+    getTenantContext(tenantId),
+    getTenantCategories(tenantId),
+  ]);
+  const tenantData = tenantContext.tenantDetails;
+  const tenantAssets = tenantContext.assets;
 
   return (
     <>

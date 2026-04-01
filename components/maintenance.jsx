@@ -1,9 +1,9 @@
 import Image from "next/image";
-import { getTenantAssets, getTenantId } from "@/lib/tenantDetails";
+import { getTenantContext, getTenantId } from "@/lib/tenantDetails";
 
 export default async function Maintenance() {
   const tenantId = await getTenantId();
-  const tenantAssets = await getTenantAssets(tenantId);
+  const { assets: tenantAssets } = await getTenantContext(tenantId);
 
   return (
     <main className="min-h-dvh w-screen flex flex-col items-center justify-center">

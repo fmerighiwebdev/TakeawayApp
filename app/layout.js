@@ -2,12 +2,8 @@ import Maintenance from "@/components/maintenance";
 import "./globals.css";
 
 import {
-  getTenantAssets,
-  getTenantCompletion,
-  getTenantDetails,
+  getTenantContext,
   getTenantId,
-  getTenantMetadata,
-  getTenantTheme,
 } from "@/lib/tenantDetails";
 
 import {
@@ -206,9 +202,8 @@ const fontThemes = {
 
 export async function generateMetadata() {
   const tenantId = await getTenantId();
-  const tenantAssets = await getTenantAssets(tenantId);
-  const tenantMetadata = await getTenantMetadata(tenantId);
-  const tenantDetails = await getTenantDetails(tenantId);
+  const { tenantDetails, assets: tenantAssets, metadata: tenantMetadata } =
+    await getTenantContext(tenantId);
 
   return {
     title: {
@@ -258,7 +253,7 @@ export async function generateMetadata() {
 
 export async function generateViewport() {
   const tenantId = await getTenantId();
-  const tenantTheme = await getTenantTheme(tenantId);
+  const { theme: tenantTheme } = await getTenantContext(tenantId);
 
   return {
     width: "device-width",
@@ -336,11 +331,11 @@ function RestaurantJsonLd({ tenantDetails, tenantAssets }) {
 
 export default async function RootLayout({ children }) {
   const tenantId = await getTenantId();
-  const tenantTheme = await getTenantTheme(tenantId);
-  const tenantAssets = await getTenantAssets(tenantId);
-  const tenantDetails = await getTenantDetails(tenantId);
-
-  const isCompleted = await getTenantCompletion(tenantId);
+  const tenantContext = await getTenantContext(tenantId);
+  const tenantTheme = tenantContext.theme;
+  const tenantAssets = tenantContext.assets;
+  const tenantDetails = tenantContext.tenantDetails;
+  const isCompleted = tenantContext.isCompleted;
   const isActive = tenantDetails.active && isCompleted;
 
   const fontKey = tenantTheme.fontKey || "clean";
