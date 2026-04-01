@@ -10,6 +10,7 @@ import { Card } from "@/components/ui/card";
 import FloatingBack from "@/components/ui/floating-back";
 import { getTopProductsPerCategory, getTopProducts } from "@/lib/products";
 import { getTenantId } from "@/lib/tenantDetails";
+import Image from "next/image";
 import Link from "next/link";
 
 export default async function AdminDashboardStats() {

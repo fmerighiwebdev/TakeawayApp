@@ -3,11 +3,15 @@ import jwt from "jsonwebtoken";
 
 import supabaseServer from "@/lib/supabaseServer";
 import bcrypt from "bcrypt";
+import { getTenantId } from "@/lib/tenantDetails";
+
+export const runtime = "nodejs";
 
 export async function POST(req) {
-  const { user, password, tenantId } = await req.json();
+  const { user, password } = await req.json();
+  const tenantId = await getTenantId();
 
-  if (!user || !password || !tenantId) {
+  if (!user || !password) {
     return NextResponse.json({ message: "Dati mancanti" }, { status: 400 });
   }
 

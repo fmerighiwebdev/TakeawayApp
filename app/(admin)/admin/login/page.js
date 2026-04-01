@@ -30,7 +30,7 @@ export default async function LoginPage() {
       <div className="container flex flex-col items-center gap-12">
         <h1 className="text-5xl md:text-6xl text-center font-medium text-primary">Gestione Ordini</h1>
         <section className="w-full max-w-md">
-          <AdminForm tenantId={tenantId} />
+          <AdminForm />
         </section>
       </div>
     </main>

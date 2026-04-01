@@ -12,7 +12,7 @@ import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
 
-export default function AdminForm({ tenantId }) {
+export default function AdminForm() {
   const router = useRouter();
 
   const [form, setForm] = useState({
@@ -61,7 +61,6 @@ export default function AdminForm({ tenantId }) {
       await axios.post("/api/admin/login", {
         user: form.user,
         password: form.password,
-        tenantId,
       });
 
       router.push("/admin/dashboard");

@@ -2,18 +2,17 @@ import { NextResponse } from "next/server";
 
 import { getTenantId } from "@/lib/tenantDetails";
 import { findCustomerByIdentity } from "@/lib/customers";
-import { validateDiscountCodeForCustomer } from "@/lib/discountCodes";
-import supabaseServer from "@/lib/supabaseServer";
-
-function normalizeCode(code) {
-  return (code ?? "").trim().toUpperCase().replace(/\s+/g, "");
-}
+import {
+  getDiscountCodeByCode,
+  validateDiscountCodeForCustomer,
+} from "@/lib/discountCodes";
+import { normalizeDiscountCode } from "@/lib/orderRequest";
 
 export async function POST(req) {
   try {
     const { email, phone, code } = await req.json();
 
-    const normalizedCode = normalizeCode(code);
+    const normalizedCode = normalizeDiscountCode(code);
 
     if (!normalizedCode) {
       return NextResponse.json(
@@ -34,19 +33,10 @@ export async function POST(req) {
 
     const tenantId = await getTenantId();
 
-    const { data: discount, error: discountError } = await supabaseServer
-      .from("discount_codes")
-      .select("id, code, percent_off")
-      .eq("tenant_id", tenantId)
-      .eq("code", normalizedCode)
-      .maybeSingle();
-
-    if (discountError) {
-      return NextResponse.json(
-        { valid: false, message: "Errore validazione codice sconto." },
-        { status: 500 }
-      );
-    }
+    const discount = await getDiscountCodeByCode({
+      tenantId,
+      code: normalizedCode,
+    });
 
     if (!discount) {
       return NextResponse.json(

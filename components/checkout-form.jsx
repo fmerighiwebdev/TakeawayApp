@@ -5,6 +5,10 @@ import axios from "axios";
 import { useRouter } from "next/navigation";
 
 import { defaultTimeOptions } from "@/lib/defaultTimeOptions";
+import {
+  normalizeDiscountCode,
+  serializeOrderItemsForRequest,
+} from "@/lib/orderRequest";
 import { useCartStore } from "@/store/cart";
 
 import { Input } from "@/components/ui/input";
@@ -23,14 +27,9 @@ import { Alert, AlertDescription, AlertTitle } from "./ui/alert";
 import { AlertCircle } from "lucide-react";
 import { AnimatePresence, motion } from "motion/react";
 
-function normalizeCode(code) {
-  return (code ?? "").trim().toUpperCase().replace(/\s+/g, "");
-}
-
 export default function CheckoutForm({
   pickupTimes,
   tenantFeatures,
-  tenantDiscounts,
   appliedDiscount,
   setAppliedDiscount,
 }) {
@@ -137,7 +136,7 @@ export default function CheckoutForm({
       email: form.email,
       notes: form.notes,
       discount_code: appliedDiscount?.code || null,
-      items: cart,
+      items: serializeOrderItemsForRequest(cart),
     };
 
     try {
@@ -170,7 +169,7 @@ export default function CheckoutForm({
   const couponVisible = tenantFeatures.discounts;
 
   async function validateCoupon() {
-    const couponCode = normalizeCode(form.coupon);
+    const couponCode = normalizeDiscountCode(form.coupon);
 
     if (!couponCode) {
       setAppliedDiscount(null);
@@ -459,7 +458,7 @@ export default function CheckoutForm({
                 onBlur={() =>
                   setForm((prev) => ({
                     ...prev,
-                    coupon: normalizeCode(prev.coupon),
+                    coupon: normalizeDiscountCode(prev.coupon),
                   }))
                 }
                 aria-invalid={!!errors?.coupon}

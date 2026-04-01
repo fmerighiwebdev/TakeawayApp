@@ -1,4 +1,4 @@
-import { NextResponse } from "next/server";
+import { after, NextResponse } from "next/server";
 
 import {
   getOrderCustomerDetails,
@@ -12,6 +12,8 @@ import jwt from "jsonwebtoken";
 import { getTenantId } from "@/lib/tenantDetails";
 import { cookies } from "next/headers";
 import { sendOrderReadyEmail } from "@/lib/emails/sendOrderReadyEmail";
+
+export const runtime = "nodejs";
 
 function verifyToken(token) {
   try {
@@ -51,30 +53,25 @@ export async function PATCH(req, { params }) {
     await updateOrderStatus(orderId, newStatus, tenantId);
 
     if (newStatus === "Pronto") {
-      try {
-        const customerData = await getOrderCustomerDetails(tenantId, orderId);
-        const customerFullName = customerData.customer_name;
-        const customerName = customerFullName.split(" ")[0];
-        const customerEmail = customerData.customer_email;
+      after(async () => {
+        try {
+          const customerData = await getOrderCustomerDetails(tenantId, orderId);
+          const customerFullName = customerData.customer_name;
+          const customerName = customerFullName.split(" ")[0];
+          const customerEmail = customerData.customer_email;
 
-        await sendOrderReadyEmail({
-          customerName,
-          customerEmail,
-          tenantId,
-        });
-      } catch (error) {
-        console.error(
-          "Stato ordine aggiornato a 'Pronto', errore durante l'invio dell'email:",
-          error
-        );
-        return NextResponse.json(
-          {
-            error:
-              "Stato ordine aggiornato, errore durante l'invio dell'email di avviso",
-          },
-          { status: 500 }
-        );
-      }
+          await sendOrderReadyEmail({
+            customerName,
+            customerEmail,
+            tenantId,
+          });
+        } catch (error) {
+          console.error(
+            "Stato ordine aggiornato a 'Pronto', errore durante l'invio dell'email:",
+            error
+          );
+        }
+      });
     }
 
     return NextResponse.json(
@@ -96,32 +93,27 @@ export async function PATCH(req, { params }) {
     try {
       await updatePickUpTime(orderId, postponementTime, tenantId);
 
-      try {
-        const customerData = await getOrderCustomerDetails(tenantId, orderId);
-        const customerFullName = customerData.customer_name;
-        const customerName = customerFullName.split(" ")[0];
-        const customerEmail = customerData.customer_email;
+      after(async () => {
+        try {
+          const customerData = await getOrderCustomerDetails(tenantId, orderId);
+          const customerFullName = customerData.customer_name;
+          const customerName = customerFullName.split(" ")[0];
+          const customerEmail = customerData.customer_email;
 
-        await sendOrderPostponementEmail({
-          customerName,
-          customerEmail,
-          postponementTime,
-          tenantId,
-          orderId,
-        });
-      } catch (error) {
-        console.error(
-          "Orario di ritiro aggiornato, errore durante l'invio dell'email:",
-          error
-        );
-        return NextResponse.json(
-          {
-            error:
-              "Orario di ritiro aggiornato, errore durante l'invio dell'email di avviso",
-          },
-          { status: 500 }
-        );
-      }
+          await sendOrderPostponementEmail({
+            customerName,
+            customerEmail,
+            postponementTime,
+            tenantId,
+            orderId,
+          });
+        } catch (error) {
+          console.error(
+            "Orario di ritiro aggiornato, errore durante l'invio dell'email:",
+            error
+          );
+        }
+      });
     } catch (error) {
       return NextResponse.json(
         { error: "Errore durante l'aggiornamento dell'orario di ritiro" },

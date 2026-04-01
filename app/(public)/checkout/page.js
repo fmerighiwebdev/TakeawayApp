@@ -1,9 +1,6 @@
-import CheckoutForm from "@/components/checkout-form";
-import CheckoutItems from "@/components/checkout-items";
 import { redirect } from "next/navigation";
 import { cookies } from "next/headers";
 import {
-  getTenantDiscounts,
   getTenantFeatures,
   getTenantId,
   getTenantPickupTimes,
@@ -47,7 +44,6 @@ export default async function CheckoutPage() {
   const tenantId = await getTenantId();
   const pickupTimes = await getTenantPickupTimes(tenantId);
   const tenantFeatures = await getTenantFeatures(tenantId);
-  const tenantDiscounts = await getTenantDiscounts(tenantId);
 
   return (
     <main className="pt-20 pb-24 lg:pt-16">
@@ -88,7 +84,6 @@ export default async function CheckoutPage() {
         <CheckoutSection
           pickupTimes={pickupTimes}
           tenantFeatures={tenantFeatures}
-          tenantDiscounts={tenantDiscounts}
         />
       </div>
       <FloatingBack href="/" />

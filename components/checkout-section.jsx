@@ -8,7 +8,6 @@ import { useState } from "react";
 export default function CheckoutSection({
   pickupTimes,
   tenantFeatures,
-  tenantDiscounts,
 }) {
   const [appliedDiscount, setAppliedDiscount] = useState(null);
 
@@ -18,7 +17,6 @@ export default function CheckoutSection({
         <CheckoutForm
           pickupTimes={pickupTimes}
           tenantFeatures={tenantFeatures}
-          tenantDiscounts={tenantDiscounts}
           appliedDiscount={appliedDiscount}
           setAppliedDiscount={setAppliedDiscount}
         />
