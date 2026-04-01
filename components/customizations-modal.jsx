@@ -1,8 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import useSWR from "swr";
-import axios from "axios";
+import { Plus, ShoppingBag } from "lucide-react";
+import { toast } from "sonner";
 
 import { useCartStore } from "@/store/cart";
 
@@ -15,34 +15,16 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "./ui/dialog";
+} from "@/components/ui/dialog";
+import { Accordion } from "@/components/ui/accordion";
+import { Spinner } from "@/components/ui/spinner";
+import CustomizationCheckboxSection from "@/components/customizations-modal/customization-checkbox-section";
+import CustomizationRadioSection from "@/components/customizations-modal/customization-radio-section";
+import { useCustomizationSelection } from "@/components/customizations-modal/use-customization-selection";
+import { useProductCustomizations } from "@/components/customizations-modal/use-product-customizations";
+import { formatCurrency } from "@/lib/currency";
 
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "./ui/accordion";
-
-import { Checkbox } from "@/components/ui/checkbox";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
-import { Label } from "@/components/ui/label";
-
-import { Button } from "./ui/button";
-import { Plus, ShoppingBag } from "lucide-react";
-import { Spinner } from "./ui/spinner";
-import { toast } from "sonner";
-
-function convertToCurrency(value) {
-  return new Intl.NumberFormat("it-IT", {
-    style: "currency",
-    currency: "EUR",
-  }).format(value);
-}
-
-const fetcher = (url) => axios.get(url).then((res) => res.data.customizations);
-
-export default function VariationsModal({
+export default function CustomizationsModal({
   product,
   productId,
   setSuccess,
@@ -51,88 +33,55 @@ export default function VariationsModal({
   const { addToCart } = useCartStore();
   const [open, setOpen] = useState(false);
 
-  const [selectedDough, setSelectedDough] = useState(null);
-  const [selectedExtras, setSelectedExtras] = useState([]);
-  const [selectedRemovals, setSelectedRemovals] = useState([]);
-  const [selectedCookingOption, setSelectedCookingOption] = useState(null);
-  const [selectedSpiceLevel, setSelectedSpiceLevel] = useState(null);
-
   const {
     data: customizations,
     error,
     isLoading,
-  } = useSWR(
-    open ? `/api/products/customizations/${productId}` : null,
-    fetcher,
-    {
-      revalidateOnFocus: false,
-      dedupingInterval: 5 * 60 * 1000,
-    }
-  );
+  } = useProductCustomizations(productId, open);
 
-  function handleExtrasToggle(checked, extraItem) {
-    if (checked) {
-      setSelectedExtras((prev) => [...prev, extraItem]);
-    } else {
-      setSelectedExtras((prev) =>
-        prev.filter((extra) => extra?.id !== extraItem.id)
-      );
-    }
-  }
+  const {
+    selectedDough,
+    selectedExtras,
+    selectedRemovals,
+    selectedCookingOption,
+    selectedSpiceLevel,
+    selectedVariationsCount,
+    handleDoughChange,
+    handleExtrasToggle,
+    handleRemovalsToggle,
+    handleCookingChange,
+    handleSpiceChange,
+  } = useCustomizationSelection(customizations);
 
-  function handleRemovalsToggle(checked, removalItem) {
-    if (checked) {
-      setSelectedRemovals((prev) => [...prev, removalItem]);
-    } else {
-      setSelectedRemovals((prev) =>
-        prev.filter((removal) => removal?.id !== removalItem.id)
-      );
-    }
-  }
-
-  function handleDoughChange(value) {
-    const dough = customizations?.doughs?.find((d) => String(d.id) === value);
-    setSelectedDough(dough ?? null);
-  }
-
-  function handleCookingChange(value) {
-    const option = customizations?.cookings?.find(
-      (o) => String(o.id) === value
-    );
-    setSelectedCookingOption(option ?? null);
-  }
-
-  function handleSpiceChange(value) {
-    const option = customizations?.spiceLevels?.find(
-      (o) => String(o.id) === value
-    );
-    setSelectedSpiceLevel(option ?? null);
-  }
+  const noCustomizationsAvailable =
+    customizations &&
+    !customizations.doughs?.length &&
+    !customizations.extras?.length &&
+    !customizations.removals?.length &&
+    !customizations.cookings?.length &&
+    !customizations.spiceLevels?.length;
 
   function handleAddToCart() {
-    const variationsCount =
-      (selectedDough ? 1 : 0) +
-      selectedExtras.length +
-      selectedRemovals.length +
-      (selectedCookingOption ? 1 : 0) +
-      (selectedSpiceLevel ? 1 : 0);
-
     addToCart(
       product,
       selectedDough,
       selectedExtras,
       selectedRemovals,
       selectedCookingOption,
-      selectedSpiceLevel
+      selectedSpiceLevel,
     );
 
     toast.success(
       `${product.name}${
-        variationsCount > 0
-          ? ` aggiunto al carrello con ${variationsCount} variazioni`
+        selectedVariationsCount > 0
+          ? ` aggiunto al carrello con ${selectedVariationsCount} variazioni`
           : " aggiunto al carrello"
-      }`
+      }`,
     );
+
+    if (typeof setSuccess === "function") {
+      setSuccess(true);
+    }
 
     setOpen(false);
   }
@@ -141,12 +90,12 @@ export default function VariationsModal({
     <Dialog open={open} onOpenChange={setOpen}>
       <DialogTrigger asChild>{trigger}</DialogTrigger>
 
-      <DialogContent className="sm:max-w-lg max-h-[80vh] overflow-y-auto">
+      <DialogContent className="max-h-[80vh] overflow-y-auto sm:max-w-lg">
         <DialogHeader>
           <DialogTitle className="text-2xl font-semibold text-(--muted-text)">
             Personalizza {product.name}
           </DialogTitle>
-          <DialogDescription className="text-(--muted-light-text) text-lg">
+          <DialogDescription className="text-lg text-(--muted-light-text)">
             Seleziona le variazioni e aggiungi il prodotto al carrello.
           </DialogDescription>
         </DialogHeader>
@@ -163,216 +112,69 @@ export default function VariationsModal({
           </p>
         )}
 
-        {!customizations?.doughs.length > 0 &&
-          !customizations?.extras.length > 0 &&
-          !customizations?.removals.length > 0 &&
-          !customizations?.cookings.length > 0 &&
-          !customizations?.spiceLevels.length > 0 &&
-          !isLoading && (
-            <p className="text-(--muted-text) my-4">
-              Non ci sono personalizzazioni disponibili per questo prodotto.
-            </p>
-          )}
+        {noCustomizationsAvailable && !isLoading && (
+          <p className="my-4 text-(--muted-text)">
+            Non ci sono personalizzazioni disponibili per questo prodotto.
+          </p>
+        )}
 
-        {customizations && (
+        {customizations && !noCustomizationsAvailable && (
           <Accordion type="multiple" className="w-full space-y-4">
-            {/* Impasti */}
-            {customizations.doughs?.some((dough) => dough.id) && (
-              <AccordionItem value="doughs">
-                <AccordionTrigger className="text-xl text-(--muted-text)">
-                  Impasto
-                </AccordionTrigger>
-                <AccordionContent>
-                  <RadioGroup
-                    value={selectedDough ? String(selectedDough.id) : ""}
-                    onValueChange={handleDoughChange}
-                    className="gap-1"
-                  >
-                    {customizations.doughs.map((dough) => (
-                      <div
-                        key={dough.id}
-                        className="flex items-center gap-2 text-(--muted-text)"
-                      >
-                        <RadioGroupItem
-                          value={String(dough.id)}
-                          id={`dough-${dough.id}`}
-                        />
-                        <Label
-                          htmlFor={`dough-${dough.id}`}
-                          className={`cursor-pointer text-lg ${
-                            selectedDough?.id === dough.id ? "font-bold" : ""
-                          }`}
-                        >
-                          {dough.name}{" "}
-                          <span className="text-primary">
-                            +{convertToCurrency(dough.price)}
-                          </span>
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </AccordionContent>
-              </AccordionItem>
-            )}
+            <CustomizationRadioSection
+              value="doughs"
+              title="Impasto"
+              options={customizations.doughs}
+              selectedOption={selectedDough}
+              onValueChange={handleDoughChange}
+              renderOptionLabel={(option) => (
+                <>
+                  {option.name} <span className="text-primary">+{formatCurrency(option.price)}</span>
+                </>
+              )}
+            />
 
-            {/* Extra */}
-            {customizations.extras?.some((extra) => extra.id) && (
-              <AccordionItem value="extras">
-                <AccordionTrigger className="text-xl text-(--muted-text)">
-                  Aggiunte
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-1">
-                    {customizations.extras.map((extra) => {
-                      const isSelected = selectedExtras.some(
-                        (e) => e.id === extra.id
-                      );
-                      return (
-                        <li key={extra.id}>
-                          <div className="flex items-center gap-2">
-                            <Checkbox
-                              id={`extra-${extra.id}`}
-                              checked={isSelected}
-                              onCheckedChange={(checked) =>
-                                handleExtrasToggle(checked, extra)
-                              }
-                            />
-                            <Label
-                              htmlFor={`extra-${extra.id}`}
-                              className={`cursor-pointer text-lg text-(--muted-text) ${
-                                isSelected ? "font-bold" : ""
-                              }`}
-                            >
-                              {extra.name}{" "}
-                              {isSelected && (
-                                <span className="text-primary">
-                                  +{convertToCurrency(extra.price)}
-                                </span>
-                              )}
-                            </Label>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            )}
+            <CustomizationCheckboxSection
+              value="extras"
+              title="Aggiunte"
+              options={customizations.extras}
+              selectedItems={selectedExtras}
+              onToggle={handleExtrasToggle}
+              renderOptionLabel={(option, isSelected) => (
+                <>
+                  {option.name}{" "}
+                  {isSelected && (
+                    <span className="text-primary">+{formatCurrency(option.price)}</span>
+                  )}
+                </>
+              )}
+            />
 
-            {/* Rimozioni */}
-            {customizations.removals?.some((removal) => removal.id) && (
-              <AccordionItem value="removals">
-                <AccordionTrigger className="text-xl text-(--muted-text)">
-                  Rimozioni
-                </AccordionTrigger>
-                <AccordionContent>
-                  <ul className="grid grid-cols-1 md:grid-cols-2 gap-1">
-                    {customizations.removals.map((removal) => {
-                      const isSelected = selectedRemovals.some(
-                        (e) => e.id === removal.id
-                      );
-                      return (
-                        <li key={removal.id}>
-                          <div className="flex items-center gap-2">
-                            <Checkbox
-                              id={`removal-${removal.id}`}
-                              checked={isSelected}
-                              onCheckedChange={(checked) =>
-                                handleRemovalsToggle(checked, removal)
-                              }
-                            />
-                            <Label
-                              htmlFor={`removal-${removal.id}`}
-                              className={`cursor-pointer text-lg text-(--muted-text) ${
-                                isSelected ? "font-bold" : ""
-                              }`}
-                            >
-                              {removal.name}
-                            </Label>
-                          </div>
-                        </li>
-                      );
-                    })}
-                  </ul>
-                </AccordionContent>
-              </AccordionItem>
-            )}
+            <CustomizationCheckboxSection
+              value="removals"
+              title="Rimozioni"
+              options={customizations.removals}
+              selectedItems={selectedRemovals}
+              onToggle={handleRemovalsToggle}
+              renderOptionLabel={(option) => option.name}
+            />
 
-            {/* Opzioni di cottura */}
-            {customizations.cookings?.some((option) => option.id) && (
-              <AccordionItem value="cookings">
-                <AccordionTrigger className="text-xl text-(--muted-text)">
-                  Opzioni di cottura
-                </AccordionTrigger>
-                <AccordionContent>
-                  <RadioGroup
-                    value={
-                      selectedCookingOption
-                        ? String(selectedCookingOption.id)
-                        : ""
-                    }
-                    onValueChange={handleCookingChange}
-                    className="gap-1"
-                  >
-                    {customizations.cookings.map((option) => (
-                      <div key={option.id} className="flex items-center gap-2">
-                        <RadioGroupItem
-                          value={String(option.id)}
-                          id={`cooking-${option.id}`}
-                        />
-                        <Label
-                          htmlFor={`cooking-${option.id}`}
-                          className={`cursor-pointer text-lg text-(--muted-text) ${
-                            selectedCookingOption?.id === option.id
-                              ? "font-bold"
-                              : ""
-                          }`}
-                        >
-                          {option.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </AccordionContent>
-              </AccordionItem>
-            )}
+            <CustomizationRadioSection
+              value="cookings"
+              title="Opzioni di cottura"
+              options={customizations.cookings}
+              selectedOption={selectedCookingOption}
+              onValueChange={handleCookingChange}
+              renderOptionLabel={(option) => option.label}
+            />
 
-            {/* Piccantezza */}
-            {customizations.spiceLevels?.some((option) => option.id) && (
-              <AccordionItem value="spiceLevels">
-                <AccordionTrigger className="text-xl text-(--muted-text)">
-                  Livello di piccantezza
-                </AccordionTrigger>
-                <AccordionContent>
-                  <RadioGroup
-                    value={
-                      selectedSpiceLevel ? String(selectedSpiceLevel.id) : ""
-                    }
-                    onValueChange={handleSpiceChange}
-                    className="gap-1"
-                  >
-                    {customizations.spiceLevels.map((option) => (
-                      <div key={option.id} className="flex items-center gap-2">
-                        <RadioGroupItem
-                          value={String(option.id)}
-                          id={`spice-${option.id}`}
-                        />
-                        <Label
-                          htmlFor={`spice-${option.id}`}
-                          className={`cursor-pointer text-lg text-(--muted-text) ${
-                            selectedSpiceLevel?.id === option.id
-                              ? "font-bold"
-                              : ""
-                          }`}
-                        >
-                          {option.label}
-                        </Label>
-                      </div>
-                    ))}
-                  </RadioGroup>
-                </AccordionContent>
-              </AccordionItem>
-            )}
+            <CustomizationRadioSection
+              value="spice-levels"
+              title="Livello di piccantezza"
+              options={customizations.spiceLevels}
+              selectedOption={selectedSpiceLevel}
+              onValueChange={handleSpiceChange}
+              renderOptionLabel={(option) => option.label}
+            />
           </Accordion>
         )}
 
