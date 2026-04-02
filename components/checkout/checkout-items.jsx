@@ -7,7 +7,7 @@ import {
   buildCartItemKey,
   calculateDiscountAmount,
   calculateDiscountedTotal,
-} from "@/lib/cart";
+} from "@/lib/cart/cart";
 import { formatCurrency } from "@/lib/shared/currency";
 import { useCartStore } from "@/store/cart";
 import { Card, CardContent } from "@/components/ui/card";

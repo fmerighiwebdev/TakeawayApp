@@ -1,4 +1,4 @@
-import AdminForm from "@/components/admin-form";
+import AdminForm from "@/components/admin/auth/admin-form";
 import { getTenantId } from "@/lib/tenant/tenantDetails";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
