@@ -1,109 +1,108 @@
 import { create } from "zustand";
-import { persist, createJSONStorage } from "zustand/middleware";
+import { createJSONStorage, persist } from "zustand/middleware";
+
+import {
+  buildCartItemKey,
+  buildCartSelectionKey,
+  calculateCartTotal,
+  normalizeCartItem,
+} from "@/lib/cart";
+import {
+  CART_SESSION_STORAGE_KEY,
+  clearLegacyCartCountCookie,
+  createCartSessionStorage,
+  readLegacyCartFromLocalStorage,
+  removeLegacyCartFromLocalStorage,
+} from "@/lib/cartSession";
+
+const cartSessionStorage = createCartSessionStorage();
 
 export const useCartStore = create(
   persist(
     (set, get) => ({
       cart: [],
       hydrated: false,
-      setHydrated: () => set(() => ({ hydrated: true })),
+      setHydrated: () => set({ hydrated: true }),
+      migrateLegacyCart: () => {
+        const currentCart = get().cart;
 
+        if (currentCart.length > 0) {
+          clearLegacyCartCountCookie();
+          removeLegacyCartFromLocalStorage();
+          return;
+        }
+
+        const legacyCart = readLegacyCartFromLocalStorage();
+
+        if (legacyCart.length === 0) {
+          clearLegacyCartCountCookie();
+          return;
+        }
+
+        set({ cart: legacyCart.map((item) => normalizeCartItem(item)) });
+        clearLegacyCartCountCookie();
+        removeLegacyCartFromLocalStorage();
+      },
       addToCart: (
         product,
         selectedDough = null,
         selectedExtras = [],
         selectedRemovals = [],
         selectedCookingOption = null,
-        selectedSpiceLevel = null
+        selectedSpiceLevel = null,
       ) => {
-        const cart = get().cart;
+        const nextItem = normalizeCartItem(product, {
+          quantity: 1,
+          selectedDough,
+          selectedExtras,
+          selectedRemovals,
+          selectedCookingOption,
+          selectedSpiceLevel,
+        });
+        const nextItemKey = buildCartItemKey(nextItem);
 
-        const existingItem = cart.find(
-          (item) =>
-            item.id === product.id &&
-            item.selectedDough === selectedDough &&
-            JSON.stringify(item.selectedExtras) ===
-              JSON.stringify(selectedExtras) &&
-            JSON.stringify(item.selectedRemovals) ===
-              JSON.stringify(selectedRemovals) &&
-            item.selectedCookingOption === selectedCookingOption &&
-            item.selectedSpiceLevel === selectedSpiceLevel
-        );
+        set((state) => {
+          const existingItem = state.cart.find(
+            (item) => buildCartItemKey(item) === nextItemKey,
+          );
 
-        if (existingItem) {
-          // If item exists, update its quantity
-          set({
-            cart: cart.map((item) =>
-              item.id === product.id &&
-              item.selectedDough === selectedDough &&
-              JSON.stringify(item.selectedExtras) ===
-                JSON.stringify(selectedExtras) &&
-              JSON.stringify(item.selectedRemovals) ===
-                JSON.stringify(selectedRemovals) &&
-              item.selectedCookingOption === selectedCookingOption &&
-              item.selectedSpiceLevel === selectedSpiceLevel
-                ? { ...item, quantity: item.quantity + 1 }
-                : item
-            ),
-          });
-        } else {
-          // Otherwise, add it as a new item
-          set({
-            cart: [
-              ...cart,
-              {
-                ...product,
-                quantity: 1,
-                selectedDough,
-                selectedExtras,
-                selectedRemovals,
-                selectedCookingOption,
-                selectedSpiceLevel,
-              },
-            ],
-          });
-        }
+          if (existingItem) {
+            return {
+              cart: state.cart.map((item) =>
+                buildCartItemKey(item) === nextItemKey
+                  ? { ...item, quantity: item.quantity + 1 }
+                  : item,
+              ),
+            };
+          }
 
-        if (typeof window !== "undefined") {
-          const hostname = window.location.hostname;
-          document.cookie = `cart-count-${hostname}=${
-            get().cart.length
-          }; path=/; SameSite=Lax`;
-        }
+          return {
+            cart: [...state.cart, nextItem],
+          };
+        });
       },
-
-      // Remove an item from the cart
       removeFromCart: (
         productId,
         selectedDough = null,
         selectedExtras = [],
         selectedRemovals = [],
         selectedCookingOption = null,
-        selectedSpiceLevel = null
+        selectedSpiceLevel = null,
       ) => {
-        set({
-          cart: get().cart.filter(
-            (item) =>
-              item.id !== productId ||
-              item.selectedDough !== selectedDough ||
-              JSON.stringify(item.selectedExtras) !==
-                JSON.stringify(selectedExtras) ||
-              JSON.stringify(item.selectedRemovals) !==
-                JSON.stringify(selectedRemovals) ||
-              item.selectedCookingOption !== selectedCookingOption ||
-              item.selectedSpiceLevel !== selectedSpiceLevel
-          ),
+        const targetItemKey = buildCartSelectionKey(productId, {
+          selectedDough,
+          selectedExtras,
+          selectedRemovals,
+          selectedCookingOption,
+          selectedSpiceLevel,
         });
 
-        if (typeof window !== "undefined") {
-          const hostname = window.location.hostname;
-          document.cookie = `cart-count-${hostname}=${
-            get().cart.length
-          }; path=/; SameSite=Lax`;
-        }
+        set((state) => ({
+          cart: state.cart.filter(
+            (item) => buildCartItemKey(item) !== targetItemKey,
+          ),
+        }));
       },
-
-      // Update item quantity
       updateQuantity: (
         productId,
         quantity,
@@ -111,94 +110,50 @@ export const useCartStore = create(
         selectedExtras = [],
         selectedRemovals = [],
         selectedCookingOption = null,
-        selectedSpiceLevel = null
+        selectedSpiceLevel = null,
       ) => {
         if (quantity <= 0) {
-          // Remove the item if quantity is 0 or less
           get().removeFromCart(
             productId,
             selectedDough,
             selectedExtras,
             selectedRemovals,
             selectedCookingOption,
-            selectedSpiceLevel
+            selectedSpiceLevel,
           );
-        } else {
-          set({
-            cart: get().cart.map((item) =>
-              item.id === productId &&
-              item.selectedDough === selectedDough &&
-              JSON.stringify(item.selectedExtras) ===
-                JSON.stringify(selectedExtras) &&
-              JSON.stringify(item.selectedRemovals) ===
-                JSON.stringify(selectedRemovals) &&
-              item.selectedCookingOption === selectedCookingOption &&
-              item.selectedSpiceLevel === selectedSpiceLevel
-                ? { ...item, quantity }
-                : item
-            ),
-          });
+          return;
         }
-      },
 
-      // Clear the entire cart
+        const targetItemKey = buildCartSelectionKey(productId, {
+          selectedDough,
+          selectedExtras,
+          selectedRemovals,
+          selectedCookingOption,
+          selectedSpiceLevel,
+        });
+
+        set((state) => ({
+          cart: state.cart.map((item) =>
+            buildCartItemKey(item) === targetItemKey
+              ? { ...item, quantity }
+              : item,
+          ),
+        }));
+      },
       clearCart: () => {
+        clearLegacyCartCountCookie();
         set({ cart: [] });
-        if (typeof window !== "undefined") {
-          const hostname = window.location.hostname;
-          document.cookie = `cart-count-${hostname}=0; path=/; SameSite=Lax`;
-        }
       },
-
-      // Get total cart price
-      getTotalPrice: () => {
-        return get()
-          .cart.filter((item) => !!item)
-          .reduce(
-            (total, item) =>
-              total +
-              item.price * item.quantity +
-              (item.selectedDough?.price || 0) * item.quantity +
-              item.selectedExtras.reduce((sum, extra) => sum + extra.price, 0) *
-                item.quantity,
-            0
-          )
-          .toFixed(2);
-      },
+      getTotalPrice: () => calculateCartTotal(get().cart),
     }),
     {
-      name: "cart-storage",
-      storage: createJSONStorage(() => ({
-        getItem: (name) => {
-          const hostname =
-            typeof window !== "undefined"
-              ? window.location.hostname
-              : "default";
-          return localStorage.getItem(`${name}-${hostname}`);
-        },
-        setItem: (name, value) => {
-          const hostname =
-            typeof window !== "undefined"
-              ? window.location.hostname
-              : "default";
-          return localStorage.setItem(`${name}-${hostname}`, value);
-        },
-        removeItem: (name) => {
-          const hostname =
-            typeof window !== "undefined"
-              ? window.location.hostname
-              : "default";
-          return localStorage.removeItem(`${name}-${hostname}`);
-        },
-      })),
+      name: CART_SESSION_STORAGE_KEY,
+      storage: createJSONStorage(() => cartSessionStorage),
       partialize: (state) => ({ cart: state.cart }),
       onRehydrateStorage: () => (state) => {
+        state?.migrateLegacyCart?.();
         state?.setHydrated?.();
-        if (typeof document !== "undefined") {
-          const hostname = window.location.hostname;
-          document.cookie = `cart-count-${hostname}=${state.cart.length}; path=/; SameSite=Lax`;
-        }
       },
-    }
-  )
+    },
+  ),
 );

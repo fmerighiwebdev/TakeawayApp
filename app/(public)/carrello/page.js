@@ -1,5 +1,9 @@
 import CartItems from "@/components/cart-items";
 import {
+  hasCartSession,
+  hasLegacyCartCountCookie,
+} from "@/lib/cartSession";
+import {
   Breadcrumb,
   BreadcrumbItem,
   BreadcrumbLink,
@@ -23,18 +27,12 @@ export const metadata = {
 };
 
 export default async function CartPage() {
-  const headersList = await headers();
-  let hostname = headersList.get("host") || "localhost";
+  const [headersList, cookieStore] = await Promise.all([headers(), cookies()]);
 
-  if (hostname === "localhost:3000") {
-    hostname = "localhost";
-  }
-
-  const cookieStore = await cookies();
-  const cartCount =
-    Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;
-
-  if (cartCount === 0) {
+  if (
+    !hasCartSession(cookieStore) &&
+    !hasLegacyCartCountCookie(cookieStore, headersList.get("host"))
+  ) {
     return (
       <main className="w-screen h-dvh flex items-center justify-center pt-20 pb-24 lg:pt-16">
         <section>

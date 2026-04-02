@@ -1,10 +1,13 @@
 import { redirect } from "next/navigation";
-import { cookies } from "next/headers";
+import { cookies, headers } from "next/headers";
+import {
+  hasCartSession,
+  hasLegacyCartCountCookie,
+} from "@/lib/cartSession";
 import {
   getTenantContext,
   getTenantId,
 } from "@/lib/tenantDetails";
-import { headers } from "next/headers";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -30,11 +33,11 @@ export const metadata = {
 
 export default async function CheckoutPage() {
   const [headersList, cookieStore] = await Promise.all([headers(), cookies()]);
-  const hostname = (headersList.get("host") || "localhost").split(":")[0];
-  const cartCount =
-    Number(cookieStore.get(`cart-count-${hostname}`)?.value) || 0;
 
-  if (cartCount === 0) {
+  if (
+    !hasCartSession(cookieStore) &&
+    !hasLegacyCartCountCookie(cookieStore, headersList.get("host"))
+  ) {
     redirect("/carrello");
   }
 

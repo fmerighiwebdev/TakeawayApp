@@ -1,17 +1,12 @@
 "use client";
 
-import { useCartStore } from "@/store/cart";
 import { ShoppingBag } from "lucide-react";
 import Link from "next/link";
-import { useEffect, useState } from "react";
+
+import { useCartStore } from "@/store/cart";
 
 export default function FloatingCart() {
-  const { cart } = useCartStore();
-  const [isHydrated, setIsHydrated] = useState(false);
-
-  useEffect(() => {
-    setIsHydrated(true);
-  }, []);
+  const { cart, hydrated } = useCartStore();
 
   return (
     <div
@@ -32,7 +27,7 @@ export default function FloatingCart() {
               className="h-11 w-11 md:h-12 md:w-12"
               strokeWidth={1.5}
             />
-            {isHydrated && (
+            {hydrated && (
               <div className="absolute top-0 right-0 flex h-5 w-5 items-center justify-center rounded-full bg-white text-slate-700 shadow-sm">
                 <span className="text-xs font-bold">{cart.length}</span>
               </div>

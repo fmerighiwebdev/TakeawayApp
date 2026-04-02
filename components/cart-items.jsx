@@ -1,58 +1,23 @@
 "use client";
 
 import Link from "next/link";
-
-import { useCartStore } from "@/store/cart";
-import { Spinner } from "./ui/spinner";
-import { Card, CardContent } from "./ui/card";
+import { AnimatePresence, motion } from "motion/react";
 import { Minus, Plus, Trash } from "lucide-react";
 import { toast } from "sonner";
-import { AnimatePresence, motion } from "motion/react";
 
-const currencyFormatter = new Intl.NumberFormat("it-IT", {
-  style: "currency",
-  currency: "EUR",
-});
-
-function formatCurrency(value) {
-  return currencyFormatter.format(value);
-}
-
-function buildCartItemKey(item) {
-  const dough = item.selectedDough?.name || "no-dough";
-  const extras =
-    item.selectedExtras.map((extra) => extra.name).join(",") || "no-extras";
-  const removals =
-    item.selectedRemovals.map((removal) => removal.name).join(",") ||
-    "no-removals";
-  const cooking = item.selectedCookingOption?.label || "no-cooking-option";
-  const spice = item.selectedSpiceLevel?.label || "no-spice-level";
-
-  return `${item.id}-${dough}-${extras}-${removals}-${cooking}-${spice}`;
-}
-
-function getItemRowPrice(item) {
-  const base = item.price;
-  const doughPrice = item.selectedDough?.price || 0;
-  const extrasTotal = item.selectedExtras.reduce(
-    (acc, extra) => acc + extra.price,
-    0
-  );
-
-  const singleUnitPrice = base + doughPrice + extrasTotal;
-  return singleUnitPrice * item.quantity;
-}
+import CartItemSummary from "@/components/cart/cart-item-summary";
+import { buildCartItemKey } from "@/lib/cart";
+import { formatCurrency } from "@/lib/currency";
+import { useCartStore } from "@/store/cart";
+import { Card, CardContent } from "./ui/card";
+import { Spinner } from "./ui/spinner";
 
 export default function CartItems() {
   const { cart, updateQuantity, hydrated, getTotalPrice, removeFromCart } =
     useCartStore();
 
   const total = getTotalPrice();
-
-  const formattedTotal = new Intl.NumberFormat("it-IT", {
-    style: "currency",
-    currency: "EUR",
-  }).format(total);
+  const formattedTotal = formatCurrency(total);
 
   if (hydrated && cart.length === 0) {
     return (
@@ -85,11 +50,6 @@ export default function CartItems() {
                 <AnimatePresence mode="popLayout" initial={false}>
                   {cart.map((item) => {
                     const key = buildCartItemKey(item);
-                    const itemPrice = getItemRowPrice(item);
-                    const formattedItemPrice = formatCurrency(itemPrice);
-                    const formattedDoughPrice = item.selectedDough
-                      ? formatCurrency(item.selectedDough.price)
-                      : null;
 
                     return (
                       <motion.div
@@ -101,11 +61,9 @@ export default function CartItems() {
                         transition={{ duration: 0.25, ease: "easeOut" }}
                         className="flex flex-col gap-4 relative cart-item"
                       >
-                        <div className="flex flex-col">
-                          <div className="flex items-center gap-2 justify-between">
-                            <h3 className="text-3xl md:text-4xl text-(--muted-text)">
-                              {item.name}
-                            </h3>
+                        <CartItemSummary
+                          item={item}
+                          headerAction={
                             <button
                               aria-label="Rimuovi articolo dal carrello"
                               onClick={() => {
@@ -116,67 +74,14 @@ export default function CartItems() {
                                   item.selectedExtras,
                                   item.selectedRemovals,
                                   item.selectedCookingOption,
-                                  item.selectedSpiceLevel
+                                  item.selectedSpiceLevel,
                                 );
                               }}
                             >
-                              <Trash className="text-red-700 hover:text-red-900 transition duration-300 cursor-pointer size-5 md:size-7" />
+                              <Trash className="size-5 cursor-pointer text-red-700 transition duration-300 hover:text-red-900 md:size-7" />
                             </button>
-                          </div>
-                          <p className="font-semibold text-xl md:text-2xl text-primary">
-                            +{formattedItemPrice}
-                          </p>
-
-                          {item.selectedDough && (
-                            <p className="text-(--muted-light-text) text-sm">
-                              {item.selectedDough?.name} ({formattedDoughPrice})
-                            </p>
-                          )}
-
-                          {item.selectedExtras.length > 0 &&
-                            item.selectedExtras.map((extra, index) => (
-                              <p
-                                key={index}
-                                className="text-(--muted-light-text) text-sm"
-                              >
-                                + {extra.name} (
-                                {new Intl.NumberFormat("it-IT", {
-                                  style: "currency",
-                                  currency: "EUR",
-                                }).format(extra.price)}
-                                )
-                              </p>
-                            ))}
-
-                          {item.selectedRemovals.length > 0 &&
-                            item.selectedRemovals.map((removal, index) => (
-                              <p
-                                key={index}
-                                className="text-(--muted-light-text) text-sm"
-                              >
-                                - {removal.name}
-                              </p>
-                            ))}
-
-                          {item.selectedCookingOption && (
-                            <p className="text-(--muted-light-text) text-sm">
-                              Cottura &quot;{item.selectedCookingOption.label}
-                              &quot;
-                            </p>
-                          )}
-
-                          {item.selectedSpiceLevel && (
-                            <p className="text-(--muted-light-text) text-sm">
-                              {item.selectedSpiceLevel.label}
-                            </p>
-                          )}
-                        </div>
-
-                        {item.description && (
-                          <p className="font-medium text-md text-(--muted-light-text)">
-                            <em>{item.description}</em>
-                          </p>
-                        )}
+                          }
+                        />
 
                         <div className="flex items-center gap-2">
                           <button

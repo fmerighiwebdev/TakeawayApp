@@ -2,51 +2,24 @@
 
 import Link from "next/link";
 
+import CartItemSummary from "@/components/cart/cart-item-summary";
+import {
+  buildCartItemKey,
+  calculateDiscountAmount,
+  calculateDiscountedTotal,
+} from "@/lib/cart";
+import { formatCurrency } from "@/lib/currency";
 import { useCartStore } from "@/store/cart";
-import { Spinner } from "./ui/spinner";
 import { Card, CardContent } from "./ui/card";
-
-const currencyFormatter = new Intl.NumberFormat("it-IT", {
-  style: "currency",
-  currency: "EUR",
-});
-
-function formatCurrency(value) {
-  return currencyFormatter.format(value);
-}
-
-function buildCartItemKey(item) {
-  const dough = item.selectedDough?.name || "no-dough";
-  const extras =
-    item.selectedExtras.map((extra) => extra.name).join(",") || "no-extras";
-  const removals =
-    item.selectedRemovals.map((removal) => removal.name).join(",") ||
-    "no-removals";
-  const cooking = item.selectedCookingOption?.label || "no-cooking-option";
-  const spice = item.selectedSpiceLevel?.label || "no-spice-level";
-
-  return `${item.id}-${dough}-${extras}-${removals}-${cooking}-${spice}`;
-}
-
-function getItemRowPrice(item) {
-  const base = item.price;
-  const doughPrice = item.selectedDough?.price || 0;
-  const extrasTotal = item.selectedExtras.reduce(
-    (acc, extra) => acc + extra.price,
-    0,
-  );
-
-  const singleUnitPrice = base + doughPrice + extrasTotal;
-  return singleUnitPrice * item.quantity;
-}
+import { Spinner } from "./ui/spinner";
 
 export default function CheckoutItems({ appliedDiscount }) {
   const { cart, hydrated, getTotalPrice } = useCartStore();
 
   const total = getTotalPrice();
   const percentOff = appliedDiscount ? appliedDiscount.percent_off : 0;
-  const discountAmount = percentOff > 0 ? (total * percentOff) / 100 : 0;
-  const discountedTotal = Math.max(total - discountAmount, 0);
+  const discountAmount = calculateDiscountAmount(total, percentOff);
+  const discountedTotal = calculateDiscountedTotal(total, percentOff);
 
   const formattedTotal = formatCurrency(total);
   const formattedDiscountAmount = formatCurrency(discountAmount);
@@ -65,69 +38,13 @@ export default function CheckoutItems({ appliedDiscount }) {
               <CardContent>
                 {cart.map((item) => {
                   const key = buildCartItemKey(item);
-                  const itemPrice = getItemRowPrice(item);
-                  const formattedItemPrice = formatCurrency(itemPrice);
-                  const formattedDoughPrice = item.selectedDough
-                    ? formatCurrency(item.selectedDough.price)
-                    : null;
 
                   return (
                     <div
                       key={key}
                       className="flex flex-col gap-4 relative cart-item"
                     >
-                      <div className="flex flex-col">
-                        <h3 className="text-3xl md:text-4xl text-(--muted-text)">
-                          {item.name}
-                        </h3>
-                        <p className="font-semibold text-xl md:text-2xl text-primary">
-                          +{formattedItemPrice}
-                        </p>
-                        {item.selectedDough && (
-                          <p className="text-(--muted-light-text) text-sm">
-                            {item.selectedDough?.name} ({formattedDoughPrice})
-                          </p>
-                        )}
-                        {item.selectedExtras.length > 0 &&
-                          item.selectedExtras.map((extra, index) => (
-                            <p
-                              key={index}
-                              className="text-(--muted-light-text) text-sm"
-                            >
-                              + {extra.name} (
-                              {new Intl.NumberFormat("it-IT", {
-                                style: "currency",
-                                currency: "EUR",
-                              }).format(extra.price)}
-                              )
-                            </p>
-                          ))}
-                        {item.selectedRemovals.length > 0 &&
-                          item.selectedRemovals.map((removal, index) => (
-                            <p
-                              key={index}
-                              className="text-(--muted-light-text) text-sm"
-                            >
-                              - {removal.name}
-                            </p>
-                          ))}
-                        {item.selectedCookingOption && (
-                          <p className="text-(--muted-light-text) text-sm">
-                            Cottura &quot;{item.selectedCookingOption.label}
-                            &quot;
-                          </p>
-                        )}
-                        {item.selectedSpiceLevel && (
-                          <p className="text-(--muted-light-text) text-sm">
-                            {item.selectedSpiceLevel.label}
-                          </p>
-                        )}
-                      </div>
-                      {item.description && (
-                        <p className="font-medium text-(--muted-light-text)">
-                          <em>{item.description}</em>
-                        </p>
-                      )}
+                      <CartItemSummary item={item} />
                     </div>
                   );
                 })}
