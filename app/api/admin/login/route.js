@@ -1,9 +1,9 @@
 import { NextResponse } from "next/server";
 import jwt from "jsonwebtoken";
 
-import supabaseServer from "@/lib/supabaseServer";
+import supabaseServer from "@/lib/supabase/supabaseServer";
 import bcrypt from "bcrypt";
-import { getTenantId } from "@/lib/tenantDetails";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
 
 export const runtime = "nodejs";
 

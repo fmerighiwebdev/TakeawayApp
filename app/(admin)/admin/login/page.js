@@ -1,5 +1,5 @@
 import AdminForm from "@/components/admin-form";
-import { getTenantId } from "@/lib/tenantDetails";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
 import jwt from "jsonwebtoken";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";

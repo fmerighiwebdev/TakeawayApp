@@ -6,14 +6,14 @@ import {
   buildCartSelectionKey,
   calculateCartTotal,
   normalizeCartItem,
-} from "@/lib/cart";
+} from "@/lib/cart/cart";
 import {
   CART_SESSION_STORAGE_KEY,
   clearLegacyCartCountCookie,
   createCartSessionStorage,
   readLegacyCartFromLocalStorage,
   removeLegacyCartFromLocalStorage,
-} from "@/lib/cartSession";
+} from "@/lib/cart/cartSession";
 
 const cartSessionStorage = createCartSessionStorage();
 

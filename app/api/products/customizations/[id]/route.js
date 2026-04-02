@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 
-import { getProductCustomizations } from "@/lib/products";
-import { getTenantId } from "@/lib/tenantDetails";
+import { getProductCustomizations } from "@/lib/products/products";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
 
 export async function GET(req, { params }) {
   const { id } = await params;

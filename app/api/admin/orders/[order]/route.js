@@ -4,12 +4,12 @@ import {
   getOrderCustomerDetails,
   updateOrderStatus,
   updatePickUpTime,
-} from "@/lib/orders";
+} from "@/lib/orders/orders";
 
 import { sendOrderPostponementEmail } from "@/lib/emails/sendOrderPostponementEmail";
 
 import jwt from "jsonwebtoken";
-import { getTenantId } from "@/lib/tenantDetails";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
 import { cookies } from "next/headers";
 import { sendOrderReadyEmail } from "@/lib/emails/sendOrderReadyEmail";
 

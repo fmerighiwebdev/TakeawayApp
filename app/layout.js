@@ -1,10 +1,10 @@
-import Maintenance from "@/components/maintenance";
+import Maintenance from "@/components/layout/maintenance";
 import "./globals.css";
 
 import {
   getTenantContext,
   getTenantId,
-} from "@/lib/tenantDetails";
+} from "@/lib/tenant/tenantDetails";
 
 import {
   Montserrat,
@@ -29,7 +29,7 @@ import {
   Karla,
 } from "next/font/google";
 import { Toaster } from "@/components/ui/sonner";
-import CookieBanner from "@/components/cookie-banner";
+import CookieBanner from "@/components/layout/cookie-banner";
 import { TooltipProvider } from "@/components/ui/tooltip";
 
 const montserrat = Montserrat({

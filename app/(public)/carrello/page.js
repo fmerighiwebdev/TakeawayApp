@@ -1,8 +1,8 @@
-import CartItems from "@/components/cart-items";
+import CartItems from "@/components/cart/cart-items";
 import {
   hasCartSession,
   hasLegacyCartCountCookie,
-} from "@/lib/cartSession";
+} from "@/lib/cart/cartSession";
 import {
   Breadcrumb,
   BreadcrumbItem,

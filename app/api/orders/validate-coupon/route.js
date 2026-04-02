@@ -1,12 +1,12 @@
 import { NextResponse } from "next/server";
 
-import { getTenantId } from "@/lib/tenantDetails";
-import { findCustomerByIdentity } from "@/lib/customers";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
+import { findCustomerByIdentity } from "@/lib/customers/customers";
 import {
   getDiscountCodeByCode,
   validateDiscountCodeForCustomer,
-} from "@/lib/discountCodes";
-import { normalizeDiscountCode } from "@/lib/orderRequest";
+} from "@/lib/orders/discountCodes";
+import { normalizeDiscountCode } from "@/lib/orders/orderRequest";
 
 export async function POST(req) {
   try {

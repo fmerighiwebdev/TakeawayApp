@@ -6,11 +6,10 @@ import {
   getTenantCategories,
   getTenantContext,
   getTenantId,
-} from "@/lib/tenantDetails";
+} from "@/lib/tenant/tenantDetails";
 import { MapPin, Phone } from "lucide-react";
 import Marquee from "react-fast-marquee";
-import HeroCarousel from "@/components/hero-carousel";
-import Hero from "daisyui/components/hero";
+import HeroCarousel from "@/components/layout/hero-carousel";
 
 export const metadata = {
   alternates: {

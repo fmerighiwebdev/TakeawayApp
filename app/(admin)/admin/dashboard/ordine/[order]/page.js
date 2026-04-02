@@ -1,8 +1,8 @@
-import OrderDetails from "@/components/order-details";
-import { getOrderByIdWithDetails } from "@/lib/orders";
-import { getTenantId } from "@/lib/tenantDetails";
+import OrderDetails from "@/components/admin/orders/order-details";
+import { getOrderByIdWithDetails } from "@/lib/orders/orders";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
 import { notFound } from "next/navigation";
-import AuthGuard from "@/components/auth-guard";
+import AuthGuard from "@/components/admin/auth/auth-guard";
 import FloatingBack from "@/components/ui/floating-back";
 import { Breadcrumb, BreadcrumbItem, BreadcrumbLink, BreadcrumbList, BreadcrumbSeparator } from "@/components/ui/breadcrumb";
 import Link from "next/link";

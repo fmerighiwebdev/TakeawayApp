@@ -1,4 +1,4 @@
-import AuthGuard from "@/components/auth-guard";
+import AuthGuard from "@/components/admin/auth/auth-guard";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -8,8 +8,8 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Card } from "@/components/ui/card";
 import FloatingBack from "@/components/ui/floating-back";
-import { getTopProductsPerCategory, getTopProducts } from "@/lib/products";
-import { getTenantId } from "@/lib/tenantDetails";
+import { getTopProductsPerCategory, getTopProducts } from "@/lib/products/products";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
 import Image from "next/image";
 import Link from "next/link";
 

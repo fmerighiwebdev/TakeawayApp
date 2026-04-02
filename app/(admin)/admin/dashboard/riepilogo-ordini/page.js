@@ -1,7 +1,7 @@
-import AdminPagination from "@/components/admin-pagination";
-import AuthGuard from "@/components/auth-guard";
-import ExportOrdersCsv from "@/components/export-orders-csv";
-import Order from "@/components/order";
+import AdminPagination from "@/components/admin/dashboard/admin-pagination";
+import AuthGuard from "@/components/admin/auth/auth-guard";
+import ExportOrdersCsv from "@/components/admin/orders/export-orders-csv";
+import Order from "@/components/admin/orders/order";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -13,9 +13,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import FloatingBack from "@/components/ui/floating-back";
-import { normalizePage, normalizeSearchTerm } from "@/lib/listing";
-import { getPastOrdersByTenantId } from "@/lib/orders";
-import { getTenantFeatures, getTenantId } from "@/lib/tenantDetails";
+import { normalizePage, normalizeSearchTerm } from "@/lib/shared/listing";
+import { getPastOrdersByTenantId } from "@/lib/orders/orders";
+import { getTenantFeatures, getTenantId } from "@/lib/tenant/tenantDetails";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 

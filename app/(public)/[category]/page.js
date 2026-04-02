@@ -1,4 +1,4 @@
-import ProductsSection from "@/components/products-section";
+import ProductsSection from "@/components/menu/products-section";
 
 import { notFound } from "next/navigation";
 import Link from "next/link";
@@ -8,11 +8,11 @@ import {
   getTenantContext,
   getTenantId,
   getTenantSubcategories,
-} from "@/lib/tenantDetails";
+} from "@/lib/tenant/tenantDetails";
 import {
   getTenantProductsByCategory,
   getTopProductsByCategory,
-} from "@/lib/products";
+} from "@/lib/products/products";
 import {
   Breadcrumb,
   BreadcrumbItem,

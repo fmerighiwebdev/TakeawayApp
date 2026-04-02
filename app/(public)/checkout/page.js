@@ -3,11 +3,11 @@ import { cookies, headers } from "next/headers";
 import {
   hasCartSession,
   hasLegacyCartCountCookie,
-} from "@/lib/cartSession";
+} from "@/lib/cart/cartSession";
 import {
   getTenantContext,
   getTenantId,
-} from "@/lib/tenantDetails";
+} from "@/lib/tenant/tenantDetails";
 import {
   Breadcrumb,
   BreadcrumbItem,
@@ -17,7 +17,7 @@ import {
 } from "@/components/ui/breadcrumb";
 import Link from "next/link";
 import FloatingBack from "@/components/ui/floating-back";
-import CheckoutSection from "@/components/checkout-section";
+import CheckoutSection from "@/components/checkout/checkout-section";
 
 export const metadata = {
   title: "Checkout",

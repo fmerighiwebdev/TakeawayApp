@@ -4,7 +4,7 @@ import {
   isLocalDevelopmentHost,
   normalizeTenantHost,
   resolveTenantIdByHost,
-} from "./lib/tenantHostResolver";
+} from "./lib/tenant/tenantHostResolver";
 
 function continueWithTenant(request, tenantId) {
   const requestHeaders = new Headers(request.headers);

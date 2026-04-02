@@ -1,12 +1,12 @@
 import { after, NextResponse } from "next/server";
 
-import { createOrder } from "@/lib/orders";
+import { createOrder } from "@/lib/orders/orders";
 import { sendOrderConfirmationEmail } from "@/lib/emails/sendOrderConfirmationEmail";
 import {
   mapCreateOrderError,
   validateCreateOrderInput,
-} from "@/lib/orderRequest";
-import { getTenantId } from "@/lib/tenantDetails";
+} from "@/lib/orders/orderRequest";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
 
 export const runtime = "nodejs";
 

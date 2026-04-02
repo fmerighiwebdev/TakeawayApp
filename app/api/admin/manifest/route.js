@@ -1,4 +1,4 @@
-import { getTenantContext, getTenantId } from "@/lib/tenantDetails";
+import { getTenantContext, getTenantId } from "@/lib/tenant/tenantDetails";
 import { NextResponse } from "next/server";
 
 export async function GET() {

@@ -1,8 +1,8 @@
-import OrderDetails from "@/components/order-details";
+import OrderDetails from "@/components/admin/orders/order-details";
 
-import { getOrderByPublicIdWithDetails } from "@/lib/orders";
-import { getTenantId } from "@/lib/tenantDetails";
-import ClearCartOnMount from "@/components/clear-cart";
+import { getOrderByPublicIdWithDetails } from "@/lib/orders/orders";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
+import ClearCartOnMount from "@/components/cart/clear-cart";
 import FloatingBack from "@/components/ui/floating-back";
 import { notFound } from "next/navigation";
 

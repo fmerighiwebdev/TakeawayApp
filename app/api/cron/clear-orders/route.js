@@ -1,5 +1,5 @@
 import { NextResponse } from "next/server";
-import { clearOrders } from "@/lib/orders";
+import { clearOrders } from "@/lib/orders/orders";
 
 export async function GET(req) {
   const secret = process.env.CRON_SECRET;

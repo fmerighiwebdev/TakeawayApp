@@ -1,12 +1,12 @@
-import CookieBanner from "@/components/cookie-banner";
-import Footer from "@/components/footer";
+import CookieBanner from "@/components/layout/cookie-banner";
+import Footer from "@/components/layout/footer";
 import InstallPrompt from "@/components/pwa/install-prompt";
-import FloatingCart from "@/components/ui/floating-cart";
+import FloatingCart from "@/components/cart/floating-cart";
 import {
   getTenantCategories,
   getTenantContext,
   getTenantId,
-} from "@/lib/tenantDetails";
+} from "@/lib/tenant/tenantDetails";
 
 export const metadata = {
   manifest: "/api/manifest",

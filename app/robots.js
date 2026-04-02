@@ -1,4 +1,4 @@
-import { getTenantContext, getTenantId } from "@/lib/tenantDetails";
+import { getTenantContext, getTenantId } from "@/lib/tenant/tenantDetails";
 
 export default async function robots() {
   const tenantId = await getTenantId();

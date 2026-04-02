@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { getTenantDetails, getTenantId, getTenantUI } from "@/lib/tenantDetails";
+import { getTenantDetails, getTenantId, getTenantUI } from "@/lib/tenant/tenantDetails";
 import {
   Breadcrumb,
   BreadcrumbItem,

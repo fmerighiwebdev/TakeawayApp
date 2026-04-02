@@ -4,11 +4,11 @@ import { useEffect, useState } from "react";
 import axios from "axios";
 import { useRouter } from "next/navigation";
 
-import { defaultTimeOptions } from "@/lib/defaultTimeOptions";
+import { defaultTimeOptions } from "@/lib/shared/defaultTimeOptions";
 import {
   normalizeDiscountCode,
   serializeOrderItemsForRequest,
-} from "@/lib/orderRequest";
+} from "@/lib/orders/orderRequest";
 import { useCartStore } from "@/store/cart";
 
 const PHONE_REGEX = /^\d{10,15}$/;

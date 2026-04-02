@@ -2,7 +2,7 @@ import {
   getTenantCategories,
   getTenantContext,
   getTenantId,
-} from "@/lib/tenantDetails";
+} from "@/lib/tenant/tenantDetails";
 
 export default async function sitemap() {
   const tenantId = await getTenantId();

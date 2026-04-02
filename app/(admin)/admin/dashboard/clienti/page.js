@@ -1,6 +1,6 @@
-import AdminPagination from "@/components/admin-pagination";
-import AuthGuard from "@/components/auth-guard";
-import CustomersTable from "@/components/customers-table";
+import AdminPagination from "@/components/admin/dashboard/admin-pagination";
+import AuthGuard from "@/components/admin/auth/auth-guard";
+import CustomersTable from "@/components/admin/customers/customers-table";
 import { Button } from "@/components/ui/button";
 import {
   Breadcrumb,
@@ -11,9 +11,9 @@ import {
 } from "@/components/ui/breadcrumb";
 import { Card, CardContent } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { getCustomers } from "@/lib/customers";
-import { normalizePage, normalizeSearchTerm } from "@/lib/listing";
-import { getTenantId } from "@/lib/tenantDetails";
+import { getCustomers } from "@/lib/customers/customers";
+import { normalizePage, normalizeSearchTerm } from "@/lib/shared/listing";
+import { getTenantId } from "@/lib/tenant/tenantDetails";
 import Link from "next/link";
 
 export default async function ClientiPage({ searchParams }) {

@@ -6,7 +6,7 @@ import {
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
 import FloatingBack from "@/components/ui/floating-back";
-import { getTenantDetails, getTenantId } from "@/lib/tenantDetails";
+import { getTenantDetails, getTenantId } from "@/lib/tenant/tenantDetails";
 import Link from "next/link";
 
 export const metadata = {

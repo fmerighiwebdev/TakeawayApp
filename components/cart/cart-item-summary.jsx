@@ -1,7 +1,7 @@
 "use client";
 
-import { calculateCartLineTotal } from "@/lib/cart";
-import { formatCurrency } from "@/lib/currency";
+import { calculateCartLineTotal } from "@/lib/cart/cart";
+import { formatCurrency } from "@/lib/shared/currency";
 
 export default function CartItemSummary({ item, headerAction = null }) {
   const formattedItemPrice = formatCurrency(calculateCartLineTotal(item));

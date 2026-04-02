@@ -1,11 +1,11 @@
-import Orders from "@/components/orders";
-import AuthGuard from "@/components/auth-guard";
-import { getTenantFeatures, getTenantId } from "@/lib/tenantDetails";
-import { getTodayOrdersByTenantId } from "@/lib/orders";
+import Orders from "@/components/admin/orders/orders";
+import AuthGuard from "@/components/admin/auth/auth-guard";
+import { getTenantFeatures, getTenantId } from "@/lib/tenant/tenantDetails";
+import { getTodayOrdersByTenantId } from "@/lib/orders/orders";
 import Link from "next/link";
-import TodayDate from "@/components/today-date";
-import { DashboardMenu } from "@/components/dashboard-menu";
-import { getAdminAuthToken } from "@/lib/auth";
+import TodayDate from "@/components/admin/dashboard/today-date";
+import { DashboardMenu } from "@/components/admin/dashboard/dashboard-menu";
+import { getAdminAuthToken } from "@/lib/auth/auth";
 
 export default async function AdminDashboard() {
   const tenantId = await getTenantId();
