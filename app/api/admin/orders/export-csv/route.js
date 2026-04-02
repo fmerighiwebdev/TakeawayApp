@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { buildOrdersCsv } from "@/lib/exportOrders";
+import { getCurrentMonthDateRange } from "@/lib/orderDateRanges";
 import { getPastOrdersByTenantIdWithDetails } from "@/lib/orders";
 import { getTenantId } from "@/lib/tenantDetails";
 
@@ -24,7 +25,11 @@ function getCsvFileName() {
 export async function GET() {
   try {
     const tenantId = await getTenantId();
-    const orders = await getPastOrdersByTenantIdWithDetails(tenantId);
+    const { startAt, endAt } = getCurrentMonthDateRange();
+    const orders = await getPastOrdersByTenantIdWithDetails(tenantId, {
+      startAt,
+      endAt,
+    });
 
     const csv = buildOrdersCsv(orders);
     const fileName = getCsvFileName();

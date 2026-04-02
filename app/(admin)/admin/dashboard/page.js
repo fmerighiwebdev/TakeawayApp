@@ -10,10 +10,11 @@ import { getAdminAuthToken } from "@/lib/auth";
 export default async function AdminDashboard() {
   const tenantId = await getTenantId();
 
-  const initialOrders = await getTodayOrdersByTenantId(tenantId);
-  const tenantFeatures = await getTenantFeatures(tenantId);
-
-  const adminAuthToken = await getAdminAuthToken();
+  const [initialOrders, tenantFeatures, adminAuthToken] = await Promise.all([
+    getTodayOrdersByTenantId(tenantId),
+    getTenantFeatures(tenantId),
+    getAdminAuthToken(),
+  ]);
 
   let menuItems = [
     { name: "Riepilogo ordini", href: "/admin/dashboard/riepilogo-ordini" },
